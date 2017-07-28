@@ -143,11 +143,12 @@
           <div id="slider_modal" style="width:200px"></div><br>
           MIX: <span id="slider-snap-value-lower-modal"></span><br>
           MAX: <span id="slider-snap-value-upper-modal"></span><br>
-          <button id="btn_smt_filter" class="btn btn-block btn-primary" onclick="">ตกลง</button>
+          <input type="text" name="minPrice" id="minPrice_Modal" class="" value="0">
+          <input type="text" name="maxPrice" id="maxPrice_Modal" class="" value="10000">
         </CENTER>
       </div>
      </form>
-
+         <button class="btn btn-block btn-primary">ตกลง</button>
     </div>
 
   </div> 
@@ -231,6 +232,8 @@ noUiSlider.create(slider, {
 
   slider_modal.noUiSlider.on('update', function( values, handle ) {
     snapValuesModal[handle].innerHTML = values[handle];
+    $('#minPrice_Modal').val(values[0]);
+    $('#maxPrice_Modal').val(values[1]);
   });
 
   
@@ -316,14 +319,15 @@ function viewDetail(id_product){
 
         .btn_filter{
           position:absolute;
-          width:30px;
-          height:30px;
+          width:35px;
+          height:35px;
           text-align: center;
-          background-color:#F5ECCE;
-          padding-top:5px;
+          background-color:#000;
+          padding-top:7px;
           box-shadow: 2px 2px 2px #888;
           border-radius:20px;
           margin-top:5%;
+          opacity:0.6;
           z-index: 999;
         }
 

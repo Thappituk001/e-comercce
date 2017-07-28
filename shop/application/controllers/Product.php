@@ -21,7 +21,7 @@ class Product extends CI_Controller
 		$this->cart_value	= $this->cart_model->cartValue($this->id_cart);
 		$this->cart_items 	= $this->cart_model->getCartProduct($this->id_cart);
 		$this->cart_qty		= $this->cart_model->cartQty($this->id_cart);
-		$this->product_qty      = 0;
+		$this->product_qty  = 0;
 		
 	}
 	

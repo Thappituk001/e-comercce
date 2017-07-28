@@ -38,8 +38,6 @@
 
   <body>
 
-   
-  
       <?php $this->load->view("include/menu.php"); ?>
       
     

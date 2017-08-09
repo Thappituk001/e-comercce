@@ -1,3 +1,4 @@
+
 <?php if( $features !== FALSE ) : ?>
 <div class="container main-container">
     <div class="morePost row featuredPostContainer style2 globalPaddingTop ">
@@ -6,33 +7,32 @@
         <div class="container" id="draggable">
             <div class="row xsResponse" id="feature-box">
             <?php foreach( $features as $item ) : ?>
-            <?php 	$link	= 'main/productDetail/'.$item->id_product; ?>
+            <?php 	$link	= 'main/productDetail/'.$item->product_id; ?>
                 <div class="item col-lg-3 col-md-3 col-sm-4 col-xs-6 features">
                     <div class="product">
                         <div class="image">
-                            <a href="<?php echo $link; ?>"><img src="<?php echo get_image_path(get_id_cover_image($item->id_product), 3); ?>" alt="img" class="img-responsive"></a>
-							<?php if( $item->discount != 0 OR is_new_product($item->id_product)) : ?>
+                            <a href="<?php echo $link; ?>"><img src="<?php echo get_image_path(get_id_cover_image($item->product_id), 3); ?>" alt="img" class="img-responsive"></a>
+							<?php if( $item->discount_amount > 0 ) : ?>
                             <div class="promotion">
-                            	<?php if( is_new_product($item->id_product) ) : ?>
-                            		<span class="new-product"> NEW</span> 
-                                <?php endif; ?>
-                                <?php if( $item->discount != 0 ) : ?>
-                                	<span class="discount"><?php echo discount_label($item->discount, $item->discount_type); ?> OFF</span>
+                            	
+                                <?php if( $item->discount_percent > 0 || $item->discount_amount > 0  ) : ?>
+                                	<span class="discount"><?php echo discount_label($item->discount_amount,$item->discount_percent); ?> OFF</span>
                                 <?php endif; ?>
                             </div>
                             <?php endif; ?>
                         </div>
                         <div class="description">
-                            <h4><a href="<?php echo $link; ?>"><?php echo $item->product_code; ?></a></h4>
-                            <p><?php echo $item->product_name; ?></p>
+                            <h4>
+                            <a href="<?php echo $link; ?>"><?php echo $item->style_code; ?></a></h4>
+                            <p><?php echo $item->style_name; ?></p>
                          </div>
                         <div class="price">
-                            <?php if( $item->discount != 0 ) : ?>
-                        	<span class="old-price"><?php echo $item->product_price; ?>  <?php echo getCurrency(); ?></span>
+                            <?php if(  $item->discount_percent > 0 || $item->discount_amount > 0  ) : ?>
+                        	<span class="old-price"><?php echo number_format($item->product_price,2,'.',''); ?>  <?php echo getCurrency(); ?></span>
                             <?php endif; ?><br/>
-                            <span><?php echo sell_price($item->product_price, $item->discount, $item->discount_type); ?>  <?php echo getCurrency(); ?></span> 
+                            <span><?php echo sell_price($item->product_price, $item->discount_amount,$item->discount_percent); ?><?php echo getCurrency(); ?></span> 
                         </div>
-                        <div class="action-control"><a class="btn btn-primary" onclick="addToCart(<?= $item->id_product ?>,<?= $id_customer ?>)"> <span class="add2cart"><i
+                        <div class="action-control"><a class="btn btn-primary" onclick="addToCart(<?= $item->product_id ?>,<?= $id_customer ?>)"> <span class="add2cart"><i
                                 class="glyphicon glyphicon-shopping-cart"> </i> Add to cart </span> </a></div>
                     </div>
                 </div>

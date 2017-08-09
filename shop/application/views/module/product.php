@@ -1,3 +1,4 @@
+
 <a onclick="openNav()" id="btn_filter" class="btn_filter hidden-lg hidden-md hidden-sm"><i class="fa fa-filter" aria-hidden="true"></i></a>
 <script type="text/javascript" src="<?php echo base_url(); ?>shop/assets/plugins/icheck-1.x/icheck.min.js"></script> 
 
@@ -40,7 +41,6 @@
     <input type="text" name="maxPrice" id="maxPrice" class="" value="10000">
     </form>
     <button class="btn btn-block btn-primary" id="btn_smt_filter">ตกลง</button>
-  
 
   </div>
   <div class="col-md-10 col-sm-10 col-xs-12" id="draggable">
@@ -51,14 +51,14 @@
         </div>
       <?php endif ?>    
       <?php foreach( @$product as $item ) : ?>
-        <?php   $link   = 'main/productDetail/'.$item->id_product; ?>
-        <div class="item col-lg-3 col-md-3 col-sm-4 col-xs-6 features" onclick="viewDetail(<?= $item->id_product ?>)">
+        <?php   $link   = 'main/productDetail/'.$item->id; ?>
+        <div class="item col-lg-3 col-md-3 col-sm-4 col-xs-6 features" onclick="viewDetail(<?= $item->id ?>)">
           <div class="product">            
             <div class="image">
-             <a href="#"><img src="<?php echo get_image_path(get_id_cover_image($item->id_product), 3); ?>" alt="img" class="img-responsive"></a>
-             <?php if( $item->discount != 0 OR is_new_product($item->id_product)) : ?>
+             <a href="#"><img src="<?php echo get_image_path(get_id_cover_image($item->id), 3); ?>" alt="img" class="img-responsive"></a>
+             <?php if( $item->discount != 0 OR is_new_product($item->id)) : ?>
               <div class="promotion">
-               <?php if( is_new_product($item->id_product) ) : ?>
+               <?php if( is_new_product($item->id) ) : ?>
                 <span class="new-product"> NEW</span> 
               <?php endif; ?>
               <?php if( $item->discount != 0 ) : ?>
@@ -77,7 +77,7 @@
         <?php endif; ?><br/>
         <span><?php echo sell_price($item->product_price, $item->discount, $item->discount_type); ?>  <?php echo getCurrency(); ?></span> 
       </div>
-      <div class="action-control"><a class="btn btn-primary" onclick="addToCart(<?= $item->id_product ?>,<?= $id_customer ?>)"> <span class="add2cart"><i
+      <div class="action-control"><a class="btn btn-primary" onclick="addToCart(<?= $item->id ?>,<?= $id_customer ?>)"> <span class="add2cart"><i
         class="glyphicon glyphicon-shopping-cart"> </i> Add to cart </span> </a></div>
       </div>
     </div>

@@ -21,16 +21,16 @@ class Product_model extends CI_Model
 	public function getProduct($parent=0,$child=0,$sub_child=0,$color=''){
 
 		if($parent != 0 && $child == 0 && $sub_child == 0){
-			$rs = $this->db->select('tbl_product.*,tbl_product_attribute.id_product_attribute,tbl_product_attribute.id_color,tbl_product_attribute.id_size,tbl_color.*,tbl_size.*')->join('tbl_product_attribute','tbl_product_attribute.id_product = product_online.id_product')->join('tbl_color','tbl_product_attribute.id_color = tbl_color.id_color')->join('tbl_product','tbl_product.id_product=product_online.id_product')->join('tbl_size','tbl_product_attribute.id_size = tbl_size.id_size')->where('product_online.id_parent_menu',$parent)->group_by('tbl_product.id_product')->get('product_online');
+			$rs = $this->db->select('tbl_product.*,tbl_product_attribute.id_product_attribute,tbl_product_attribute.id_color,tbl_product_attribute.id_size,tbl_color.*,tbl_size.*')->join('tbl_product_attribute','tbl_product_attribute.id_product = product_online.id_product')->join('tbl_color','tbl_product_attribute.id_color = tbl_color.id_color')->join('tbl_product','tbl_product.id=product_online.id_product')->join('tbl_size','tbl_product_attribute.id_size = tbl_size.id_size')->where('product_online.id_parent_menu',$parent)->group_by('tbl_product.id')->get('product_online');
 
 		}else if($parent != 0 && $child != 0 && $sub_child == 0){
-			$rs = $this->db->select('tbl_product.*,tbl_product_attribute.id_product_attribute,tbl_product_attribute.id_color,tbl_product_attribute.id_size,tbl_color.*,tbl_size.*')->join('tbl_product_attribute','tbl_product_attribute.id_product = product_online.id_product')->join('tbl_color','tbl_product_attribute.id_color = tbl_color.id_color')->join('tbl_product','tbl_product.id_product=product_online.id_product')->join('tbl_size','tbl_product_attribute.id_size = tbl_size.id_size')->where('product_online.id_parent_menu',$parent)->where('product_online.id_child_menu',$child)->group_by('tbl_product.id_product')->get('product_online');
+			$rs = $this->db->select('tbl_product.*,tbl_product_attribute.id_product_attribute,tbl_product_attribute.id_color,tbl_product_attribute.id_size,tbl_color.*,tbl_size.*')->join('tbl_product_attribute','tbl_product_attribute.id_product = product_online.id_product')->join('tbl_color','tbl_product_attribute.id_color = tbl_color.id_color')->join('tbl_product','tbl_product.id=product_online.id_product')->join('tbl_size','tbl_product_attribute.id_size = tbl_size.id_size')->where('product_online.id_parent_menu',$parent)->where('product_online.id_child_menu',$child)->group_by('tbl_product.id')->get('product_online');
 
 		}else if($parent != 0 && $child != 0 && $sub_child != 0){
-			$rs = $this->db->select('tbl_product.*,tbl_product_attribute.id_product_attribute,tbl_product_attribute.id_color,tbl_product_attribute.id_size,tbl_color.*,tbl_size.*')->join('tbl_product_attribute','tbl_product_attribute.id_product = product_online.id_product')->join('tbl_color','tbl_product_attribute.id_color = tbl_color.id_color')->join('tbl_product','tbl_product.id_product=product_online.id_product')->join('tbl_size','tbl_product_attribute.id_size = tbl_size.id_size')->where('product_online.id_parent_menu',$parent)->where('product_online.id_child_menu',$child)->where('product_online.id_subchild_menu',$sub_child)->group_by('tbl_product.id_product')->get('product_online');
+			$rs = $this->db->select('tbl_product.*,tbl_product_attribute.id_product_attribute,tbl_product_attribute.id_color,tbl_product_attribute.id_size,tbl_color.*,tbl_size.*')->join('tbl_product_attribute','tbl_product_attribute.id_product = product_online.id_product')->join('tbl_color','tbl_product_attribute.id_color = tbl_color.id_color')->join('tbl_product','tbl_product.id=product_online.id_product')->join('tbl_size','tbl_product_attribute.id_size = tbl_size.id_size')->where('product_online.id_parent_menu',$parent)->where('product_online.id_child_menu',$child)->where('product_online.id_subchild_menu',$sub_child)->group_by('tbl_product.id')->get('product_online');
 
 		}else{
-			$rs = $this->db->select('tbl_product.*,tbl_product_attribute.id_product_attribute,tbl_product_attribute.id_color,tbl_product_attribute.id_size,tbl_color.*,tbl_size.*')->join('tbl_product_attribute','tbl_product_attribute.id_product = product_online.id_product')->join('tbl_color','tbl_product_attribute.id_color = tbl_color.id_color')->join('tbl_product','tbl_product.id_product=product_online.id_product')->join('tbl_size','tbl_product_attribute.id_size = tbl_size.id_size')->where('product_online.id_parent_menu',$parent)->where('tbl_product.show_in_shop',1)->group_by('tbl_product.id_product')->get('product_online');
+			$rs = $this->db->select('tbl_product.*,tbl_product_attribute.id_product_attribute,tbl_product_attribute.id_color,tbl_product_attribute.id_size,tbl_color.*,tbl_size.*')->join('tbl_product_attribute','tbl_product_attribute.id_product = product_online.id_product')->join('tbl_color','tbl_product_attribute.id_color = tbl_color.id_color')->join('tbl_product','tbl_product.id=product_online.id_product')->join('tbl_size','tbl_product_attribute.id_size = tbl_size.id_size')->where('product_online.id_parent_menu',$parent)->where('tbl_product.show_in_shop',1)->group_by('tbl_product.id')->get('product_online');
 
 		}
 
@@ -100,7 +100,27 @@ class Product_model extends CI_Model
 	
 	public function getProductDetail($id)
 	{
-		$rs = $this->db->where('id_product', $id)->get('tbl_product');
+		$rs = $this->db->select('tbl_product.id as product_id,
+			tbl_product.code as product_code,
+			tbl_product.name as product_name,
+			tbl_product.price as product_price,
+			tbl_product.discount_percent,
+			tbl_product.discount_amount,
+			tbl_style.id as style_id,
+			tbl_style.code as style_code,
+			tbl_style.name as style_name,
+			tbl_color.id_color,
+			tbl_color.color_code,
+			tbl_color.color_name,
+			tbl_size.id_size,
+			tbl_size.size_name,
+			')
+		->join('tbl_style' , 'tbl_style.id = tbl_product.id_style')
+		->join('tbl_color','tbl_color.id_color = tbl_product.id_color')
+		->join('tbl_size','tbl_size.id_size = tbl_product.id_size')
+		->where('tbl_product.id' ,$id)
+		->order_by('tbl_product.id_category', 'desc')
+		->get('tbl_product');		
 		if( $rs->num_rows() == 1 )
 		{
 			return $rs->row();
@@ -248,7 +268,7 @@ class Product_model extends CI_Model
 	{
 		$info = '';
 		$rs = $this->db->select('product_detail')->where('id_product', $id_pd)->get('tbl_product_detail');
-		if( $rs->num_rows() == 1 )
+		if( $rs->num_rows() == 1)
 		{
 			$info = $rs->row()->product_detail;
 		}

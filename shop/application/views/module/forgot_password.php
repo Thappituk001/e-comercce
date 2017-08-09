@@ -1,4 +1,4 @@
-
+<?php include_once("ga.php") ?>
 <div class="container main-container head-offset">
 	<div class="row featuredPostContainer globalPadding style2">
 		<h3 class="section-title style2 text-center header-main"><span>FORGOT PASSWORD</span></h3>

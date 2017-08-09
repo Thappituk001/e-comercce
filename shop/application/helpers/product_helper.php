@@ -165,13 +165,13 @@ function itemPrice($id_pa)
 	return $price;
 }
 
-function sell_price($price = 0, $discount = 0, $discount_type = 'percentage')
+function sell_price($price = 0, $discount_amount = 0 , $discount_percent = 0)
 {
-	if( $discount_type === 'percentage' OR $discount_type === 'percent' )
+	if( $discount_percent !== 0 && $price !== 0)
 	{
-		$discount = $price * ($discount * 0.01);
+		$discount = $price * ($discount_percent * 0.01);
 	}
-	return $price - $discount;
+	return ($price - $discount) - $discount_amount ;
 }
 
 function discountAmount($id_pa, $qty, $id_cus)
@@ -189,9 +189,19 @@ function discountAmount($id_pa, $qty, $id_cus)
 	return $dca;
 }
 
-function discount_label($dis = 0, $type = 'percentage')
+function discount_label($discount_amount = 0, $discount_percent = 0)
 {
-	$discount 	= $type == 'percentage' ? $dis.' %' : $dis.' '.getConfig('CURRENCY');
+	if($discount_percent > 0  && $discount_amount <= 0){
+		$discount 	= $discount_percent.' %';
+	}else if ($discount_amount > 0 && $discount_percent <= 0 ) {
+		$discount 	= number_format($discount_amount,2,'.','').' '.getConfig('CURRENCY');
+	}else if($discount_amount > 0 && $discount_percent > 0){
+		$discount 	= $discount_percent.' %'.' AND '.number_format($discount_amount,2,'.','').' '.getConfig('CURRENCY');
+	}else{
+		$discount = null;
+	}
+
+	
 	return $discount;
 }
 

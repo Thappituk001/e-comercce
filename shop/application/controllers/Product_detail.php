@@ -28,6 +28,7 @@ class Product_detail extends CI_Controller
 		$data['view']	= 'product_detail';
 		$data['menus'] =  $this->Menu_model->menus();
 		
+		
 		$this->load->view($this->layout, $data);
 	}
 	

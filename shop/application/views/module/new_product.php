@@ -1,3 +1,4 @@
+<?php include_once("ga.php") ?>
 <a onclick="openNav()" id="btn_filter" class="btn_filter hidden-lg hidden-md hidden-sm">open</a>
 <script type="text/javascript" src="<?php echo base_url(); ?>shop/assets/plugins/icheck-1.x/icheck.min.js"></script> 
 

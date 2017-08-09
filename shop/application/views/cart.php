@@ -1,3 +1,4 @@
+<?php include_once("./module/ga.php") ?>
 <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.16.0/jquery.validate.js"></script>
 
 <div class="container main-container headerOffset" id="body">

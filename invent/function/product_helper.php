@@ -207,7 +207,7 @@ function getProductDetail($id='')
 {
 	if($id != '')
 	{
-		$qs  = dbQuery("SELECT * FROM tbl_product WHERE id_product = ".$id);	
+		$qs  = dbQuery("SELECT * FROM tbl_product WHERE id = ".$id);	
 	}
 	$rs = $id == '' ? '' : dbFetchArray($qs);
 	$ds = array(

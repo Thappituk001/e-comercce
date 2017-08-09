@@ -37,6 +37,10 @@ class Main extends CI_Controller
 
 		$data['menus'] =  $this->Menu_model->menus();
 
+		// echo "<pre>";
+		// print_r($data['new_arrivals']);
+		// exit();
+
 
 		$this->load->view("include/template", $data);
 	}
@@ -56,6 +60,8 @@ class Main extends CI_Controller
 		$data['cart_qty']		= $this->cart_qty;
 
 		$data['menus'] =  $this->Menu_model->menus();
+
+
 		$this->load->view($this->layout, $data);	
 	}
 

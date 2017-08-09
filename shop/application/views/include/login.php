@@ -2,6 +2,7 @@
 <!-- <script src="/invent/library/js/jquery.md5.js"></script> -->
 <!-- Modal Login start -->
 <!-- <script type="text/javascript" src="<?php echo base_url(); ?>shop/assets/plugins/icheck-1.x/icheck.min.js"></script>  -->
+
 <div class="modal signUpContent fade" id="ModalLogin" tabindex="-1" role="dialog" >
     <div class="modal-dialog" style="width:300px;">
         <div class="modal-content">

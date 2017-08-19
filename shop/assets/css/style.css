@@ -1141,8 +1141,9 @@ legend {
 }
 
 .old-price {
-    color: #666666;
-    font-size: 14px;
+    /*color: #666666;*/
+    color: #C51A1A;
+;    font-size: 14px;
     font-weight: normal;
     text-decoration: line-through;
 }
@@ -2849,16 +2850,16 @@ h1.bolder-style.dark, h1.bolder-style.dark a {
 
 .item h4 a {
     font-family: 'Source Sans Pro', sans-serif;
-    font-weight: 700;
-    color: #3a3a3a;
+    font-weight: 800;
+    color: #051104;
     text-decoration: none;
     text-transform: uppercase;
-    font-size: 16px;
+    font-size: 18px;
 
 }
 
 .description p {
-    color: #888888;
+    color: #797A79;
     font-size: 14px;
     min-height: 55px;
     max-height: 90px;
@@ -2869,7 +2870,7 @@ h1.bolder-style.dark, h1.bolder-style.dark a {
 .price {
     font-size: 18px;
     font-weight: bold;
-    color: #454545;
+    color: #051104;
 }
 
 .action-control {

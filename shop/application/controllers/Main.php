@@ -48,17 +48,21 @@ class Main extends CI_Controller
 	public function productDetail($id_pd)
 	{
 		$data['title']			= 'Product Details';
-		$data['pd'] 			= $this->product_model->getProductDetail($id_pd);
+		$data['product'] 			= $this->product_model->getProductDetail($id_pd);
 		$data['images']			= $this->product_model->productImages($id_pd);
-		$data['count_attrs']	= $this->product_model->getAttrs($id_pd);
-		$data['cart_items']		= $this->cart_items==''?$this->cart_items=array():$this->cart_items;
-		$data['product_info']	= $this->product_model->getProductInfo($id_pd);
+
+		// echo "<pre>";
+		// print_r($data['pd']);
+		// exit();
+
+
+
+
 		$data['view']			= 'product_detail';
-		
+		$data['cart_items']		= $this->cart_items==''?$this->cart_items=array():$this->cart_items;
 		$data['id_customer']    = $this->id_customer;
 		$data['id_cart']		= $this->id_cart;
 		$data['cart_qty']		= $this->cart_qty;
-
 		$data['menus'] =  $this->Menu_model->menus();
 
 
@@ -76,53 +80,45 @@ class Main extends CI_Controller
 			$result = $this->main_model->moreFeatures($this->input->post('offset'));
 			if( $result !== FALSE )
 			{
+				// print_r($result);
 				foreach( $result as $rs )
 				{
 					$promo = 0;
-					if( $rs->discount != 0 OR is_new_product($rs->id_product) )
+					if( $rs->discount_amount > 0 || $rs->discount_percent > 0 )
 					{
 						$promo = 1;
 					}
 					$arr = array(
-						'link'				=>	'main/productDetail/'.$rs->id_product,
-						'image_path'		=> get_image_path(get_id_cover_image($rs->id_product), 3),
-						'promotion'		=> $promo,
-						'new_product'	=> is_new_product($rs->id_product) === TRUE ? 1 : 0,
-						'discount'			=> intval($rs->discount),
-						'discount_label'	=> discount_label($rs->discount, $rs->discount_type),
-						'product_code'	=> $rs->product_code,
-						'product_name'	=> $rs->product_name,
-						'sell_price'		=> sell_price($rs->product_price, $rs->discount, $rs->discount_type),
-						'price'				=> $rs->product_price
+						'link'				=>	'main/productDetail/'.$rs->product_id,
+						'image_path'		=> get_image_path(get_id_cover_image($rs->product_id), 3),
+						'promotion'			=> $promo,
+						'new_product'		=> is_new_product($rs->product_id),
+						'discount'			=> $rs->discount_amount+$rs->discount_percent,
+						'discount_amount'	=> number_format($rs->discount_amount,2,'.',''),
+						'discount_percent'	=> number_format($rs->discount_percent,2,'.',''),
+						'discount_label'	=> discount_label($rs->discount_amount, $rs->discount_percent),
+						'product_code'	=> $rs->style_code,
+						'product_name'	=> $rs->style_name,
+						'sell_price'		=> sell_price($rs->product_price, $rs->discount_amount, $rs->discount_percent),
+						'price'				=> number_format($rs->product_price,2,'.','')
 						);	
 					array_push($data, $arr);
-				}
-				echo json_encode($data);
+				}//foreach 
 
+				print_r(json_encode($data));
+			}//$result !== FALSE 
+			else{
+				echo "none";
 			}
-			else
-			{
-				echo 'none';	
-			}
-		}
-		else
-		{
-			echo 'none';
-		}
-
-	}
+			
+		}//$this->input->post('offset')
+		
+	}//function loadmore
 	
-	// public function cart($id=0)
-	// {
-	// 	$data['title']			= 'Cart detail';
-	// 	$data['cart_items']		= $this->cart_items;
-	// 	$data['view'] 			= 'cart';			
-
-	// 	$this->load->view($this->layout, $data);
-
-	// }
+	
+	
 	
 }/// end class
-// Message: Missing argument 1 for Main::cart(), called in C:\xampp\htdocs\invent\shop\system\core\CodeIgniter.php on line 514 and defined
+
 
 ?>

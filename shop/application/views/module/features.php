@@ -14,7 +14,6 @@
                             <a href="<?php echo $link; ?>"><img src="<?php echo get_image_path(get_id_cover_image($item->product_id), 3); ?>" alt="img" class="img-responsive"></a>
 							<?php if( $item->discount_amount > 0 ) : ?>
                             <div class="promotion">
-                            	
                                 <?php if( $item->discount_percent > 0 || $item->discount_amount > 0  ) : ?>
                                 	<span class="discount"><?php echo discount_label($item->discount_amount,$item->discount_percent); ?> OFF</span>
                                 <?php endif; ?>
@@ -75,15 +74,14 @@
 			<p>{{ product_name }}</p>
 		</div>
 		<div class="price">
-			<span>{{ sell_price }}</span> 
 			{{#if discount}}
-			<span class="old-price">{{ price }}</span>
+			<span class="old-price">{{ price }} บาท</span>
 			{{/if}}
+            <br><span>{{ sell_price }} บาท</span> 
 		</div>
 		<div class="action-control"><a class="btn btn-primary"> <span class="add2cart"><i class="glyphicon glyphicon-shopping-cart"> </i> Add to cart </span> </a></div>
 	</div>
 </div>
-
 {{/each}}
 </script> 
 <script>
@@ -101,8 +99,9 @@ function loadMoreFeatures()
 			var rs = $.trim(rs);
 			if( rs != 'none' )
 			{
+                // console.log(rs);
 				var source = $('#item_template').html();
-				var data		= $.parseJSON(rs);
+				var data    = $.parseJSON(rs);
 				var output	= $('#feature-box');
 				render_append(source, data, output);
 			}
@@ -110,6 +109,7 @@ function loadMoreFeatures()
 	});	
 	}, 1000);
 }
+
 </script>
 
 <?php endif; ?>

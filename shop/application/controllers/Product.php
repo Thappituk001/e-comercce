@@ -23,25 +23,9 @@ class Product extends CI_Controller
 		$this->cart_qty		= $this->cart_model->cartQty($this->id_cart);
 		$this->product_qty  = 0;
 		
+		
 	}
 	
-	public function index()
-	{
-		// $data['title']			= $this->title;		
-		// $data['view']			= 'module/product';
-		// $data['product']	= $this->product_model->getAllProduct();
-		// $data['color']			= $this->product_model->getColor();
-		// $data['size']			= $this->product_model->getSize();
-		// $data['cart_items']		= $this->cart_items==''?$this->cart_items=array():$this->cart_items;
-		// $data['id_customer']    = $this->id_customer;
-		// $data['id_cart']		= $this->id_cart;
-		// $data['cart_qty']		= $this->cart_qty;
-		// $data['menus'] 			=  $this->Menu_model->menus();
-		
-		// $this->load->view("include/template", $data);
-	}
-
-
 	public function item($parent= 0,$child= 0,$sub_child= 0){
 		$data['title']			= $this->title;		
 		$data['view']			= 'module/product';
@@ -49,27 +33,36 @@ class Product extends CI_Controller
 		$product		     = $this->product_model->getProduct($parent,$child,$sub_child);	
 		$data['product']	    = $product;
 		$this->product_qty      = count($product);
-
-		$data['color']['color_group']			= '';
-		$data['size']			= $this->product_model->getSize($parent,$child,$sub_child);
-
-		// echo "<pre>";
-		// print_r($product);
-		// exit();
-
-		// pass product color to array 
+		$ColorGroup 			= array();
+		$size 					= array();
+		$id 					= array();
+		$data['color']          = "";
+		$data['size']			= array();
+		
+		//pass product color to array 
 		if(!empty($product)){
-			
+			$id_s = '';
 			foreach ($product as $pd) {
 				if(!empty($pd)){
-					$s = array_search($pd->color_group,$data['color']);
-					if(empty($s)){
-						array_push($data['color'], $pd->color_group);
-					}
-				}
-			}
-		}
-
+					
+					if(!in_array($pd->id_color_group,$size, TRUE))
+					{
+						array_push($ColorGroup ,$pd->color_group_name);
+					}//if color group
+					
+					if (!in_array($pd->id_size,$id, TRUE))
+					{
+						array_push($id,$pd->id_size);
+						array_push($size ,array("id"=>$pd->id_size,"name"=>$pd->size_name));
+					}//if size
+				}//if !empty
+			}//foreach
+		}//!empty
+		
+		$data['color']  = array_unique($ColorGroup);
+		$data['size']   = $size;
+		
+		//filter data
 		if($this->input->get()){
 			$present_qty = count($data['product']);
 			$color = $this->input->get('color')==''?array():$this->input->get('color',true);
@@ -77,107 +70,29 @@ class Product extends CI_Controller
 			$minPrice = $this->input->get('minPrice')==''?0:$this->input->get('minPrice',true);
 			$maxPrice = $this->input->get('maxPrice')==''?10000:$this->input->get('maxPrice',true);
 
-			$productColor = array();
-
-			if($present_qty = $this->product_qty){
-			
-				foreach ($data['product'] as $p) {
-					if(!empty($color)){
-						foreach ($color as $c) {
-							if($p->color_group == $c){
-								if(!empty($size)){
-									if(!empty($minPrice) && !empty($maxPrice)){
-										if($p->product_price>= $minPrice && $p->product_price <= $maxPrice ){
-											array_push($productColor,$p);
-										}
-									}else{
-										array_push($productColor,$p);
-									}// else !emply minPrice
-								}else{
-									
-									if(!empty($minPrice) && !empty($maxPrice)){
-										if($p->product_price>= $minPrice && $p->product_price <= $maxPrice ){
-											array_push($productColor,$p);
-										}
-									}else{
-										array_push($productColor,$p);
-									}// else !emply minPrice
-								}//else !emply size
-							}//if $c
-						}//foreach color
-					}else{
-						if(!empty($size)){
-							if(!empty($minPrice) && !empty($maxPrice)){
-								if($p->product_price>= $minPrice && $p->product_price <= $maxPrice ){
-									array_push($productColor,$p);
-								}
-							}else{
-								array_push($productColor,$p);
-							}// else !emply minPrice
-						}else{
-							if(!empty($minPrice) && !empty($maxPrice)){
-								if($p->product_price>= $minPrice && $p->product_price <= $maxPrice ){
-									array_push($productColor,$p);
-								}
-							}else{
-								array_push($productColor,$p);
-							}// else !emply minPrice
-						}//else !emply size
-					}//if !emply color
-
-				}//foreach product
-				$data['product'] = $productColor;	
-			}//if
-			else{
-				$product	 = $this->product_model->getProduct($parent,$child,$sub_child);	
-				foreach ($data['product'] as $p) {
-					if(!empty($color)){
-						foreach ($color as $c) {
-							if($p->color_group == $c){
-								if(!empty($size)){
-									if(!empty($minPrice) && !empty($maxPrice)){
-										if($p->product_price>= $minPrice && $p->product_price <= $maxPrice ){
-											array_push($productColor,$p);
-										}
-									}else{
-										array_push($productColor,$p);
-									}// else !emply minPrice
-								}else{
-									
-									if(!empty($minPrice) && !empty($maxPrice)){
-										if($p->product_price>= $minPrice && $p->product_price <= $maxPrice ){
-											array_push($productColor,$p);
-										}
-									}else{
-										array_push($productColor,$p);
-									}// else !emply minPrice
-								}//else !emply size
-							}//if $c
-						}//foreach color
-					}else{
-						if(!empty($size)){
-							if(!empty($minPrice) && !empty($maxPrice)){
-								if($p->product_price>= $minPrice && $p->product_price <= $maxPrice ){
-									array_push($productColor,$p);
-								}
-							}else{
-								array_push($productColor,$p);
-							}// else !emply minPrice
-						}else{
-							if(!empty($minPrice) && !empty($maxPrice)){
-								if($p->product_price>= $minPrice && $p->product_price <= $maxPrice ){
-									array_push($productColor,$p);
-								}
-							}else{
-								array_push($productColor,$p);
-							}// else !emply minPrice
-						}//else !emply size
-					}//if !emply color
-				}//foreach product
-				$data['product'] = $productColor;
-			}
-		}//if
+			$productArray = array();
 		
+			
+			if($present_qty = $this->product_qty){
+				$n = 0;
+				foreach ($data['product'] as $p) {
+					
+					if(
+						(in_array($p->color_group_name,$color) && !empty($color)) || 
+						(in_array($p->id_size,$size) && !empty($size)) &&
+						($p->product_price >= $minPrice) &&
+						($p->product_price <= $maxPrice) 
+					 )
+					{
+						array_push($productArray, $p);
+					}
+				}
+				
+				$n++;
+			}//if be present data
+
+			$data['product'] = $productArray;
+		}//if get filter
 
 		$data['cart_items']		= $this->cart_items==''?$this->cart_items=array():$this->cart_items;
 		$data['id_customer']    = $this->id_customer;
@@ -189,14 +104,63 @@ class Product extends CI_Controller
 		
 	}
 
-	public function orderGrid(){
-		$id_product = $this->input->post('id_pd',true);
-		echo "on orderGrid";
-	}
+	
 
-	public function filter_product(){
-		echo "filter";
-	}
+	public function loadMoreItem()
+	{
+		
+		$data = array();
+		if( $this->input->post('offset') )
+		{
+			$result = $this->product_model->moreItem($this->input->post('offset'),$this->input->post('parent',true),$this->input->post('child',true),$this->input->post('sub_child',true));
+			if( $result !== FALSE )
+			{
+				foreach( $result as $rs )
+				{
+					$promo = 0;
+					if( $rs->discount_amount > 0 || $rs->discount_percent > 0 )
+					{
+						$promo = 1;
+					}
+					$arr = array(
+						'link'				=>	'main/productDetail/'.$rs->product_id,
+						'image_path'		=> get_image_path(get_id_cover_image($rs->product_id), 3),
+						'promotion'			=> $promo,
+						'new_product'		=> is_new_product($rs->product_id),
+						'discount'			=> $rs->discount_amount+$rs->discount_percent,
+						'discount_amount'	=> number_format($rs->discount_amount,2,'.',''),
+						'discount_percent'	=> number_format($rs->discount_percent,2,'.',''),
+						'discount_label'	=> discount_label($rs->discount_amount, $rs->discount_percent),
+						'product_code'	=> $rs->style_code,
+						'product_name'	=> $rs->style_name,
+						'sell_price'		=> sell_price($rs->product_price, $rs->discount_amount, $rs->discount_percent),
+						'price'				=> number_format($rs->product_price,2,'.','')
+						);	
+					array_push($data, $arr);
+				}//foreach 
+				print_r(json_encode($data));
+			}//$result !== FALSE 
+			else{
+				print_r(array());
+			}
+			
+		}//$this->input->post('offset')
+
+		
+	}//function loadmore
+	
+	public function orderGrid(){
+		$this->load->helper('product_helper');
+
+		$grid = array(
+			'color'=> get_product_colors($this->input->post('id_style')),
+			'size' => get_product_sizes($this->input->post('id_style')),
+			);
+
+		print_r(json_encode($grid));
+
+	}//orderGrid
+
 }
 
 ?>

@@ -19,13 +19,25 @@ function itemName($id_pa)
 }
 
 /// ส่งกลับรายชื่อสีต่างๆของสินค้าเป็น Object
-function get_product_colors($id_pd)
+function get_product_colors($id)
 {
 	$colors = FALSE ;
 	$c 		=& get_instance();
-	$c->db->select('tbl_product_attribute.id_color, color_code, color_name')->from('tbl_color')->join('tbl_product_attribute', 'tbl_product_attribute.id_color = tbl_color.id_color');
-	$c->db->where('id_product', $id_pd)->group_by('tbl_product_attribute.id_color');
-	$rs 		= $c->db->get();
+	$rs = $c->db->select('tbl_product.id as product_id,
+				tbl_style.id as style_id,
+				tbl_color.id_color,
+				tbl_color.color_code,
+				tbl_color.color_name,
+				tbl_color.id_color_group,
+				color_group.color_group_name,
+				color_group.code_color
+				')
+			->join('tbl_style' , 'tbl_style.id = tbl_product.id_style')
+			->join('tbl_color','tbl_color.id_color = tbl_product.id_color')
+			->join('color_group','color_group.id_color_group = tbl_color.id_color_group')
+			->where('tbl_product.id_style',$id)
+			->get('tbl_product');	
+
 	if( $rs->num_rows() > 0 )
 	{
 		$colors	= $rs->result();
@@ -33,49 +45,24 @@ function get_product_colors($id_pd)
 	return $colors;
 }
 
-function get_product_sizes($id_pd)
+function get_product_sizes($id)
 {
 	$sizes = FALSE; 
-	$c 	=& get_instance();
-	$c->db->select('tbl_product_attribute.id_size, size_name')->from('tbl_size')->join('tbl_product_attribute', 'tbl_product_attribute.id_size = tbl_size.id_size');
-	$c->db->where('id_product', $id_pd)->group_by('tbl_product_attribute.id_size');
-	$rs	= $c->db->get();
+	$c 		=& get_instance();
+	$rs = $c->db->select('tbl_product.id as product_id,
+				tbl_size.id_size,
+				tbl_size.size_name
+				')
+			
+			->join('tbl_size','tbl_size.id_size = tbl_product.id_size')
+			->where('tbl_product.id_style',$id)
+			->get('tbl_product');	
+
 	if( $rs->num_rows() > 0 )
 	{
 		$sizes = $rs->result();	
 	}
 	return $sizes;
-}
-
-function get_product_attributes($id_pd)
-{
-	return $id_pd;
-}
-
-function has_attribute($id_pd, $attribute = 'color')
-{
-	$rs = FALSE;	
-	switch( $attribute )
-	{
-		case 'color' :
-		$attr = 'id_color';
-		break;
-		case 'size' :
-		$attr = 'id_size';
-		break;
-		case 'attribute' :
-		$attr = 'id_attribute';
-		break;
-		default :
-		$attr = 'id_color';
-		break;
-	}
-	$qs = get_instance()->db->where('id_product', $id_pd)->where($attr.' !=', 0)->limit(1)->get('tbl_product_attribute');
-	if( $qs->num_rows() == 1 )
-	{
-		$rs = TRUE; 
-	}
-	return $rs;
 }
 
 function get_discount($id_cus = 0, $id_pd = 0)
@@ -210,12 +197,13 @@ function is_new_product($id_pd)
 	$is 			= FALSE;
 	$new_days = getConfig('NEW_PRODUCT_DATE');
 	$date 		= beforeDate($new_days);
-	$rs = get_instance()->db->select('id_product')->where('id_product', $id_pd)->where('date_add >', $date)->get('tbl_product');
+	$rs = get_instance()->db->select('id')->where('id', $id_pd)->where('date_upd >', $date)->get('tbl_product');
 	if( $rs->num_rows() == 1 )
 	{
 		$is		= TRUE; 
 	}
 	return $is;
+
 }
 
 function get_id_cover_image($id_pd)

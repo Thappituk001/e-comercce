@@ -11,20 +11,6 @@
 <!-- include carousel slider plugin  -->
 <script src="<?php echo base_url(); ?>shop/assets/js/owl.carousel.min.js"></script>
 
-<!-- <script src="<?php echo base_url(); ?>shop/assets/plugins/magnific/jquery.magnific-popup.min.js"></script> -->
-
-
-<!-- 
-<script src="<?php echo base_url(); ?>shop/assets/js/bootstrap.touchspin.js"></script>
-
-include touchspin.js // touch friendly input spinner component   -->
-<!--
-<script src="<?php echo base_url(); ?>shop/assets/js/script.js"></script>
-
- include custom script for site  -->
-
-<!-- <script src="<?php echo base_url(); ?>shop/assets/plugins/rating/bootstrap-rating.min.js"></script> -->
-
 <script>
 
     // For Demo purposes only
@@ -45,7 +31,6 @@ include touchspin.js // touch friendly input spinner component   -->
         goToFirstSpeed: 2000,
         singleItem: true,
         autoHeight: true
-
 
     });
 

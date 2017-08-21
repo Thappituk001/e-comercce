@@ -1,4 +1,4 @@
-<?php include_once("ga.php") ?>
+
 <?php if( @$new_arrivals !== true ) : ?>
 
     <div class="container main-container head-offset">
@@ -6,8 +6,11 @@
 
         <div class="row featuredPostContainer globalPadding style2">
             <h3 class="section-title style2 text-center header-main"><span>NEW ARRIVALS</span></h3>
+
+            
             <div id="productslider" class="owl-carousel owl-theme ">
                 <?php foreach( @$new_arrivals as $item ) : ?>
+
                     <?php 	@$link = 'main/productDetail/'.$item->product_id; ?>
                     <div class="item">
                         <div class="product">

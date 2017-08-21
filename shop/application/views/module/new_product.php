@@ -43,7 +43,7 @@
     <div class="row xsResponse" id="feature-box">
 
       <?php foreach( $product_query as $item ) : ?>
-
+        
         <?php 	$link	= 'main/productDetail/'.$item->id_product; ?>
         <div class="item col-lg-3 col-md-3 col-sm-4 col-xs-6 features">
           <div class="product">                

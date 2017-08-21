@@ -28,7 +28,7 @@
 									</div>
 									<?php $j = 1; ?>
 									<?php foreach ($images as $img): ?>
-										<label for="image<?= $j ?>" class="thumb" style="background-image: url('<?php echo get_image_path(@$img->id_image, 4); ?>">
+										<label for="image<?= $j ?>" class="thumb" style="background-image: url('<?php echo get_image_path(@$img->id, 4); ?>">
 										</label>
 										<?php $j++; ?>
 									<?php endforeach ?>
@@ -39,7 +39,7 @@
 									<?php foreach ($images as $img): ?>
 										<figure>
 											<label for="fullscreen">
-												<img src="<?php echo get_image_path(@$img->id_image, 4); ?>" alt="image<?= $o ?>"/>
+												<img src="<?php echo get_image_path(@$img->id, 4); ?>" alt="image<?= $o ?>"/>
 											</label>
 										</figure>
 										<?php $o++; ?>
@@ -137,16 +137,59 @@
 					<h5 class="modal-title text-center" id="productCode"><?php echo $pd->style_code; ?> |  <?php echo $pd->style_name; ?></h5>
 				</div>
 				<div class="modal-body" id="orderContent">
-
+					<script id="item_template" type="text/x-handlebars-template">
+					<form class="form-horizontal">
+						<div class="table-responsive">
+							<table class="table table-bordered table-striped table-highlight">
+								<thead>
+									<th></th>
+									<th>Date</th>
+									<th>Cost</th>
+									<th>Tax</th>
+									<th>Other Col</th>
+									<th>Other Col</th>
+									<th>Other Col</th>
+								</thead>
+								<tbody>
+									<tr>
+										<td>
+											<input type="text" class="form-control" value="" />
+										</td>
+										<td>
+											<input type="text" class="form-control" value="" />
+										</td>
+										<td>
+											<input type="text" class="form-control" value="" />
+										</td>
+										<td>
+											<input type="text" class="form-control" value="" />
+										</td>
+										<td>
+											<input type="text" class="form-control" value="" />
+										</td>
+										<td>
+											<input type="text" class="form-control" value="" />
+										</td>
+										<td>
+											<input type="text" class="form-control" value="" />
+										</td>
+										
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</form>
+					</script>
 				</div>
-				<div class="modal-footer">
-					<input type="hidden" name="id_product" id="id_product" value="<?php echo $pd->product_id; ?>" />
-					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-					<button type="button" class="btn btn-primary" onClick="addToCart()">Add to cart</button>
-				</div>
-			</div><!-- /.modal-content -->
-		</div><!-- /.modal-dialog -->
-	</div><!-- /.modal -->
+			</div>
+			<div class="modal-footer">
+				<input type="hidden" name="id_product" id="id_product" value="<?php echo $pd->product_id; ?>" />
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				<button type="button" class="btn btn-primary" onClick="addToCart()">Add to cart</button>
+			</div>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
 </form>
 
 <?php endif; ?>
@@ -223,15 +266,21 @@
 			data: { "id_style" : id },
 			success: function(rs){
 				// load_out();
-				
-		           console.log(rs);
+
+				var arr = Object.keys(JSON.parse(rs)).map(function(k) { return JSON.parse(rs)[k] });
+				var color = arr[0];
+				var size = arr[1];
+
+				console.log(color[0].code_color);
+
+		        // $("#orderContent").html();
 		        
-					// $("#orderGrid").modal('show');
-				
-				// console.log(rs);			
-			},error: function(XMLHttpRequest, textStatus, errorThrown) {
-				console.log(errorThrown);
-			}
+		        $("#orderGrid").modal('show');
+
+
+		    },error: function(XMLHttpRequest, textStatus, errorThrown) {
+		    	console.log(errorThrown);
+		    }
 		});
 	}
 

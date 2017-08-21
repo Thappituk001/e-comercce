@@ -209,10 +209,10 @@ function is_new_product($id_pd)
 function get_id_cover_image($id_pd)
 {
 	$id_image = 0;
-	$rs = get_instance()->db->where('id_product', $id_pd)->where('cover', 1)->get('tbl_image');
+	$rs = get_instance()->db->where('id_style', $id_pd)->where('cover', 1)->get('tbl_image');
 	if( $rs->num_rows() > 0 )
 	{
-		$id_image = $rs->row()->id_image;	
+		$id_image = $rs->row()->id;	
 	}
 	return $id_image;
 }

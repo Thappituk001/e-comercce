@@ -237,7 +237,7 @@ class Product_model extends CI_Model
 	
 	public function productImages($id_pd)
 	{
-		$rs = $this->db->where('id_product', $id_pd)->get('tbl_image');
+		$rs = $this->db->where('id_style', $id_pd)->get('tbl_image');
 		if( $rs->num_rows() > 0 )
 		{
 			return $rs->result();	

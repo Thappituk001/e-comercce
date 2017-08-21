@@ -48,11 +48,11 @@ class Main extends CI_Controller
 	public function productDetail($id_pd)
 	{
 		$data['title']			= 'Product Details';
-		$data['product'] 			= $this->product_model->getProductDetail($id_pd);
+		$data['product'] 		= $this->product_model->getProductDetail($id_pd);
 		$data['images']			= $this->product_model->productImages($id_pd);
 
 		// echo "<pre>";
-		// print_r($data['pd']);
+		// print_r($data['images']);
 		// exit();
 
 

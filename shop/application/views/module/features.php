@@ -7,6 +7,7 @@
         <div class="container" id="draggable">
             <div class="row xsResponse" id="feature-box">
             <?php foreach( $features as $item ) : ?>
+
             <?php 	$link	= 'main/productDetail/'.$item->product_id; ?>
                 <div class="item col-lg-3 col-md-3 col-sm-4 col-xs-6 features">
                     <div class="product">

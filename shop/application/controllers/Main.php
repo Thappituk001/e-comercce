@@ -14,9 +14,8 @@ class Main extends CI_Controller
 		$this->load->model('cart_model');
 		$this->load->model('Menu_model');
 
-
 		$this->home = base_url()."shop/main";
-		
+
 		$this->id_customer  = getIdCustomer();//great or member
 		$this->id_cart 	    = getIdCart($this->id_customer);
 		$this->cart_items 	= $this->cart_model->getCartProduct($this->id_cart);
@@ -50,14 +49,11 @@ class Main extends CI_Controller
 		$data['title']			= 'Product Details';
 		$data['product'] 		= $this->product_model->getProductDetail($id_pd);
 		$data['images']			= $this->product_model->productImages($id_pd);
-
-		// echo "<pre>";
-		// print_r($data['images']);
-		// exit();
-
-
-
-
+		
+		$data['grid']			= $this->product_model->grid($data['product'][0]->style_id);
+		
+		
+		
 		$data['view']			= 'product_detail';
 		$data['cart_items']		= $this->cart_items==''?$this->cart_items=array():$this->cart_items;
 		$data['id_customer']    = $this->id_customer;
@@ -69,7 +65,6 @@ class Main extends CI_Controller
 		$this->load->view($this->layout, $data);	
 	}
 
-	
 
 	public function loadMoreFeatures()
 	{

@@ -65,6 +65,11 @@ function get_product_sizes($id)
 	return $sizes;
 }
 
+function getSizesSelected($id_style,$color_select)
+{
+
+}
+
 function get_discount($id_cus = 0, $id_pd = 0)
 {
 	$product 	= get_product($id_pd);
@@ -450,6 +455,9 @@ function apply_stock_filter($qty = 0)
 	}
 	return $qty;
 }
+
+
+
 
 
 ?>

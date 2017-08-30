@@ -65,44 +65,117 @@
 							<?php endif; ?><br/>
 							<span><?php echo sell_price($pd->product_price, $pd->discount_amount,$pd->discount_percent); ?><?php echo getCurrency(); ?></span> 
 						</div>
+
+						<!--  *************************************************************  -->
+						<!--  *********************** show on web *************************  -->
+
 						<!-- part  of color-->
 						<?php 	$colors 	= get_product_colors($pd->style_id); ?>
-						<div class="product-details-product-color">
+						<div class="product-details-product-color hidden-xs">
 							<span class="selected-color">
+
 								<strong>Color </strong> 
-								<?php if( $colors !== FALSE ) : ?>    
-									<?php $i = count($colors); ?>                
-									<?php 	foreach( $colors as $color ) : ?>
-										<span class="color-value" style="padding-right:10px; display:inline-block;color: <?php echo $color->code_color ?>"><?php echo $color->color_name; ?></span>
-										<?php if( $i >1 ) : ?>|  <?php endif; ?>
-										<?php $i--; ?> 
-									<?php 	endforeach; ?>                                
+								<?php if( $colors !== FALSE ) : ?> 
+
+									<?php 
+									$id 	= [];
+									$color  = [];	
+									foreach ($colors as $c) {
+										if (!in_array($c->id_color,$id)) {
+
+											array_push($id,$c->id_color);
+											array_push($color,["color_name"=>$c->color_name,"code_color"=>$c->code_color,"id_color"=>$c->id_color]);
+											}//if
+										}//foreach
+
+										?>
+
+										<?php $i = count($color);?>   
+										<?php 	foreach( $color as $c ) : ?>
+											<span class="color-value" style="padding-right:10px; display:inline-block;color:<?php print_r($c['code_color'])?>"><?php print_r($c['color_name']); ?></span>
+											<?php if( $i >1 ) : ?> |  <?php endif; ?>
+											<?php $i--; ?> 
+										<?php 	endforeach; ?>                   
+									<?php endif; ?>                                
+								</span>
+							</div>
+
+							<!-- part  of size-->
+
+							<?php 	$sizes	= get_product_sizes($pd->style_id); ?>
+							<div class="product-details-product-color hidden-xs">
+								<span class="selected-color">
+									<strong>Size </strong> 
+									<?php if( $sizes !== FALSE ) : ?>  
+										<?php 	$i = count($sizes) ; ?>                  
+										<?php 	foreach( $sizes as $size ) : ?>
+											<span class="color-value" style="padding-right:10px; display:inline-block"><?php echo $size->size_name; ?></span><?php if( $i >1 ) : ?>|  <?php endif; ?>
+											<?php $i--; ?>                                
+										<?php 	endforeach; ?>                                
+									<?php endif; ?>                                
+								</span>
+							</div>
+
+	
+							<!--  ***************************************************************  -->
+							<!--  ********************** show on mobile *************************  -->
+
+							<?php 	$colors 	= get_product_colors($pd->style_id); ?>
+							<div class="product-details-product-color row-cart-actions clearfix hidden-lg hidden-md hidden-sm">
+								<form>
+									<strong>Select Color</strong> 
+									<?php if( $colors !== FALSE ) : ?> 
+										<?php 
+										$id 	= [];
+										$color  = [];	
+										foreach ($colors as $c) {
+											if (!in_array($c->id_color,$id)) {
+
+												array_push($id,$c->id_color);
+												array_push($color,["color_name"=>$c->color_name,"code_color"=>$c->code_color,"id_color"=>$c->id_color]);
+											}//if
+										}//foreach
+										?>  <div class="form-group">
+										<select class="form-control" id="color_select">
+											<?php 	foreach( $color as $c ) : ?>
+												<option value="<?php print_r($c['id_color']); ?>"><?php print_r($c['color_name']); ?></option>
+												
+											<?php 	endforeach; ?>  
+										</select>
+									</div>                 
 								<?php endif; ?>                                
-							</span>
+
+								<!-- part  of size-->
+								
+								<div class="product-details-product-color hidden-lg hidden-md hidden-sm">
+					
+									<strong>Select Size </strong>
+									<div class="form-group">
+										<select class="form-control" name="size_select" id="size_select">
+											
+										</select>
+									</div>                      
+								</div>
+							</form>
 						</div>
 
-						<!-- part  of size-->
 
-						<?php 	$sizes	= get_product_sizes($pd->style_id); ?>
-						<div class="product-details-product-color">
-							<span class="selected-color">
-								<strong>Size </strong> 
-								<?php if( $sizes !== FALSE ) : ?>  
-									<?php 	$i = count($sizes) ; ?>                  
-									<?php 	foreach( $sizes as $size ) : ?>
-										<span class="color-value" style="padding-right:10px; display:inline-block"><?php echo $size->size_name; ?></span><?php if( $i >1 ) : ?>|  <?php endif; ?>
-										<?php $i--; ?>                                
-									<?php 	endforeach; ?>                                
-								<?php endif; ?>                                
-							</span>
-						</div>
+
+			<!--  **************************** END ******************************  -->
+			<!--  ***************************************************************  -->
+						<input type="text" class="hidden" id="style_id" value="<?= $pd->style_id; ?>">
 
 
 						<div class="row row-cart-actions clearfix hidden-xs" style="margin-top: 20px">
 							<div class="col-sm-12 "><button type="button" class="btn btn-block btn-dark" onClick="getOrderGrid(<?php echo $pd->style_id; ?>)">ต้องการสั่งซื้อ</button></div>
 						</div>
 
-						<div class="clear"></div>
+
+						<div class="row row-cart-actions clearfix hidden-md hidden-lg hidden-sm" style="margin-top: 20px">
+							<div class="col-sm-12 "><button type="button" class="btn btn-block btn-dark" >ต้องการสั่งซื้อ</button></div>
+						</div>
+
+						<!-- <div class="clear"></div> -->
 
 						<div class="product-share clearfix">
 							<p> SHARE </p>
@@ -132,70 +205,93 @@
 	<div class="modal fade" id="orderGrid">
 		<div class="modal-dialog" id="mainGrid">
 			<div class="modal-content">
-				<div class="modal-header">
+				<div class="modal-header" style="background-color:#585858">
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-					<h5 class="modal-title text-center" id="productCode"><?php echo $pd->style_code; ?> |  <?php echo $pd->style_name; ?></h5>
+					<h5 class="modal-title text-center" id="productCode" style="size:26px;margin-top:10px;font-weight: bold;"><?php echo $pd->style_code; ?> |  <?php echo $pd->style_name; ?></h5>
 				</div>
 				<div class="modal-body" id="orderContent">
-					<script id="item_template" type="text/x-handlebars-template">
 					<form class="form-horizontal">
 						<div class="table-responsive">
-							<table class="table table-bordered table-striped table-highlight">
-								<thead>
+							<table class="table table-bordered table-striped table-highlight text-center" >
+								<thead style="text-align: center;">
 									<th></th>
-									<th>Date</th>
-									<th>Cost</th>
-									<th>Tax</th>
-									<th>Other Col</th>
-									<th>Other Col</th>
-									<th>Other Col</th>
+									<?php 
+									$color = [];
+									$size= [];
+
+									?>
+									<?php foreach ($grid as $g): ?>
+										<?php 
+										if(!in_array($g->color_name,$color))
+										{
+											array_push($color, $g->color_name);
+										}
+										if(!in_array($g->size_name,$size)){
+											array_push($size, array($g->size_name,"color"=>$g->color_name));
+										}
+										?>
+									<?php endforeach ?>
+									<?php foreach ($color as $c): ?>
+										<th><?= $c ?></th>
+									<?php endforeach ?>
+
 								</thead>
-								<tbody>
-									<tr>
-										<td>
-											<input type="text" class="form-control" value="" />
-										</td>
-										<td>
-											<input type="text" class="form-control" value="" />
-										</td>
-										<td>
-											<input type="text" class="form-control" value="" />
-										</td>
-										<td>
-											<input type="text" class="form-control" value="" />
-										</td>
-										<td>
-											<input type="text" class="form-control" value="" />
-										</td>
-										<td>
-											<input type="text" class="form-control" value="" />
-										</td>
-										<td>
-											<input type="text" class="form-control" value="" />
-										</td>
-										
-									</tr>
+								<tbody >									
+									<?php foreach ($size as $s): ?>
+										<tr><td><?php  print_r($s[0]); ?></td>
+											<?php foreach ($color as $c): ?>
+												<?php if ($s['color'] == $c): ?>
+													<td><input type="text"></td>
+												<?php else: ?>
+													<td></td>
+												<?php endif ?>
+											<?php endforeach ?>
+										</tr>
+									<?php endforeach ?>
 								</tbody>
 							</table>
-						</div>
-					</form>
-					</script>
+						</form>
+
+					</div>
 				</div>
-			</div>
-			<div class="modal-footer">
-				<input type="hidden" name="id_product" id="id_product" value="<?php echo $pd->product_id; ?>" />
-				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-				<button type="button" class="btn btn-primary" onClick="addToCart()">Add to cart</button>
-			</div>
-		</div><!-- /.modal-content -->
-	</div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
+				<div class="modal-footer">
+					<input type="hidden" name="id_product" id="id_product" value="<?php echo $pd->product_id; ?>" />
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					<button type="button" class="btn btn-primary" onClick="addToCart()">Add to cart</button>
+				</div>
+			</div><!-- /.modal-content -->
+		</div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
 </form>
 
 <?php endif; ?>
 
 
 <script>
+$(document).ready(function(){
+	$("#color_select").change(function(){
+		$.ajax({
+			url:"<?php echo base_url(); ?>shop/product/fetchSize",
+			type:"POST",
+			cache:true, 
+			data: {
+				"color_select" : $(this).val(),
+				"id_style": $("#style_id").val()
+			}, 
+			success: function(rs) { 
+				var opt = "";
+				var res = $.parseJSON(rs)
+				$.each(res, function(key, val){
+					opt +="<option value='"+ val +"'>"+val["size_name"]+"</option>"
+				});
+				$("#size_select").html( opt );
+				console.log(res);
+			},error: function(e) {
+				console.log("error");
+			}
+		});	
+	});
+});//document ready
 
 	function addToCart()
 	{
@@ -256,6 +352,8 @@
 			el.val('');
 		}
 	}
+
+
 	function getOrderGrid(id)
 	{
 		// load_in();
@@ -271,7 +369,7 @@
 				var color = arr[0];
 				var size = arr[1];
 
-				console.log(color[0].code_color);
+				console.log(color[0]);
 
 		        // $("#orderContent").html();
 		        

@@ -750,4 +750,5 @@ function can_do($permission, $text){
 	return $text;
 }
 
+
 ?>

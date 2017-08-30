@@ -2796,5 +2796,6 @@ public function isActiveItem($id_pa)
 	return $sc;
 }
 
+
 }//จบ class
 ?>

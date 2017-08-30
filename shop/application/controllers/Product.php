@@ -10,7 +10,6 @@ class Product extends CI_Controller
 	public function __construct()
 	{
 		parent::__construct();		
-		
 		$this->load->model("main_model");
 		$this->load->model('product_model');
 		$this->load->model('cart_model');
@@ -160,6 +159,16 @@ class Product extends CI_Controller
 		print_r(json_encode($grid));
 
 	}//orderGrid
+
+	public function fetchSize()
+	{
+		
+		$select_color    = $this->input->post('color_select');
+		$id_style		 = $this->input->post('id_style');
+		$rs              = $this->product_model->getSizeByColor($select_color,$id_style);
+		print_r(json_encode($rs));
+
+	}
 
 }
 

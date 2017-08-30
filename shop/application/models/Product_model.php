@@ -340,8 +340,51 @@ class Product_model extends CI_Model
 			return FALSE;
 		}	
 	}
-
 	
+	public function grid($id_style)
+	{
+		$rs = $this->db->select('tbl_color.id_color,tbl_color.color_name,tbl_size.id_size,tbl_size.size_name')
+		->join('tbl_size','tbl_size.id_size = tbl_product.id_size')
+		->join('tbl_color','tbl_color.id_color = tbl_product.id_color')
+		->where('tbl_product.id_style',$id_style)
+		->get('tbl_product');
+
+		if( $rs->num_rows() > 0 )
+		{
+			return $rs->result();	
+		}
+		else
+		{
+			return FALSE;
+		}	
+	}
+
+
+	public function getSizeByColor($select_color,$id_style)
+	{
+		
+
+		$rs = $this->db->select('tbl_size.id_size,tbl_size.size_name')
+		->join('tbl_size','tbl_size.id_size = tbl_product.id_size')
+		->where('tbl_product.id_style',$id_style)
+		->where('tbl_product.id_color',$select_color)
+		->get('tbl_product');
+
+		if( $rs->num_rows() > 0 )
+		{
+			return $rs->result();	
+		}
+		else
+		{
+			return FALSE;
+		}	
+
+
+	}
+
+
+
+
 }/// End class
 
 ?>

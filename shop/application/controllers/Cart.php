@@ -15,6 +15,7 @@ class Cart extends CI_Controller
 		$this->load->model('Menu_model');
 		$this->home = base_url()."shop/main";
 		$this->id_customer  = getIdCustomer();
+		$this->bank 		= getBank();
 		$this->id_cart 	    = getIdCart($this->id_customer);
 		$this->cart_value	= $this->cart_model->cartValue($this->id_cart);
 		$this->cart_items 	= $this->cart_model->getCartProduct($this->id_cart);
@@ -30,39 +31,28 @@ class Cart extends CI_Controller
 	public function cart($id=0)
 	{
 		$data['title']			= 'Cart detail';
-		$data['cart_items']		= $this->cart_items==''?$this->cart_items=array():$this->cart_items;
-		$data['cart_qty']		= $this->cart_qty;
-		$data['menus'] 			=  $this->Menu_model->menus();
 		$data['view'] 			= 'cart';
-		$data['attr']['attr_weight']	= array();
-		$data['attr']['attr_width'] 	= array();	 
-		$data['attr']['attr_height'] 	= array();	 
-		$data['attr']['attr_long']  	= array();	 
-	
 
-		foreach ($this->cart_items as $item) {
-			// $this->width  += 0;
-			// $this->height += 0;
-			// $this->long   += 0; 1892 / 1901
-			@$rs = $this->cart_model->getAttr(@$item->id_pa);
-			array_push($data['attr']['attr_weight'], $rs[0]->weight);
-			array_push($data['attr']['attr_width'], $rs[0]->width);
-			array_push($data['attr']['attr_height'], $rs[0]->height);
-			array_push($data['attr']['attr_long'], $rs[0]->length);
-
-			$data['carton'] = $this->cal_carton($rs[0]->weight,$rs[0]->width,$rs[0]->height,$rs[0]->length);
-
-		}	
+		$data['id_cart']		= $this->id_cart;
+		$data['cart_qty']		= $this->cart_qty;
+		$data['menus'] 			= $this->Menu_model->menus();
 		
+		$data['item_in_cart']  = $this->cart_model->getItemInCart($this->id_cart);
+		$data['address']	   = $this->cart_model->getAddress($this->id_cart);
+		$data['bank']		   = $this->bank ;
 		
+		// echo "<pre>";
+		// print_r($this->bank );
+		// exit();
+
 		$this->load->view($this->layout, $data);
 
 	}
 	public function getCartQty()
 	{
-		if( $this->input->post('id_cart') )
+		if( $this->input->post('id_cart',true) )
 		{
-			$id_cart = $this->input->post('id_cart');
+			$id_cart = $this->input->post('id_cart',true);
 			if( $id_cart != 0 )
 			{
 				$qty = $this->cart_model->cartQty($id_cart);
@@ -77,13 +67,13 @@ class Cart extends CI_Controller
 	
 	public function updateCart()
 	{
-		if( $this->input->post('id_cart') )
+		if( $this->input->post('id_pd',true) && $this->input->post('qty',true) )
 		{
-			$id_cart 	= $this->input->post('id_cart');
-			$id_pa 	= $this->input->post('id_pa');
-			$qty 		= $this->input->post('qty');	
-			$rs = $this->cart_model->updateCartProduct($id_cart, $id_pa, $qty);
-			if( $rs )
+			$id_cart 	= $this->id_cart ;
+			$id_pd 		= $this->input->post('id_pd',true);
+			$qty 		= $this->input->post('qty',true);	
+			$rs = $this->cart_model->updateCartProduct($id_cart, $id_pd, $qty);
+			if( $rs == true )
 			{
 				echo 'success';
 			}
@@ -96,11 +86,11 @@ class Cart extends CI_Controller
 	
 	public function deleteCartProduct()
 	{
-		// if( $this->input->post('id_cart') && $this->input->post('id_pa') )
+		if($this->input->post('id_pd') )
 		{
-			$id_cart = $this->input->post('id_cart');
-			$id_pa 	= $this->input->post('id_pa');
-			$rs = $this->cart_model->deleteCartProduct($id_cart, $id_pa);
+			
+			$id_pd 	= $this->input->post('id_pd');
+			$rs = $this->cart_model->deleteCartProduct($this->id_cart , $id_pd);
 			if( $rs )
 			{
 				echo 'success';
@@ -161,10 +151,6 @@ class Cart extends CI_Controller
 		
 	}
 
-
-	public function test(){
-		echo "test";
-	}
 
 	
 }/// end class

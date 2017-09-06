@@ -18,9 +18,49 @@ class Cart_model extends CI_Model
 			return FALSE;
 		}
 	}
-	public function getAttr($id_pa){
+
+	public function getItemInCart($id_cart){
+		$rs = $this->db->select('cart_product_online.qty,tbl_product.id,tbl_style.code,tbl_style.name,tbl_product.price,tbl_product.discount_amount,tbl_product.discount_percent,tbl_product.weight,tbl_product.width,tbl_product.length,tbl_product.height,tbl_color.*,tbl_size.*')
+		->join('tbl_product','tbl_product.id = cart_product_online.id_product')
+		->join('tbl_style','tbl_style.id = tbl_product.id_style')
+		->join('tbl_color','tbl_color.id_color = tbl_product.id_color')
+		->join('tbl_size','tbl_size.id_size = tbl_product.id_size')
+		->where('cart_product_online.id_cart_online',$id_cart)
+		->get('cart_product_online');
+
+
+		if( $rs->num_rows() > 0 )
+		{
+			return $rs->result();
+		}
+		else
+		{
+			return FALSE;
+		}
+	}
+
+	public function getAddress($id_cart)
+	{
+		$rs = $this->db->select('cart_online.id_cart,cart_online.id_customer,cart_online.id_great')
+			->where('cart_online.id_cart',$id_cart)
+			->get('cart_online');
+
+		if ($rs->result()[0]->id_customer !== 0 || !empty($rs->result()[0]->id_customer)) 
+		{
+			
+		}
+		else if ($rs->result()[0]->id_great !== 0 || !empty($rs->result()[0]->id_great))
+		{
+			# code...
+		}
+
+		return $rs->result();
+	}
+	
+	public function getAttr($id_pd)
+	{
 		
-		$rs = $this->db->where('id_product_attribute', $id_pa)->get('tbl_product_attribute');
+		$rs = $this->db->where('id', $id_pd)->get('tbl_product');
 		if( $rs->num_rows() > 0 )
 		{
 			return $rs->result();
@@ -102,15 +142,17 @@ class Cart_model extends CI_Model
 		return $qty;
 	}
 	
-	public function updateCartProduct($id_cart, $id_pa, $qty)
+	public function updateCartProduct($id_cart, $id_pd, $qty)
 	{
-		$rs = $this->db->where('id_cart', $id_cart)->where('id_product_attribute', $id_pa)->update('tbl_cart_product', array('qty'=>$qty));
-		return $rs;	
+		
+		return $this->db->where('id_cart_online', $id_cart)->where('id_product', $id_pd)->update('cart_product_online', array('qty'=>$qty));
+		
+			
 	}
 	
-	public function deleteCartProduct($id_cart, $id_pa)
+	public function deleteCartProduct($id_cart, $id_pd)
 	{
-		return $this->db->where('id_cart', $id_cart)->where('id_product_attribute', $id_pa)->delete('tbl_cart_product');	
+		return $this->db->where('id_cart_online', $id_cart)->where('id_product', $id_pd)->delete('cart_product_online');	
 	}
 
 	public function getBox(){

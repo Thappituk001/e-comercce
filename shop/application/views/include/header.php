@@ -3,7 +3,6 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
   <link rel="shortcut icon" href="<?php echo base_url(); ?>shop/assets/ico/warrix.ico">
   <title><?php if( isset( $title )){ echo $title; }else{ echo 'Welcome'; } ?></title>
   <!-- Bootstrap core CSS -->

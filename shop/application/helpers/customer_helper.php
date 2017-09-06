@@ -49,6 +49,18 @@ function getIdCustomer()
 	}
 }
 
+function getBank()
+{
+	$rs = get_instance()->db->select('tbl_bank_account.*')
+	->where('tbl_bank_account.active',1)
+	->get('tbl_bank_account');
+	if( $rs->num_rows() > 0 )
+	{
+		return $rs->result();
+	}
+	
+}
+
 function customerName($id)
 {
 	$name = '';

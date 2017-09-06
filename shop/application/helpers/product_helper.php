@@ -166,19 +166,10 @@ function sell_price($price = 0, $discount_amount = 0 , $discount_percent = 0)
 	return ($price - $discount) - $discount_amount ;
 }
 
-function discountAmount($id_pa, $qty, $id_cus)
+function discountAmount($id_pd=0, $qty=0,$price=0)
 {
-	$dca = 0;
-	if( is_numeric($id_cus) )
-	{
-		$id_pd 	= getIdProduct($id_pa);
-		$price 	= itemPrice($id_pa);
-		$dis 		= get_discount($id_cus, $id_pd);
-		$disc 	= $dis['discount'];
-		$type 	= $dis['type'];
-		$dca		= $type == 'percent' ? $qty * ($price * ($disc * 0.01)) : $qty * $disc;
-	}
-	return $dca;
+
+	
 }
 
 function discount_label($discount_amount = 0, $discount_percent = 0)

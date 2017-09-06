@@ -78,4 +78,40 @@ function delivery_cost($qty = 0)
 	return $cost;	
 }
 
+function getDiscount($id_cart)
+{	
+	$total_discount = 0;
+	$rs = get_instance()->db->select('cart_product_online.qty,tbl_product.id,tbl_product.price,tbl_product.discount_amount,tbl_product.discount_percent')
+	->join('tbl_product','tbl_product.id = cart_product_online.id_product')
+	->where('cart_product_online.id_cart_online',$id_cart)
+	->get('cart_product_online');
+	if( $rs->num_rows() > 0 )
+	{
+		foreach ($rs->result() as $item) {
+			$total_discount += $item->discount_amount*$item->qty;
+			$total_discount += (($item->discount_percent*$item->price)/100)*$item->qty;
+		}
+		
+	}
+	return $total_discount;
+}
+
+
+function getTotal($id_cart)
+{
+	$total_amount = 0;
+	$rs = get_instance()->db->select('cart_product_online.qty,tbl_product.id,tbl_product.price')
+	->join('tbl_product','tbl_product.id = cart_product_online.id_product')
+	->where('cart_product_online.id_cart_online',$id_cart)
+	->get('cart_product_online');
+	if( $rs->num_rows() > 0 )
+	{
+		foreach ($rs->result() as $item) {
+			$total_amount += $item->price*$item->qty;
+		}
+		
+	}
+	return $total_amount;
+}
+
 ?>

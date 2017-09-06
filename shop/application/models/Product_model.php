@@ -145,13 +145,14 @@ class Product_model extends CI_Model
 
 	}
 
-	public function getAvailableQty($id_pa)
+	public function getAvailableQty($id_pd)
 	{
 		$qty 		= 0; 
-		$move 	    = $this->moveQty($id_pa);
-		$cancle 	= $this->cancleQty($id_pa);
-		$order	    = $this->orderQty($id_pa);
-		$rs 		= $this->db->select_sum('qty')->join('tbl_zone', 'tbl_zone.id_zone = tbl_stock.id_zone')->where('id_product_attribute', $id_pa)->where('id_warehouse !=', 2)->get('tbl_stock');
+		$move 	    = $this->moveQty($id_pd);
+		$cancle 	= $this->cancleQty($id_pd);
+		$order	    = $this->orderQty($id_pd);
+		$rs 		= $this->db->select_sum('qty')->join('tbl_zone', 'tbl_zone.id_zone = tbl_stock.id_zone')->where('id_product', $id_pd)->where('id_warehouse !=', 2)->get('tbl_stock');
+		
 		if( $rs->num_rows() == 1 && !is_null($rs->row()->qty))
 		{
 			$qty = $rs->row()->qty;

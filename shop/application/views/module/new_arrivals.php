@@ -10,38 +10,44 @@
             
             <div id="productslider" class="owl-carousel owl-theme ">
                 <?php foreach( @$new_arrivals as $item ) : ?>
-
                     <?php 	@$link = 'main/productDetail/'.$item->product_id; ?>
                     <div class="item">
                         <div class="product">
-                           <div class="image">
-                            <a href="<?php echo $link; ?>">
-                             <img src="<?php echo get_image_path(get_id_cover_image($item->product_id), 4); ?>" class="img-responsive">
-                         </a>
-                         <div class="promotion">
-                            <span class="new-product" > NEW </span>
-                            <?php if ($item->discount_amount > 0  ): ?>
-                            <span class="discount">
-                            <?php echo number_format($item->discount_amount, 2, '.', '');?> OFF 
-                            </span>
-                            
-                            <?php elseif ($item->discount_amount <= 0 && $item->discount_percent > 0 ): ?> 
-                            <span class="discount">
-                            <?php echo number_format($item->discount_percent, 2, '.', '').' %';?> OFF 
-                            </span>
+                            <div class="image">
+                                <a href="<?php echo $link; ?>">
+                                 <img src="<?php echo get_image_path(get_id_cover_image($item->product_id), 4); ?>" class="img-responsive">
+                             </a> 
+                             <div class="promotion">
+                               <span class="new-product" > NEW </span>
+                               <?php if ($item->discount_amount > 0 && $item->discount_percent <= 0): ?>
+                                <span class="discount">
+                                    <?php echo number_format($item->discount_amount, 2, '.', '');?> บาท
+                                    <span style="color:yellow" >OFF</span>
+                                </span>
+                            <?php elseif ($item->discount_amount <= 0 && $item->discount_percent > 0): ?>
+                                <span class="discount">
+                                    <?php echo number_format($item->discount_percent, 2, '.', '');?> %
+                                    <span style="color:yellow" >OFF</span>
+                                </span>
+                            <?php elseif($item->discount_amount > 0 && $item->discount_percent > 0): ?>
+                                <span class="discount">
+                                    <?php echo number_format($item->discount_amount, 2, '.', '');?> บาท 
+                                    <?php echo number_format($item->discount_percent, 2, '.', '');?> %
+                                    <span style="color:yellow" >OFF</span>
+                                </span>
                             <?php endif ?>
-                         </div>
-                     </div>
-                     <div class="description">
+                        </div>
+                    </div>
+                    <div class="description">
                         <h4><a href="<?php echo $link; ?>"><?php echo $item->style_code; ?></a></h4>
                         <p><?php echo $item->style_name; ?></p>
                     </div>
                     <div class="price">
                         <?php if( $item->discount_percent > 0 || $item->discount_amount > 0) : ?>
-                        <span class="old-price"><?php echo number_format($item->product_price, 2, '.', '') ?>  <?php echo getCurrency(); ?></span>
+                            <span class="old-price"><?php echo number_format($item->product_price, 2, '.', '') ?>  <?php echo getCurrency(); ?></span>
                         <?php endif; ?>
                         <span><br>
-                        <?php echo sell_price($item->product_price, $item->discount_amount,$item->discount_percent); ?> <?php echo getCurrency(); ?>
+                            <?php echo sell_price($item->product_price, $item->discount_amount,$item->discount_percent); ?> <?php echo getCurrency(); ?>
                         </span> 
                     </div>
                     <div class="action-control">
@@ -63,8 +69,8 @@
 <?php endif; ?>
 
 <script>
-   
-        function addToCart(id_product,id_customer){
+
+    function addToCart(id_product,id_customer){
             // console.log(id_product);
             // console.log(id_customer);
             
@@ -85,5 +91,5 @@
             }); 
         }//function
 
- 
-</script>
+
+    </script>

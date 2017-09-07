@@ -2799,8 +2799,8 @@ h1.bolder-style.dark, h1.bolder-style.dark a {
 
 .description {
     margin: 0 auto;
-    min-height: 107px;
-    max-width: 235px;
+    min-height: 20px;
+    max-width: 200px;
 }
 
 .list-view .description {
@@ -2861,8 +2861,8 @@ s
 .description p {
     color: #797A79;
     font-size: 14px;
-    min-height: 55px;
-    max-height: 90px;
+    min-height: 30px;
+    max-height: 70px;
     overflow: hidden;
     line-height: 18px;
 }
@@ -2887,7 +2887,7 @@ s
 
 .cart a {
     font-size: 20px;
-    color: #454545;
+    color: #454475;
     margin: 0 0;
     display: inline-block;
     transition: all 0.3s ease-out 0s;

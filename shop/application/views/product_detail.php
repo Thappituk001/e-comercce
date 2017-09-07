@@ -21,18 +21,28 @@
     });
 
     // productShowCase  carousel
-    var pic = $(".product-images-carousel");
+    var pic = $(".image");
 
     pic.owlCarousel({
-        autoPlay: false,
-        lazyLoad: true,
-        navigation: false,
-        paginationSpeed: 1000,
-        goToFirstSpeed: 2000,
-        singleItem: true,
-        autoHeight: true
-
-    });
+    loop:true,
+    margin:0,
+    responsiveClass:true,
+    responsive:{
+        0:{
+            items:1,
+            nav:true
+        },
+        600:{
+            items:3,
+            nav:false
+        },
+        1000:{
+            items:5,
+            nav:true,
+            loop:false
+        }
+    }
+});
 
     // Custom Navigation Events
     $(".product-images-carousel-wrapper nav.slider-nav .next").click(function () {

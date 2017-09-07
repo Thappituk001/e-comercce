@@ -90,8 +90,8 @@ function updateCart(id_pd, qty)
 }
 
 
-
 $(document).ready(function(){
+
 var base_url = window.location.origin;
 (function getProviance(){
 
@@ -190,38 +190,13 @@ $("#Subdistrict").change(function(){
   $("#SubID").val($("#Subdistrict").val());
 });
 
-$("#Postcode").change(function(){
-  $("#PostID").val($(this).val());
+  $("#Postcode").change(function(){
+    $("#PostID").val($(this).val());
+  });
+
 });
-});
 
 
-$("#addNewAddr" ).on('shown', function(){
-  runAble();
-}());
-
-
-function runAble(){
-
-  $.ajax({
-    url:"<?php echo base_url(); ?>/invent/shop/register/getdata",
-    type:"GET",
-    cache:false, 
-    data:{ "TYPE" : "Proviance"},
-    success: function(jd){
-      // console.log(jd);
-      var opt="<option value=\"0\" selected=\"selected\">---เลือกจังหวัด---</option>";
-      $.each(JSON.parse(jd), function(key, val){
-        opt +="<option value='"+ val["PROVINCE_ID"] +"'>"+val["PROVINCE_NAME"]+"</option>"
-      });
-
-      $("#Proviance").html( opt );
-
-    },error:function(e){
-      console.log("error");
-    }
-  }); 
-}; 
 
 function removeFile()
 {

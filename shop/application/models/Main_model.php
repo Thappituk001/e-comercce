@@ -17,8 +17,8 @@ class Main_model extends CI_Model
 			tbl_product.code as product_code,
 			tbl_product.name as product_name,
 			tbl_product.price as product_price,
-			tbl_product.discount_percent,
-			tbl_product.discount_amount,
+			promotion.discount_percent,
+			promotion.discount_amount,
 			tbl_style.id as style_id,
 			tbl_style.code as style_code,
 			tbl_style.name as style_name,
@@ -28,9 +28,12 @@ class Main_model extends CI_Model
 			tbl_size.id_size,
 			tbl_size.size_name,
 			')
+		->join('product_online','product_online.id_product_online = tbl_product.id')
+		->join('promotion','promotion.id_product = product_online.id_product','left')
 		->join('tbl_style' , 'tbl_style.id = tbl_product.id_style')
 		->join('tbl_color','tbl_color.id_color = tbl_product.id_color')
 		->join('tbl_size','tbl_size.id_size = tbl_product.id_size')
+		
 		->where('tbl_product.show_in_online',1)
 		->where('tbl_product.is_deleted',0)
 		->where('tbl_product.active',1)
@@ -51,13 +54,12 @@ class Main_model extends CI_Model
 	public function features()
 	{
 		
-		
 		$rs  = $this->db->select('tbl_product.id as product_id,
 			tbl_product.code as product_code,
 			tbl_product.name as product_name,
 			tbl_product.price as product_price,
-			tbl_product.discount_percent,
-			tbl_product.discount_amount,
+			promotion.discount_percent,
+			promotion.discount_amount,
 			tbl_style.id as style_id,
 			tbl_style.code as style_code,
 			tbl_style.name as style_name,
@@ -79,6 +81,8 @@ class Main_model extends CI_Model
 			tbl_product_category.code as category_code,
 			tbl_product_category.name as category_name,
 			')
+		->join('product_online','product_online.id_product_online = tbl_product.id')
+		->join('promotion','promotion.id_product = product_online.id_product','left')
 		->join('tbl_style' , 'tbl_style.id = tbl_product.id_style')
 		->join('tbl_color','tbl_color.id_color = tbl_product.id_color')
 		->join('tbl_size','tbl_size.id_size = tbl_product.id_size')
@@ -86,11 +90,12 @@ class Main_model extends CI_Model
 		->join('tbl_product_type','tbl_product_type.id = tbl_product.id_type')
 		->join('tbl_product_group','tbl_product_group.id = tbl_product.id_group')
 		->join('tbl_product_category','tbl_product_category.id = tbl_product.id_category')
+
 		->where('tbl_product.show_in_online',1)
 		->where('tbl_product.is_deleted',0)
 		->where('tbl_product.active',1)
 		->limit(8,0)
-		->order_by('tbl_product.id_category', 'desc')
+		->order_by('tbl_product.price', 'desc')
 		->get('tbl_product');		
 		
 		if( $rs->num_rows() > 0 )
@@ -110,22 +115,31 @@ class Main_model extends CI_Model
 			tbl_product.code as product_code,
 			tbl_product.name as product_name,
 			tbl_product.price as product_price,
-			tbl_product.discount_percent,
-			tbl_product.discount_amount,
+			promotion.discount_percent,
+			promotion.discount_amount,
 			tbl_style.id as style_id,
 			tbl_style.code as style_code,
 			tbl_style.name as style_name,
-			
+			tbl_color.id_color,
+			tbl_color.color_code,
+			tbl_color.color_name,
+			tbl_size.id_size,
+			tbl_size.size_name
 			')
+		->join('product_online','product_online.id_product_online = tbl_product.id')
+		->join('promotion','promotion.id_product = product_online.id_product','left')
 		->join('tbl_style' , 'tbl_style.id = tbl_product.id_style')
-		
+		->join('tbl_color','tbl_color.id_color = tbl_product.id_color')
+		->join('tbl_size','tbl_size.id_size = tbl_product.id_size')
+
 		->where('tbl_product.show_in_online',1)
 		->where('tbl_product.is_deleted',0)
 		->where('tbl_product.active',1)
-		->order_by('tbl_product.id_category', 'desc')
+		->limit(8,0)
+		->order_by('tbl_product.price', 'desc')
 		->limit(10,$offset)
-		->get('tbl_product');
-
+		->get('tbl_product');		
+		
 		if( $rs->num_rows() > 0 )
 		{
 			return $rs->result();	

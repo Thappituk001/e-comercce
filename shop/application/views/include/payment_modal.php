@@ -129,7 +129,7 @@
           </div>
           <div class="modal-footer">
            <button type="button" class="btn btn-primary" data-dismiss="modal">ปิด</button>
-           <button type="button" class="btn btn-success" >ตกลง</button>
+            <button type="button" class="btn btn-info" data-toggle="modal" data-target="#transportPickerModal" data-dismiss="modal">เลือกช่องทางการจัดส่ง</button>         
          </div>
        </div>
      </form>
@@ -220,8 +220,8 @@
       <h4 class="modal-title">เพิ่มที่อยู่</h4>
     </div>
     <?php 
-    $attributes = array('id' => 'form');
-    echo form_open("shop/Register/register" , $attributes); 
+    $attributes = array('id' => 'form_add_addr');
+    echo form_open("shop/Register/add_address" , $attributes); 
     ?>
     <div class="modal-body">
       <div class="form-group">
@@ -257,7 +257,7 @@
           <label class="control-label col-sm-3" for="Proviance">จังหวัด : </label>
           <div class="col-sm-7">
           <select name="Proviance" id="Proviance" class="form-control">
-            <option value=\"0\" selected=\"selected\">---เลือกจังหวัด---</option>
+            <option value="0" selected="selected">---เลือกจังหวัด---</option>
           </select>
           </div>
           <input type="text" name="ProID" id="ProID" hidden="" />
@@ -269,7 +269,7 @@
           <label class="control-label col-sm-3" for="District">อำเภอ : </label>
           <div class="col-sm-7">
           <select name="District" id="District" class="form-control">
-            <option value=\"0\" selected=\"selected\">---เลือกอำเภอ---</option>
+            <option value="0" selected="selected">---เลือกอำเภอ---</option>
           </select>
           </div>
           <input type="text" name="DisID" id="DisID" hidden="" />
@@ -281,7 +281,7 @@
           <label class="control-label col-sm-3" for="Subdistrict">ตำบล : </label>
           <div class="col-sm-7">
           <select name="Subdistrict" id="Subdistrict" class="form-control" >
-            <option value=\"0\" selected=\"selected\">---เลือกจังตำบล---</option>
+            <option value="0" selected="selected">---เลือกจังตำบล---</option>
           </select>
           </div>
           <input type="text" name="SubID" id="SubID" hidden="" />
@@ -291,9 +291,9 @@
       <div class="form-horizontal">
         <div class="form-group">
           <label class="control-label col-sm-3" for="Postcode">POSTCODE : </label>
-          <div class="col-sm-7 ">
+          <div class="col-sm-7">
           <select name="Postcode" id="Postcode" class="form-control">
-            <option value=\"0\" selected=\"selected\">---เลือกรหัสไปรษณีย์---</option>
+            <option value="0" selected="selected">---เลือกรหัสไปรษณีย์---</option>
           </select>
           </div>
           <input type="text" name="PostID" id="PostID" hidden="" />
@@ -302,7 +302,7 @@
     </div>  <!-- modal body -->
     <div class="modal-footer">
      <button type="button" class="btn btn-primary" data-dismiss="modal">ปิด</button>
-     <button type="button" class="btn btn-default" data-dismiss="modal">บันทึก</button>
+    <button type="button" class="btn btn-info" id="smt_addr">ต่อไป</button>
    </div>
    <?php echo form_close(); ?>
  </div>
@@ -311,6 +311,7 @@
 
 
 <script>
+
   $(document).ready(function() {
       $('input[name="optradio[]"]').on('change', function() {
         $("#btnChooseBank").prop('disabled', false);
@@ -334,7 +335,29 @@
 
    $("#bn").attr("src",imgSRC);
 
-}
+  }
+
+
+
+$("#smt_addr").click(function() {
+
+  
+    e.preventDefault();
+    var base_url = window.location.origin;
+    $.ajax({
+        type: "POST",
+        url:base_url+"/invent/shop/register/add_address",
+        data: {"form_data":form.serialize()}, 
+        dataType: "JSON",
+        success: function(data){
+          console.log(data);
+        },
+        error: function() {
+         alert("Error posting feed."); 
+       }
+    });
+ 
+});
 </script>
 
 

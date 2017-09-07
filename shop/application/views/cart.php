@@ -200,7 +200,7 @@
             <tr>
               <td colspan="2">
 
-                <button type="button" class="btn btn-info btn-block" data-toggle="modal" data-target="#transportPickerModal"> เลือกช่องทางการจัดส่ง</button>
+               <!--  <button type="button" class="btn btn-info btn-block" data-toggle="modal" data-target="#transportPickerModal">เลือกช่องทางการจัดส่ง</button> -->
                 <button type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#bankPickerModal">แจ้งการโอนเงิน</button>
 
                 <button type="button" class="btn btn-success btn-block" id="checkout-btn-bottom" onClick="goToHome()">กลับ</button>

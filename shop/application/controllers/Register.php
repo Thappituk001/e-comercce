@@ -100,6 +100,12 @@ class Register extends CI_Controller
 		}
 	}	
 
+	public function add_address(){
+		
+		print_r($this->input->post());
+
+	}
+
 
 	public function getData(){
 

@@ -4,7 +4,7 @@
 <link href="<?php echo base_url(); ?>shop/assets/css/cart-nav.css" rel="stylesheet">
 <link href="<?php echo base_url(); ?>shop/assets/css/product-details-5.css" rel="stylesheet">
 
-    <!-- gall-item Gallery for gallery page -->
+<!-- gall-item Gallery for gallery page -->
 <!-- <link href="<?php echo base_url(); ?>shop/assets/plugins/magnific/magnific-popup.css" rel="stylesheet"> -->
 <?php $this->load->view('module/product_detail'); ?>
 <?php $this->load->view('module/product_info'); ?>
@@ -12,37 +12,27 @@
 <script src="<?php echo base_url(); ?>shop/assets/js/owl.carousel.min.js"></script>
 
 <script>
+    // [].slice.call(document.querySelectorAll('nav.nav-narrow-svg > a')).forEach(function (el) {
+    //     el.addEventListener('click', function (ev) {
+    //         ev.preventDefault();
+    //     });
+    // });
 
-    // For Demo purposes only
-    [].slice.call(document.querySelectorAll('nav.nav-narrow-svg > a')).forEach(function (el) {
-        el.addEventListener('click', function (ev) {
-            ev.preventDefault();
-        });
-    });
+    $(document).ready(function(){
+        
+        var pic = $(".image");
+
+        pic.owlCarousel({
+           items: 3, 
+           nav: true, 
+           dots: true,
+           loop: false,
+           rewind: false,
+           autoPlay: 3000, 
+       });
 
     // productShowCase  carousel
-    var pic = $(".image");
-
-    pic.owlCarousel({
-    loop:true,
-    margin:0,
-    responsiveClass:true,
-    responsive:{
-        0:{
-            items:1,
-            nav:true
-        },
-        600:{
-            items:3,
-            nav:false
-        },
-        1000:{
-            items:5,
-            nav:true,
-            loop:false
-        }
-    }
-});
+    
 
     // Custom Navigation Events
     $(".product-images-carousel-wrapper nav.slider-nav .next").click(function () {
@@ -52,6 +42,8 @@
         pic.trigger('owl.prev');
     })
 
+
+});
 </script>
 <script>
  /*   $(function () {
@@ -84,8 +76,8 @@
 
 
 
-<!-- <script type="text/javascript" src="<?php echo base_url(); ?>shop/assets/js/skrollr.min.js"></script> -->
-<!-- <script type="text/javascript">
+ <script type="text/javascript" src="<?php echo base_url(); ?>shop/assets/js/skrollr.min.js"></script>
+<script type="text/javascript">
     var isMobile = function () {
         //console.log("Navigator: " + navigator.userAgent);
         return /(iphone|ipod|ipad|android|blackberry|windows ce|palm|symbian)/i.test(navigator.userAgent);
@@ -104,8 +96,7 @@
     }
 
 
-</script> -->
-
+</script>
 
 <!-- Reveal Animations When You Scroll  -->
 <script src="<?php echo base_url(); ?>shop/assets/js/wow.min.js"></script>

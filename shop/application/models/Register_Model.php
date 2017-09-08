@@ -10,7 +10,7 @@ class Register_model extends CI_Model
 
 		$this->db->trans_start();
 
-			$this->db->insert('customer_online', $data['customer']);
+		$this->db->insert('customer_online', $data['customer']);
 			$id = $this->db->insert_id();//last id
 			
 			$data['address']["id_customer_online"] =  $id;
@@ -31,9 +31,9 @@ class Register_model extends CI_Model
 
 				//update id customer and great id in cart
 				$data = array(
-	               'id_customer' => $id,
-	               'id_great' => '0'
-	            );
+					'id_customer' => $id,
+					'id_great' => '0'
+					);
 
 				$this->db->where('id_cart', $id_cart);
 				$this->db->update('cart_online', $data); 
@@ -52,16 +52,16 @@ class Register_model extends CI_Model
 				$user_data = $this->Register_model->getUserData($last_id[0]->id_customer);
 
 
-					$userdata = array(
-						'id_customer'     => $user_data[0]->id_customer,
-						'first_name'     => $user_data[0]->fname,
-						'last_name'     => $user_data[0]->lname,					
-						);
-					$this->session->set_userdata($userdata);
+				$userdata = array(
+					'id_customer'     => $user_data[0]->id_customer,
+					'first_name'     => $user_data[0]->fname,
+					'last_name'     => $user_data[0]->lname,					
+					);
+				$this->session->set_userdata($userdata);
 
 				return 'success';
 			}
-				
+
 
 		// $data['address']["id_customer_online"] = 1;
 		// return $data['address']["id_customer_online"];
@@ -129,6 +129,40 @@ class Register_model extends CI_Model
 			}
 
 		}
+
+		public function addMemberAddr($id_customer=0,$role="",$form_data=[])
+		{
+			$greatID = 0;
+			if ($role=="member") {
+				$id_customer = $id_customer;
+			}else{
+				$id_customer = 0;
+			}
+
+			if ($role=="great") {
+				$greatID = $id_customer ;
+			}
+
+			$data = array(
+				'id_address'=>'',
+				'id_customer_online'=>$id_customer, 
+				'id_great'=>$greatID,
+				'address_no'=>$form_data['addr'],
+				'subdistrict'=>$form_data['Proviance'], 
+				'district'=>$form_data['District'],
+				'proviance'=>$form_data['Subdistrict'], 
+				'postcode'=>$form_data['Postcode']
+			);
+			// return $form_data['addr'];
+			return $this->db->insert('customer_online_address', $data); 
+		}
+
+		public function updateMemberAddr($id=0)
+		{
+
+
+		}
+
 
 
 

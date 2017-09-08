@@ -9,7 +9,7 @@ class Login extends CI_Controller
 		// $this->load->model('Menu_model');
 		$this->home = base_url()."shop/main";
 		$this->id_customer  = getIdCustomer();
-		$this->id_cart 	    = getIdCart($this->id_customer);
+		$this->id_cart 	    = getIdCart($this->id_customer['id']);
 		$this->cart_value	= $this->cart_model->cartValue($this->id_cart);
 		$this->cart_items 	= $this->cart_model->getCartProduct($this->id_cart);
 		$this->cart_qty		= $this->cart_model->cartQty($this->id_cart);

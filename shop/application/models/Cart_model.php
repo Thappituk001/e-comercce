@@ -20,13 +20,26 @@ class Cart_model extends CI_Model
 	}
 
 	public function getItemInCart($id_cart){
-		$rs = $this->db->select('cart_product_online.qty,tbl_product.id,tbl_style.code,tbl_style.name,tbl_product.price,tbl_product.discount_amount,tbl_product.discount_percent,tbl_product.weight,tbl_product.width,tbl_product.length,tbl_product.height,tbl_color.*,tbl_size.*')
-		->join('tbl_product','tbl_product.id = cart_product_online.id_product')
-		->join('tbl_style','tbl_style.id = tbl_product.id_style')
-		->join('tbl_color','tbl_color.id_color = tbl_product.id_color')
-		->join('tbl_size','tbl_size.id_size = tbl_product.id_size')
-		->where('cart_product_online.id_cart_online',$id_cart)
-		->get('cart_product_online');
+		$rs = $this->db->select('cart_product_online.qty,
+			tbl_product.id,
+			tbl_style.code,
+			tbl_style.name,
+			tbl_product.price,
+			tbl_product.discount_amount,
+			tbl_product.discount_percent,
+			tbl_product.weight,
+			tbl_product.width,
+			tbl_product.length,
+			tbl_product.height,
+			tbl_color.*,
+			tbl_size.*')
+		
+			->join('tbl_product','tbl_product.id = cart_product_online.id_product')
+			->join('tbl_style','tbl_style.id = tbl_product.id_style')
+			->join('tbl_color','tbl_color.id_color = tbl_product.id_color')
+			->join('tbl_size','tbl_size.id_size = tbl_product.id_size')
+			->where('cart_product_online.id_cart_online',$id_cart)
+			->get('cart_product_online');
 
 
 		if( $rs->num_rows() > 0 )
@@ -108,25 +121,6 @@ class Cart_model extends CI_Model
 
 	}
 	
-	public function cartValue($id_cart = 0)
-	{
-		$value = 0.00;
-		if( $id_cart != 0 )
-		{
-			$rs = $this->db->join('tbl_cart', 'tbl_cart.id_cart = tbl_cart_product.id_cart')->where('tbl_cart_product.id_cart', $id_cart)->get('tbl_cart_product');
-			if( $rs->num_rows() > 0 )
-			{
-				foreach($rs->result() as $rd)
-				{
-					$id_pd 		= getIdProduct($rd->id_product_attribute);
-					$qty 			= $rd->qty;
-					$price 		= itemPrice($rd->id_product_attribute);
-					$value 		+= ($price * $qty);
-				}
-			}
-		}
-		return $value;
-	}
 	
 	public function cartQty($id_cart = 0)
 	{

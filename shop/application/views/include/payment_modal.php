@@ -2,16 +2,16 @@
 
   input[type="radio"] {
    display:inline-block;
-    width:30px;
-    height:30px;
-    margin:-5px 5px 0 0;
-    vertical-align:middle;
-    cursor:pointer;
-  }
+   width:30px;
+   height:30px;
+   margin:-5px 5px 0 0;
+   vertical-align:middle;
+   cursor:pointer;
+ }
 
-  input[type="radio"]:checked {
-    background:url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/210284/check_radio_sheet.png) -57px top no-repeat;
-  }
+ input[type="radio"]:checked {
+  background:url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/210284/check_radio_sheet.png) -57px top no-repeat;
+}
 </style>
 
 <div class="modal fade" id="bankPickerModal" role="dialog">
@@ -28,25 +28,25 @@
             <tr>
               <td style="padding-top:20%;padding-left:10px">
                <input type="radio" id="r1" name="optradio[]" value="<?php echo $b->id_account; ?>"/>
-              </td>
-              <td>
-                <img id="bank_img" src="<?php echo  base_url()."img" ?>/bank/<?php echo $b->bankcode; ?>.png" alt="">
-              </td>
-              <td style="color:#0B0B3B;font-size:14px">
-                <p><span id="b_name" ><?php echo $b->bank_name; ?></span></p>
-                <p>เลขที่ : <span id="a_no" style="color:red;font-size:18px"><?php echo $b->acc_no; ?></span></p>
-                <p>ชื่อบัญชี : <span id="a_name"><?php echo $b->acc_name; ?></span></p>
-              </td>
-            </tr>
-          <?php endforeach ?>
-        </tbody>
-      </table>
-    </div>
-    <div class="modal-footer">
-     <button type="button" class="btn btn-primary" data-dismiss="modal">ปิด</button>
-     <button type="button" id="btnChooseBank" class="btn btn-success" data-toggle="modal" data-target="#paymentModal" data-dismiss="modal" onclick="checked()" disabled="">ต่อไป</button>
-   </div>
+             </td>
+             <td>
+              <img id="bank_img" src="<?php echo  base_url()."img" ?>/bank/<?php echo $b->bankcode; ?>.png" alt="">
+            </td>
+            <td style="color:#0B0B3B;font-size:14px">
+              <p><span id="b_name" ><?php echo $b->bank_name; ?></span></p>
+              <p>เลขที่ : <span id="a_no" style="color:red;font-size:18px"><?php echo $b->acc_no; ?></span></p>
+              <p>ชื่อบัญชี : <span id="a_name"><?php echo $b->acc_name; ?></span></p>
+            </td>
+          </tr>
+        <?php endforeach ?>
+      </tbody>
+    </table>
+  </div>
+  <div class="modal-footer">
+   <button type="button" class="btn btn-primary" data-dismiss="modal">ปิด</button>
+   <button type="button" id="btnChooseBank" class="btn btn-success" data-toggle="modal" data-target="#paymentModal" data-dismiss="modal" onclick="checked()" disabled="">ต่อไป</button>
  </div>
+</div>
 </div>
 </div>
 
@@ -129,7 +129,7 @@
           </div>
           <div class="modal-footer">
            <button type="button" class="btn btn-primary" data-dismiss="modal">ปิด</button>
-            <button type="button" class="btn btn-info" data-toggle="modal" data-target="#transportPickerModal" data-dismiss="modal">เลือกช่องทางการจัดส่ง</button>         
+           <button type="button" class="btn btn-info" data-toggle="modal" data-target="#transportPickerModal" data-dismiss="modal">เลือกช่องทางการจัดส่ง</button>         
          </div>
        </div>
      </form>
@@ -198,17 +198,17 @@
               <p>เลขที่ 11/241 หมู่1 ตำบลห้วยหวาย อ.เมือง จังหวัด มหาสารคาม 42571</p>
             </td>
           </tr>
-      </tbody>
-    </table>
-  </div>
-  <div class="modal-footer">
-   <button type="button" class="btn btn-primary" data-dismiss="modal">ปิด</button>
-   <button type="button" class="btn btn-success" data-toggle="modal" data-target="#addNewAddr" data-dismiss="modal">เพิ่มที่อยู่</button>
+        </tbody>
+      </table>
+    </div>
+    <div class="modal-footer">
+     <button type="button" class="btn btn-primary" data-dismiss="modal">ปิด</button>
+     <button type="button" class="btn btn-success" data-toggle="modal" data-target="#addNewAddr" data-dismiss="modal">เพิ่มที่อยู่</button>
 
-   <button type="button" class="btn btn-default" onclick="">ตกลง</button>
+     <button type="button" class="btn btn-default" onclick="">ตกลง</button>
 
+   </div>
  </div>
-</div>
 </div>
 </div>
 
@@ -256,9 +256,9 @@
         <div class="form-group">
           <label class="control-label col-sm-3" for="Proviance">จังหวัด : </label>
           <div class="col-sm-7">
-          <select name="Proviance" id="Proviance" class="form-control">
-            <option value="0" selected="selected">---เลือกจังหวัด---</option>
-          </select>
+            <select name="Proviance" id="Proviance" class="form-control">
+              <option value="0" selected="selected">---เลือกจังหวัด---</option>
+            </select>
           </div>
           <input type="text" name="ProID" id="ProID" hidden="" />
         </div>
@@ -268,9 +268,9 @@
         <div class="form-group">
           <label class="control-label col-sm-3" for="District">อำเภอ : </label>
           <div class="col-sm-7">
-          <select name="District" id="District" class="form-control">
-            <option value="0" selected="selected">---เลือกอำเภอ---</option>
-          </select>
+            <select name="District" id="District" class="form-control">
+              <option value="0" selected="selected">---เลือกอำเภอ---</option>
+            </select>
           </div>
           <input type="text" name="DisID" id="DisID" hidden="" />
         </div>
@@ -280,9 +280,9 @@
         <div class="form-group">
           <label class="control-label col-sm-3" for="Subdistrict">ตำบล : </label>
           <div class="col-sm-7">
-          <select name="Subdistrict" id="Subdistrict" class="form-control" >
-            <option value="0" selected="selected">---เลือกจังตำบล---</option>
-          </select>
+            <select name="Subdistrict" id="Subdistrict" class="form-control" >
+              <option value="0" selected="selected">---เลือกจังตำบล---</option>
+            </select>
           </div>
           <input type="text" name="SubID" id="SubID" hidden="" />
         </div>
@@ -292,9 +292,9 @@
         <div class="form-group">
           <label class="control-label col-sm-3" for="Postcode">POSTCODE : </label>
           <div class="col-sm-7">
-          <select name="Postcode" id="Postcode" class="form-control">
-            <option value="0" selected="selected">---เลือกรหัสไปรษณีย์---</option>
-          </select>
+            <select name="Postcode" id="Postcode" class="form-control">
+              <option value="0" selected="selected">---เลือกรหัสไปรษณีย์---</option>
+            </select>
           </div>
           <input type="text" name="PostID" id="PostID" hidden="" />
         </div>
@@ -302,7 +302,7 @@
     </div>  <!-- modal body -->
     <div class="modal-footer">
      <button type="button" class="btn btn-primary" data-dismiss="modal">ปิด</button>
-    <button type="button" class="btn btn-info" id="smt_addr">ต่อไป</button>
+     <button type="button" class="btn btn-info" id="smt_addr">ต่อไป</button>
    </div>
    <?php echo form_close(); ?>
  </div>
@@ -313,9 +313,9 @@
 <script>
 
   $(document).ready(function() {
-      $('input[name="optradio[]"]').on('change', function() {
-        $("#btnChooseBank").prop('disabled', false);
-      });
+    $('input[name="optradio[]"]').on('change', function() {
+      $("#btnChooseBank").prop('disabled', false);
+    });
   }); 
 
   function checked(){
@@ -335,28 +335,41 @@
 
    $("#bn").attr("src",imgSRC);
 
-  }
-
-
+ }
 
 $("#smt_addr").click(function() {
-
   
-    e.preventDefault();
-    var base_url = window.location.origin;
-    $.ajax({
-        type: "POST",
-        url:base_url+"/invent/shop/register/add_address",
-        data: {"form_data":form.serialize()}, 
-        dataType: "JSON",
-        success: function(data){
-          console.log(data);
-        },
-        error: function() {
-         alert("Error posting feed."); 
-       }
-    });
- 
+  var base_url  = window.location.origin;
+  var fname     = $("#fname").val();
+  var lname     = $("#lname").val();
+  var tel       = $("#tel").val();
+  var addr      = $("#addr").val();
+  var Proviance = $("#ProID").val();
+  var District  = $("#DisID").val();
+  var Subdistrict = $("#SubID").val();
+  var Postcode  = $("#PostID").val();
+
+  $.ajax({
+    type: "POST",
+    url:base_url+"/invent/shop/Register/add_address",
+    data: ({
+      fname:fname,
+      lname:lname,
+      tel:tel,
+      addr:addr,
+      Proviance:Proviance,
+      District:District,
+      Subdistrict:Subdistrict,
+      Postcode:Postcode,
+    }), 
+    success: function(data){
+      console.log(data);
+    },
+    error: function(e) {
+      console.log("Error posting feed."); 
+    }
+  });
+
 });
 </script>
 

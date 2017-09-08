@@ -94,7 +94,6 @@ $(document).ready(function(){
 
 var base_url = window.location.origin;
 (function getProviance(){
-
    $.ajax({
     url:base_url+"/invent/shop/register/getdata",
     type:"GET",
@@ -102,7 +101,7 @@ var base_url = window.location.origin;
     data: {"TYPE" : "Proviance"}, 
     dataType: "JSON", 
     success: function(jd) {
-      console.log(jd);
+      // console.log(jd);
       var opt="<option value=\"0\" selected=\"selected\">---เลือกจังจังหวัด---</option>";
       $.each(jd, function(key, val){
         opt +="<option value='"+ val["PROVINCE_ID"] +"'>"+val["PROVINCE_NAME"]+"</option>"
@@ -112,7 +111,6 @@ var base_url = window.location.origin;
       console.log("Proviance error");
     }
   }); 
-
 }());
 //************ for address all input ****************
 
@@ -193,10 +191,7 @@ $("#Subdistrict").change(function(){
   $("#Postcode").change(function(){
     $("#PostID").val($(this).val());
   });
-
 });
-
-
 
 function removeFile()
 {
@@ -215,12 +210,13 @@ function readURL(input)
 {
  if (input.files && input.files[0]) {
   var reader = new FileReader();
-  reader.onload = function (e) {
-    $('#previewImg').html('<img id="previewImg" src="'+e.target.result+'" width="200px" alt="รูปสลิปของคุณ" />');
-  }
+    reader.onload = function (e) {
+      $('#previewImg').html('<img id="previewImg" src="'+e.target.result+'" width="200px" alt="รูปสลิปของคุณ" />');
+    }
   reader.readAsDataURL(input.files[0]);
+  }
 }
-}
+
 $("#image").change(function(){
   if($(this).val() != '')
   {

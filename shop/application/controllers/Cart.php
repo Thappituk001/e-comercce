@@ -16,8 +16,8 @@ class Cart extends CI_Controller
 		$this->home = base_url()."shop/main";
 		$this->id_customer  = getIdCustomer();
 		$this->bank 		= getBank();
-		$this->id_cart 	    = getIdCart($this->id_customer);
-		$this->cart_value	= $this->cart_model->cartValue($this->id_cart);
+		$this->id_cart 	    = getIdCart($this->id_customer['id']);
+		$this->cart_value	= 0;
 		$this->cart_items 	= $this->cart_model->getCartProduct($this->id_cart);
 		$this->cart_qty		= $this->cart_model->cartQty($this->id_cart);
 	}
@@ -131,21 +131,22 @@ class Cart extends CI_Controller
 
 	public function addToCart(){
 		$id_product = $this->input->post('id_product');
-		$id_customer = $this->input->post('id_customer');
 		
-		if(!$this->session->userdata('id_customer')){
 
-			$great_id = $this->cart_model->createGreatID();
+		
 
-			$cart_id  = $this->cart_model->createCartID($great_id);
-			
-			$this->cart_model->insertItem($cart_id,$id_product);
-			echo "success";
-
-		}else{
-			$id_customer = $this->session->userdata('id_customer');
-		    $x = $this->cart_model->addToCart($id_customer,$id_product);
-			print_r($x);
+		//member
+		if($this->id_customer['role']=='member'){
+			// $great_id = $this->cart_model->createGreatID();
+			// $cart_id  = $this->cart_model->createCartID($great_id);
+			// $this->cart_model->insertItem($cart_id,$id_product);
+			// echo "success";
+			echo "if";
+		}else{// great
+			// $id_customer = $this->session->userdata('id_customer');
+		 //    $x = $this->cart_model->addToCart($id_customer,$id_product);
+			// print_r($x);
+			echo "else";
 		}
 		
 		

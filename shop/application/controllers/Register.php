@@ -3,7 +3,7 @@ class Register extends CI_Controller
 {	
 	
 	public $layout = "include/template";
-	public $title = "Register";
+	public $title  = "Register";
 
 	public function __construct()
 	{
@@ -13,11 +13,10 @@ class Register extends CI_Controller
 		$this->load->model('Menu_model');
 		$this->home = base_url()."shop/main";
 		$this->id_customer  = getIdCustomer();
-		$this->id_cart 	    = getIdCart($this->id_customer);
+		$this->id_cart 	    = getIdCart($this->id_customer['id']);
 		$this->cart_value	= $this->cart_model->cartValue($this->id_cart);
 		$this->cart_items 	= $this->cart_model->getCartProduct($this->id_cart);
 		$this->cart_qty		= $this->cart_model->cartQty($this->id_cart);
-		
 	}
 	
 	public function index()
@@ -39,10 +38,8 @@ class Register extends CI_Controller
 		$data['cart_items']		= $this->cart_items==''?$this->cart_items=array():$this->cart_items;
 		$data['menus'] =  $this->Menu_model->menus();
 		if(@$this->session->userdata('id_customer')){
-			
 			$data['view'] 			= 'main';	
 			$this->load->view("include/template", $data);
-
 		}else{
 
 			$data['customer'] = array(
@@ -95,17 +92,30 @@ class Register extends CI_Controller
 				$data['view'] 			= 'module/register';	
 
 				$this->load->view("include/template", $data);
-
 			}
 		}
 	}	
 
 	public function add_address(){
-		
-		print_r($this->input->post());
+		$role = $this->id_customer['role'];
+		$id_customer   = $this->id_customer['id'];
+		$data = Array
+			(
+			    "fname" =>$this->input->post("fname",true), 
+			    "lname" =>$this->input->post("lname",true), 
+			    "tel" =>$this->input->post("tel",true), 
+			    "addr" =>$this->input->post("addr",true), 
+			    "Proviance" =>$this->input->post("Proviance",true), 
+			    "District" =>$this->input->post("District",true), 
+			    "Subdistrict" =>$this->input->post("Subdistrict",true), 
+			    "Postcode" => $this->input->post("Postcode",true)
+			);
 
+
+		$add_addr = $this->Register_model->addMemberAddr($id_customer,$role,$data);
+		print_r($add_addr);
+	
 	}
-
 
 	public function getData(){
 
@@ -122,12 +132,8 @@ class Register extends CI_Controller
 		} else if($type=='Postcode'){
 			$result = $this->Register_model->postcode($ID);
 		}
-		
 		print_r(json_encode($result));
-
-		// echo "ok";
-
-		}//functiom
+	}//functiom
 		
 }//class
 

@@ -17,7 +17,7 @@ class Main extends CI_Controller
 		$this->home = base_url()."shop/main";
 
 		$this->id_customer  = getIdCustomer();//great or member
-		$this->id_cart 	    = getIdCart($this->id_customer);
+		$this->id_cart 	    = getIdCart($this->id_customer['id']);
 		$this->cart_items 	= $this->cart_model->getCartProduct($this->id_cart);
 		$this->cart_qty		= $this->cart_model->cartQty($this->id_cart);
 		
@@ -29,7 +29,7 @@ class Main extends CI_Controller
 		$data['new_arrivals'] 	= $this->main_model->new_arrivals()!= false?$this->main_model->new_arrivals():array();
 		$data['features']		= $this->main_model->features()!= false?$this->main_model->features():array();
 		$data['cart_items']		= $this->cart_items==''?$this->cart_items=array():$this->cart_items;
-		$data['id_customer']    = $this->id_customer;
+		$data['id_customer']    = $this->id_customer['id'];
 		$data['id_cart']		= $this->id_cart;
 		$data['cart_qty']		= $this->cart_qty;
 		$data['view'] 			= 'main';	
@@ -56,7 +56,7 @@ class Main extends CI_Controller
 		
 		$data['view']			= 'product_detail';
 		$data['cart_items']		= $this->cart_items==''?$this->cart_items=array():$this->cart_items;
-		$data['id_customer']    = $this->id_customer;
+		$data['id_customer']    = $this->id_customer['id'];
 		$data['id_cart']		= $this->id_cart;
 		$data['cart_qty']		= $this->cart_qty;
 		$data['menus'] =  $this->Menu_model->menus();

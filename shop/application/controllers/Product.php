@@ -16,8 +16,8 @@ class Product extends CI_Controller
 		$this->load->model('Menu_model');
 		$this->home = base_url()."shop/main";
 		$this->id_customer  = getIdCustomer();
-		$this->id_cart 	    = getIdCart($this->id_customer);
-		$this->cart_value	= $this->cart_model->cartValue($this->id_cart);
+		$this->id_cart 	    = getIdCart($this->id_customer['id']);
+		$this->cart_value	= $this->cart_value	= 0;
 		$this->cart_items 	= $this->cart_model->getCartProduct($this->id_cart);
 		$this->cart_qty		= $this->cart_model->cartQty($this->id_cart);
 		$this->product_qty  = 0;
@@ -94,7 +94,7 @@ class Product extends CI_Controller
 		}//if get filter
 
 		$data['cart_items']		= $this->cart_items==''?$this->cart_items=array():$this->cart_items;
-		$data['id_customer']    = $this->id_customer;
+		$data['id_customer']    = $this->id_customer['id'];
 		$data['id_cart']		= $this->id_cart;
 		$data['cart_qty']		= $this->cart_qty;
 		$data['menus'] 			= $this->Menu_model->menus();

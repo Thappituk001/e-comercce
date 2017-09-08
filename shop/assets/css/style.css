@@ -2552,7 +2552,7 @@ h1.bolder-style.dark, h1.bolder-style.dark a {
 }
 
 #productslider .item {
-    margin: 0 15px 15px;
+    margin: 0 15px 5px;
 }
 
 .item {
@@ -2564,7 +2564,7 @@ h1.bolder-style.dark, h1.bolder-style.dark a {
     -o-transition: all 0.3s ease 0s;
     -ms-transition: all 0.3s ease 0s;
     margin-bottom: 15px;
-    height: 480px;
+    height: 450px;
 }
 
 #SimilarProductSlider .item {
@@ -5962,6 +5962,7 @@ div.quickview {
     cursor: pointer;
     transition: 0.3s ease;
     opacity: 1;
+    padding-right:40px;
 }
 
 .owl-has-nav:hover {

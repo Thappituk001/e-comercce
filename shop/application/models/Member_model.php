@@ -8,29 +8,12 @@ class Member_model extends CI_Model
 
 	public function getOrder($id_customer){
 
-		$qs	= $this->db->where('id_customer',$id_customer)->get('order_table');
 		
-		if( $qs->num_rows() > 0 )
-		{
-			return $qs->result();	
-		}
-		else
-		{
-			return false;
-		}
 	}
 
 	public function getOrder_Detail(){
 
-		$qs	= $this->db->where('id_order','917')->get('tbl_order_detail');
-		if( $qs->num_rows() > 0 )
-		{
-			return $qs->result();	
-		}
-		else
-		{
-			return false;
-		}
+		
 	}
 
 	public function getAddress_Online($id_cus){

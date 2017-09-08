@@ -30,7 +30,7 @@ function getIdCustomer()
 	$ci =& get_instance();
 	$id_customer = $ci->session->userdata('id_customer');
 	// $ci->session->unset_userdata('id_customer');
-	if(!$ci->session->userdata('id_customer')){// is member ?
+	if(!$ci->session->userdata('id_customer')){// is not member ?
 		//not member
 		$rs = $ci->db->select('id_great')->where('ip_address', $ci->input->ip_address())->get('great');
 
@@ -38,14 +38,18 @@ function getIdCustomer()
 		{
 			// have id great 
 			$id_great = $rs->row()->id_great;
-			return $id_great;
+			return array("id"=>$id_great,"role"=>"great");
 		}else{
-			
-			return '0';
+			$data = array(
+			   'ip_address' => $ci->input->ip_address() 
+			);
+			$ci->db->insert('great', $data); 
+			$insert_id = $ci->db->insert_id();
+			return $insert_id;
 		}
 		
 	}else{
-		return $id_customer; //member
+		return array("id"=>$id_customer,"role"=>"member"); //member
 	}
 }
 

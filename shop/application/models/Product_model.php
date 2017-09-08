@@ -164,39 +164,32 @@ class Product_model extends CI_Model
 	
 	public function cancleQty($id_pa)
 	{
-		$qty 	= 0;
-		$rs 	= $this->db->select_sum('qty')->where('id_product_attribute', $id_pa)->get('tbl_cancle');
-		if( $rs->num_rows() == 1 && !is_null($rs->row()->qty) )
-		{
-			$qty = $rs->row()->qty;
-		}
-		return $qty;
+		// $qty 	= 0;
+		// $rs 	= $this->db->select_sum('qty')->where('id_product_attribute', $id_pa)->get('tbl_cancle');
+		// if( $rs->num_rows() == 1 && !is_null($rs->row()->qty) )
+		// {
+		// 	$qty = $rs->row()->qty;
+		// }
+		// return $qty;
+		return 0;
 	}
 	
 	public function moveQty($id_pa)
 	{
-		$qty = 0;
-		$rs 	= $this->db->select_sum('qty_move')->where('id_product_attribute', $id_pa)->get('tbl_move');
-		if( $rs->num_rows() == 1 && !is_null($rs->row()->qty_move))
-		{
-			$qty = $rs->row()->qty_move;
-		}
-		return $qty;
+		// $qty = 0;
+		// $rs 	= $this->db->select_sum('qty_move')->where('id_product_attribute', $id_pa)->get('tbl_move');
+		// if( $rs->num_rows() == 1 && !is_null($rs->row()->qty_move))
+		// {
+		// 	$qty = $rs->row()->qty_move;
+		// }
+		// return $qty;
+		return 0;
 	}
 	
 	public function orderQty($id_pa)
 	{
-		$qty = 0;
-		$this->db->select_sum('product_qty')->from('tbl_order_detail');
-		$this->db->join('tbl_order', 'tbl_order.id_order = tbl_order_detail.id_order');
-		$this->db->where('id_product_attribute', $id_pa)->where('valid_detail', 0);
-		$this->db->where_not_in('current_state', array('6', '7', '8', '9'));
-		$rs	= $this->db->get();
-		if( $rs->num_rows() == 1 && !is_null($rs->row()->product_qty) )
-		{
-			$qty = $rs->row()->product_qty;
-		}
-		return $qty;
+		
+		return 0;
 	}
 	
 	public function getProductDetail($id)

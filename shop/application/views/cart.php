@@ -171,7 +171,7 @@
 <?php $total_price    = getTotal($id_cart); ?>
 <?php $total_amount   = ($total_price-$total_discount) + $shipping_cost  ?>
 <div class="col-lg-3 col-md-3 col-sm-5 rightSidebar">
-  
+
   <div class="contentBox">
     <div class="w100 costDetails">
       <div class="table-block" id="order-detail-content">
@@ -179,31 +179,56 @@
         <table id="cart-summary" class="std table">
           <tbody>
             <tr>
-              <td>สินค้ารวม</td>
+              <td>ราคาสินค้ารวม</td>
               <td class="price" id="total-price">
-              <?php echo number_format($total_price, 2); ?>
+                <?php echo number_format($total_price, 2); ?>
+              </td>
+            </tr>
+             <tr class="cart-total-price ">
+              <td>ส่วนลด</td>
+              <td class="price" id="total-discount">
+                <?php echo number_format($total_discount,2); ?>
+              </td>
+            </tr>
+            <tr class="cart-total-price ">
+              <td>ส่วนลดจากรหัสโปรโมชั่น</td>
+              <td class="price" id="total-discount">
+                <?php echo "0.00"; ?>
               </td>
             </tr>
             <tr class="cart-total-price ">
               <td>ส่วนลดรวม</td>
               <td class="price" id="total-discount">
-              <?php echo number_format($total_discount, 2); ?></td>
+                <?php echo number_format($total_discount, 2); ?>
+              </td>
             </tr>
             <tr style="">
-              <td>ค่าจัดส่ง</td>
-              <td class="price" id="shipping-fee"><?php echo number_format($shipping_cost, 2); ?></td>
+                <td>ค่าจัดส่ง</td>
+                <td class="price" id="shipping-fee"><span id="transCost" style="color:red;font-size:14px">*** กรุณากดคำนวนค่าจัดส่ง</span></td>
             </tr>
             <tr>
-              <td>รวมทั้งสิ้น</td>
-              <td class=" site-color" id="total-amount" style="font-size:22px; font-weight:bold;"><?php echo number_format($total_amount, 2); ?></td>
+                <td style="font-size:18px;font-size:700">ราคาสุทธิ</td>
+                <td class=" site-color" id="total-amount" style="font-size:22px; font-weight:bold;"><?php echo number_format($total_amount, 2); ?></td>
             </tr>
-            <tr>
-              <td colspan="2">
+              <tr>
+                <td colspan="2">
 
-               <!--  <button type="button" class="btn btn-info btn-block" data-toggle="modal" data-target="#transportPickerModal">เลือกช่องทางการจัดส่ง</button> -->
-                <button type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#bankPickerModal">แจ้งการโอนเงิน</button>
+                 <!--  <button type="button" class="btn btn-info btn-block" data-toggle="modal" data-target="#transportPickerModal">เลือกช่องทางการจัดส่ง</button> -->
+                <label for="">รหัสโปรโมชั่น : </label>
+                <div class="input-group">
 
-                <button type="button" class="btn btn-success btn-block" id="checkout-btn-bottom" onClick="goToHome()">กลับ</button>
+                  <input type="text" class="form-control" placeholder="Promotion Code" aria-label="Search for...">
+                  <span class="input-group-btn">
+                    <button class="btn btn-success" type="button">ตกลง</button>
+                  </span>
+                </div>
+                <legend></legend>
+                <button type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#transportPickerModal">คำนวนค่าจัดส่ง</button>
+
+                <button type="button" class="btn btn-info btn-block" data-toggle="modal" data-target="#bankPickerModal">แจ้งการโอนเงิน</button>
+
+                <button type="button" class="btn btn-warning btn-block" id="checkout-btn-bottom" onClick="goToHome()">กลับ</button>
+                
               </td>
             </tr>
           </tbody>

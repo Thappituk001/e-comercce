@@ -52,24 +52,83 @@ class Cart_model extends CI_Model
 		}
 	}
 
-	public function getAddress($id_cart)
+	public function getAddress($cus)
 	{
-		$rs = $this->db->select('cart_online.id_cart,cart_online.id_customer,cart_online.id_great')
-			->where('cart_online.id_cart',$id_cart)
-			->get('cart_online');
+		$id = $cus['id'];
+		$role = $cus['role'];
+		
+		if ($cus['role'] == "member") {
+			$rs = $this->db->select('
+				customer_online_address.id_address,
+				customer_online_address.id_customer_online,
+				customer_online_address.id_great,
+				customer_online_address.fname,
+				customer_online_address.lname,
+				customer_online_address.address_no,
+				customer_online_address.postcode,
+				province.PROVINCE_NAME,
+				amphur.AMPHUR_NAME,
+				district.DISTRICT_NAME,
 
-		if ($rs->result()[0]->id_customer !== 0 || !empty($rs->result()[0]->id_customer)) 
-		{
-			
-		}
-		else if ($rs->result()[0]->id_great !== 0 || !empty($rs->result()[0]->id_great))
-		{
-			# code...
+				')
+			->join('province','province.PROVINCE_ID = customer_online_address.proviance')
+			->join('amphur' , 'amphur.AMPHUR_ID = customer_online_address.district')
+			->join('district','district.DISTRICT_ID = customer_online_address.subdistrict')
+
+			->where('customer_online_address.id_customer_online',$id)
+			->get('customer_online_address');
+		}else{
+			$rs = $this->db->select('
+				customer_online_address.id_address,
+				customer_online_address.id_customer_online,
+				customer_online_address.id_great,
+				customer_online_address.fname,
+				customer_online_address.lname,
+				customer_online_address.address_no,
+				customer_online_address.postcode,
+				province.PROVINCE_NAME,
+				amphur.AMPHUR_NAME,
+				district.DISTRICT_NAME,
+
+				')
+			->join('province','province.PROVINCE_ID = customer_online_address.proviance')
+			->join('amphur' , 'amphur.AMPHUR_ID = customer_online_address.district')
+			->join('district','district.DISTRICT_ID = customer_online_address.subdistrict')
+
+			->where('customer_online_address.id_great',$id)
+			->get('customer_online_address');
 		}
 
 		return $rs->result();
 	}
+
+	public function getTrans()
+	{
+		$rs = $this->db->get('transport_with');
+		if( $rs->num_rows() > 0 )
+		{
+			return $rs->result();
+		}
+		else
+		{
+			return FALSE;
+		}
+	}
 	
+	public function getTypeTrans($id_trans)
+	{
+		$rs = $this->db->select('*')->where('id_logistic',$id_trans)
+		->get('transport_domestic_type');
+		if( $rs->num_rows() > 0 )
+		{
+			return $rs->result();
+		}
+		else
+		{
+			return FALSE;
+		}
+	}
+
 	public function getAttr($id_pd)
 	{
 		

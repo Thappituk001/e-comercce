@@ -14,9 +14,9 @@ class Cart extends CI_Controller
 		$this->load->model('cart_model');
 		$this->load->model('Menu_model');
 		$this->home = base_url()."shop/main";
-		$this->id_customer  = getIdCustomer();
+		$this->customer     = getIdCustomer();
 		$this->bank 		= getBank();
-		$this->id_cart 	    = getIdCart($this->id_customer['id']);
+		$this->id_cart 	    = getIdCart($this->customer['id']);
 		$this->cart_value	= 0;
 		$this->cart_items 	= $this->cart_model->getCartProduct($this->id_cart);
 		$this->cart_qty		= $this->cart_model->cartQty($this->id_cart);
@@ -38,11 +38,12 @@ class Cart extends CI_Controller
 		$data['menus'] 			= $this->Menu_model->menus();
 		
 		$data['item_in_cart']  = $this->cart_model->getItemInCart($this->id_cart);
-		$data['address']	   = $this->cart_model->getAddress($this->id_cart);
+		$data['transport']	   = $this->cart_model->getTrans();
+		$data['address']	   = $this->cart_model->getAddress($this->customer);
 		$data['bank']		   = $this->bank ;
 		
 		// echo "<pre>";
-		// print_r($this->bank );
+		// print_r($data['address']);
 		// exit();
 
 		$this->load->view($this->layout, $data);
@@ -136,7 +137,7 @@ class Cart extends CI_Controller
 		
 
 		//member
-		if($this->id_customer['role']=='member'){
+		if($this->customer['role']=='member'){
 			// $great_id = $this->cart_model->createGreatID();
 			// $cart_id  = $this->cart_model->createCartID($great_id);
 			// $this->cart_model->insertItem($cart_id,$id_product);
@@ -152,7 +153,23 @@ class Cart extends CI_Controller
 		
 	}
 
+	public function getTrans(){
+		$id_trans = $this->input->post('id',true);
+		$rs = $this->cart_model->getTypeTrans($id_trans);
+			if( $rs )
+			{
+				print_r(json_encode($rs));
+			}
+	}
 
+	public function transportSec()
+	{	
+		$data = ["logistic_by"=>$this->input->post('transType',true),
+		"style_delivery"=>$this->input->post('typeTrans',true),
+		"addr_customer"=>$this->input->post('address',true)];
+
+		print_r($data);
+	}
 	
 }/// end class
 

@@ -14,7 +14,6 @@ class Register extends CI_Controller
 		$this->home = base_url()."shop/main";
 		$this->id_customer  = getIdCustomer();
 		$this->id_cart 	    = getIdCart($this->id_customer['id']);
-		$this->cart_value	= $this->cart_model->cartValue($this->id_cart);
 		$this->cart_items 	= $this->cart_model->getCartProduct($this->id_cart);
 		$this->cart_qty		= $this->cart_model->cartQty($this->id_cart);
 	}
@@ -97,8 +96,12 @@ class Register extends CI_Controller
 	}	
 
 	public function add_address(){
-		$role = $this->id_customer['role'];
+		$add_addr =[];
 		$id_customer   = $this->id_customer['id'];
+		$role = $this->id_customer['role'];
+		
+		if ($this->input->post()) {
+	
 		$data = Array
 			(
 			    "fname" =>$this->input->post("fname",true), 
@@ -113,7 +116,8 @@ class Register extends CI_Controller
 
 
 		$add_addr = $this->Register_model->addMemberAddr($id_customer,$role,$data);
-		print_r($add_addr);
+		}
+		print_r(json_encode($add_addr));
 	
 	}
 

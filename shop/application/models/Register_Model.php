@@ -130,31 +130,80 @@ class Register_model extends CI_Model
 
 		}
 
-		public function addMemberAddr($id_customer=0,$role="",$form_data=[])
+		public function addMemberAddr($id_customer,$role="",$form_data=[])
 		{
 			$greatID = 0;
+			$id_c = 0;
 			if ($role=="member") {
-				$id_customer = $id_customer;
+				$id_c = $id_customer;
 			}else{
-				$id_customer = 0;
-			}
-
-			if ($role=="great") {
-				$greatID = $id_customer ;
+				$greatID     = $id_customer;
 			}
 
 			$data = array(
 				'id_address'=>'',
-				'id_customer_online'=>$id_customer, 
+				'id_customer_online'=>$id_c, 
 				'id_great'=>$greatID,
+				'fname'=>$form_data['fname'],
+				'lname'=>$form_data['lname'],
 				'address_no'=>$form_data['addr'],
-				'subdistrict'=>$form_data['Proviance'], 
+				'subdistrict'=>$form_data['Subdistrict'], 
 				'district'=>$form_data['District'],
-				'proviance'=>$form_data['Subdistrict'], 
+				'proviance'=>$form_data['Proviance'], 
 				'postcode'=>$form_data['Postcode']
-			);
+				);
 			// return $form_data['addr'];
-			return $this->db->insert('customer_online_address', $data); 
+			if ($this->db->insert('customer_online_address', $data)) 
+			{
+				if ($role == "member") {
+					$rs = $this->db->select('
+						customer_online_address.id_address,
+						customer_online_address.id_customer_online,
+						customer_online_address.id_great,
+						customer_online_address.fname,
+						customer_online_address.lname,
+						customer_online_address.address_no,
+						customer_online_address.postcode,
+						province.PROVINCE_NAME,
+						amphur.AMPHUR_NAME,
+						district.DISTRICT_NAME,
+
+						')
+					->join('province','province.PROVINCE_ID = customer_online_address.proviance')
+					->join('amphur' , 'amphur.AMPHUR_ID = customer_online_address.district')
+					->join('district','district.DISTRICT_ID = customer_online_address.subdistrict')
+
+					->where('customer_online_address.id_customer_online',$id_c)
+					->get('customer_online_address');
+					return $rs->result() ;
+
+				}else{
+					$rs = $this->db->select('
+						customer_online_address.id_address,
+						customer_online_address.id_customer_online,
+						customer_online_address.id_great,
+						customer_online_address.fname,
+						customer_online_address.lname,
+						customer_online_address.address_no,
+						customer_online_address.postcode,
+						province.PROVINCE_NAME,
+						amphur.AMPHUR_NAME,
+						district.DISTRICT_NAME,
+
+						')
+					->join('province','province.PROVINCE_ID = customer_online_address.proviance')
+					->join('amphur' , 'amphur.AMPHUR_ID = customer_online_address.district')
+					->join('district','district.DISTRICT_ID = customer_online_address.subdistrict')
+
+					->where('customer_online_address.id_great',$greatID)
+					->get('customer_online_address');
+
+					return $rs->result() ;
+				}
+
+			} 
+
+
 		}
 
 		public function updateMemberAddr($id=0)

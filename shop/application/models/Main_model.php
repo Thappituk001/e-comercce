@@ -12,7 +12,7 @@ class Main_model extends CI_Model
 		$days	= getConfig('NEW_ARRIVAL_DAYS');
 		$from	= fromDate(beforeDate($days, date('Y-m-d')));
 		$to		= toDate(NOW());
-	
+		
 		$qs  = $this->db->select('tbl_product.id as product_id,
 			tbl_product.code as product_code,
 			tbl_product.name as product_name,
@@ -153,33 +153,34 @@ class Main_model extends CI_Model
 	public function moreItemByMenu($offset,$parent,$child,$sub_child)
 	{
 		$rs  = $this->db->select('tbl_product.id as product_id,
-				tbl_product.code as product_code,
-				tbl_product.name as product_name,
-				tbl_product.price as product_price,
-				tbl_product.discount_percent,
-				tbl_product.discount_amount,
-				tbl_style.id as style_id,
-				tbl_style.code as style_code,
-				tbl_style.name as style_name,
-				tbl_color.id_color,
-				tbl_color.color_code,
-				tbl_color.color_name,
-				tbl_color.color_group,
-				tbl_size.id_size,
-				tbl_size.size_name,
-				product_online.*
-				')
-			->join('tbl_style' , 'tbl_style.id = tbl_product.id_style')
-			->join('tbl_color','tbl_color.id_color = tbl_product.id_color')
-			->join('tbl_size','tbl_size.id_size = tbl_product.id_size')
-			->join('product_online','product_online.id_product = tbl_product.id')
-			->where('product_online.id_parent_menu',$parent)
-			->where('product_online.id_child_menu',$child)
-			->where('product_online.id_subchild_menu',$sub_child)
-			->limit(2,$offset)
-			->group_by('tbl_product.id')
-			->order_by('tbl_product.id_category', 'desc')
-			->get('tbl_product');	
+			tbl_product.code as product_code,
+			tbl_product.name as product_name,
+			tbl_product.price as product_price,
+			promotion.discount_percent,
+			promotion.discount_amount,
+			tbl_style.id as style_id,
+			tbl_style.code as style_code,
+			tbl_style.name as style_name,
+			tbl_color.id_color,
+			tbl_color.color_code,
+			tbl_color.color_name,
+			tbl_color.color_group,
+			tbl_size.id_size,
+			tbl_size.size_name,
+			product_online.*
+			')
+		->join('tbl_style' , 'tbl_style.id = tbl_product.id_style')
+		->join('tbl_color','tbl_color.id_color = tbl_product.id_color')
+		->join('tbl_size','tbl_size.id_size = tbl_product.id_size')
+		->join('product_online','product_online.id_product = tbl_product.id')
+		->join('promotion','promotion.id_product = product_online.id_product','left')
+		->where('product_online.id_parent_menu',$parent)
+		->where('product_online.id_child_menu',$child)
+		->where('product_online.id_subchild_menu',$sub_child)
+		->limit(2,$offset)
+		->group_by('tbl_product.id')
+		->order_by('tbl_product.id_category', 'desc')
+		->get('tbl_product');	
 
 
 		if( $rs->num_rows() > 0 )

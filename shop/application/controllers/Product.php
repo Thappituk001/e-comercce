@@ -124,14 +124,16 @@ class Product extends CI_Controller
 					$arr = array(
 						'link'				=>	'main/productDetail/'.$rs->product_id,
 						'image_path'		=> get_image_path(get_id_cover_image($rs->product_id), 3),
+						'style_id'			=> $rs->style_id,
 						'promotion'			=> $promo,
 						'new_product'		=> is_new_product($rs->product_id),
 						'discount'			=> $rs->discount_amount+$rs->discount_percent,
 						'discount_amount'	=> number_format($rs->discount_amount,2,'.',''),
 						'discount_percent'	=> number_format($rs->discount_percent,2,'.',''),
 						'discount_label'	=> discount_label($rs->discount_amount, $rs->discount_percent),
-						'product_code'	=> $rs->style_code,
-						'product_name'	=> $rs->style_name,
+						 'available_qty'    => apply_stock_filter($this->product_model->getAvailableQty($rs->product_id)), 
+						'product_code'		=> $rs->style_code,
+						'product_name'		=> $rs->style_name,
 						'sell_price'		=> sell_price($rs->product_price, $rs->discount_amount, $rs->discount_percent),
 						'price'				=> number_format($rs->product_price,2,'.','')
 						);	
@@ -149,12 +151,9 @@ class Product extends CI_Controller
 	}//function loadmore
 	
 	public function orderGrid(){
-		$this->load->helper('product_helper');
+		
 
-		$grid = array(
-			'color'=> get_product_colors($this->input->post('id_style')),
-			'size' => get_product_sizes($this->input->post('id_style')),
-			);
+		$grid =$this->product_model->grid($this->input->post('id_style'));
 
 		print_r(json_encode($grid));
 
@@ -167,6 +166,23 @@ class Product extends CI_Controller
 		$id_style		 = $this->input->post('id_style');
 		$rs              = $this->product_model->getSizeByColor($select_color,$id_style);
 		print_r(json_encode($rs));
+
+	}
+
+
+	public function addToCart()
+	{	
+		$data    = json_decode($this->input->post('dataChoosed'),true);
+
+		foreach ($data as $key => $value) {
+			echo $key." ".$value;
+		}
+		
+	}
+
+	public function getAvailable_qty(){
+		$qty = $this->product_model->getAvailableQty_OnGrid($this->input->post('id_style',true),$this->input->post('id_color',true),$this->input->post('id_size',true));
+		print_r($qty->qty);
 
 	}
 

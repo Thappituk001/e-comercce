@@ -25,8 +25,8 @@ class Cart_model extends CI_Model
 			tbl_style.code,
 			tbl_style.name,
 			tbl_product.price,
-			tbl_product.discount_amount,
-			tbl_product.discount_percent,
+			promotion.discount_percent,
+			promotion.discount_amount,
 			tbl_product.weight,
 			tbl_product.width,
 			tbl_product.length,
@@ -35,6 +35,7 @@ class Cart_model extends CI_Model
 			tbl_size.*')
 		
 			->join('tbl_product','tbl_product.id = cart_product_online.id_product')
+			->join('promotion','promotion.id_product = tbl_product.id','left')
 			->join('tbl_style','tbl_style.id = tbl_product.id_style')
 			->join('tbl_color','tbl_color.id_color = tbl_product.id_color')
 			->join('tbl_size','tbl_size.id_size = tbl_product.id_size')

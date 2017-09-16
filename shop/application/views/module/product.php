@@ -6,8 +6,6 @@
 <link rel="stylesheet" href="<?php echo base_url(); ?>shop/assets/css/nouislider.min.css" />
 
 <div class="container main-container" style="margin-left:5%">
-
-
   <div class="morePost row featuredPostContainer style2 globalPaddingTop" style="margin:20px">
 
     <div class="col-md-2 col-sm-2 hidden-xs" >

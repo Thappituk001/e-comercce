@@ -81,8 +81,10 @@ function delivery_cost($qty = 0)
 function getDiscount($id_cart)
 {	
 	$total_discount = 0;
-	$rs = get_instance()->db->select('cart_product_online.qty,tbl_product.id,tbl_product.price,tbl_product.discount_amount,tbl_product.discount_percent')
+	$rs = get_instance()->db->select('cart_product_online.qty,tbl_product.id,tbl_product.price,promotion.discount_percent,
+			promotion.discount_amount,')
 	->join('tbl_product','tbl_product.id = cart_product_online.id_product')
+	->join('promotion','promotion.id_product = tbl_product.id','left')
 	->where('cart_product_online.id_cart_online',$id_cart)
 	->get('cart_product_online');
 	if( $rs->num_rows() > 0 )

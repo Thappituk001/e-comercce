@@ -15,7 +15,7 @@
 </style>
 
 <div class="modal fade" id="bankPickerModal" role="dialog">
- <div class="modal-dialog modal-xs">
+ <div class="modal-dialog ">
   <div class="modal-content">
     <div class="modal-header" style="background-color:#585858">
       <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -50,7 +50,7 @@
 
 
 <div class="modal fade" id="paymentModal" role="dialog">
-  <div class="modal-dialog modal-xs">
+  <div class="modal-dialog ">
     <div class="modal-content">
       <div class="modal-header" style="background-color:#585858">
         <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -142,15 +142,15 @@
 
 
   <div class="modal fade" id="transportPickerModal" role="dialog">
-   <div class="modal-dialog modal-xs">
+   <div class="modal-dialog ">
     <div class="modal-content">
       <div class="modal-header" style="background-color:#585858">
         <button type="button" class="close" data-dismiss="modal">&times;</button>
         <h4 class="modal-title">ช่องทางการขนส่ง</h4>
       </div>
       <div class="modal-body">
-       <table class="table">
-        <tbody>
+       <table class="table" style="min-width:300px" style="min-width:300px">
+        <tbody >
           <?php foreach ($transport as $k => $v): ?>
             <tr>
               <td><?php echo $k+1; ?></td>
@@ -180,14 +180,14 @@
 
 
 <div class="modal fade" id="transportTypeModal" role="dialog">
- <div class="modal-dialog modal-xs">
+ <div class="modal-dialog ">
   <div class="modal-content">
     <div class="modal-header" style="background-color:#585858">
       <button type="button" class="close" data-dismiss="modal">&times;</button>
       <h4 class="modal-title">เลือกรูปแบบการส่ง</h4>
     </div>
     <div class="modal-body">
-      <table class="table">
+      <table class="table" style="min-width:300px">
         <tbody id="styletrans">
         </tbody>
       </table>
@@ -205,18 +205,18 @@
 </div>
 
 <div class="modal fade" id="addrPickerModal" role="dialog">
- <div class="modal-dialog modal-xs">
+ <div class="modal-dialog ">
   <div class="modal-content">
     <div class="modal-header" style="background-color:#585858">
       <button type="button" class="close" data-dismiss="modal">&times;</button>
       <h4 class="modal-title">เลือกที่อยู่</h4>
     </div>
     <div class="modal-body">
-      <table class="table">
+      <table class="table" style="min-width:350px;text-align:left;">
         <tbody id="addrRow">
           <?php foreach ($address as $addr): ?>
-            <tr >
-              <td style="padding-top:40px;padding-left:10px">
+            <tr>
+              <td style="padding-top:40px;padding-left:5%">
                 <input type="radio" name="optradio[]" value="<?= $addr->id_address; ?>">
               </td>
               <td>
@@ -242,7 +242,7 @@
 </div>
 
 <div class="modal fade" id="addNewAddr" role="dialog" >
- <div class="modal-dialog modal-xs">
+ <div class="modal-dialog ">
   <div class="modal-content">
     <div class="modal-header" style="background-color:#585858">
       <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -252,6 +252,7 @@
     $attributes = array('id' => 'form_add_addr');
     echo form_open("shop/Register/add_address" , $attributes); 
     ?>
+
     <div class="modal-body">
       <div class="form-group">
         <div>
@@ -281,7 +282,7 @@
         </div>
       </div>
 
-      <div class="form-horizontal">
+      
         <div class="form-group">
           <label class="control-label col-sm-3" for="Proviance">จังหวัด : </label>
           <div class="col-sm-7">
@@ -291,9 +292,9 @@
           </div>
           <input type="text" name="ProID" id="ProID" hidden="" />
         </div>
-      </div>
+     
 
-      <div class="form-horizontal">
+     
         <div class="form-group">
           <label class="control-label col-sm-3" for="District">อำเภอ : </label>
           <div class="col-sm-7">
@@ -303,9 +304,9 @@
           </div>
           <input type="text" name="DisID" id="DisID" hidden="" />
         </div>
-      </div>
+      
 
-      <div class="form-horizontal">
+     
         <div class="form-group">
           <label class="control-label col-sm-3" for="Subdistrict">ตำบล : </label>
           <div class="col-sm-7">
@@ -315,9 +316,9 @@
           </div>
           <input type="text" name="SubID" id="SubID" hidden="" />
         </div>
-      </div>
+     
 
-      <div class="form-horizontal">
+     
         <div class="form-group">
           <label class="control-label col-sm-3" for="Postcode">POSTCODE : </label>
           <div class="col-sm-7">
@@ -327,7 +328,7 @@
           </div>
           <input type="text" name="PostID" id="PostID" hidden="" />
         </div>
-      </div>
+     
     </div>  <!-- modal body -->
     <div class="modal-footer">
       <tr>
@@ -341,7 +342,46 @@
  </div>
 </div>
 </div>
+<style>
 
+@media only screen and (max-width: 320px) {
+  
+  .modal-dialog { /* Width */
+    max-width: 100%;
+    min-width: 200px;
+    width: auto !important;
+    display:block;
+    text-align:left;
+  }
+
+  .modal-content { /* Width */
+    display:block;
+  }
+  .modal-body { /* Width */
+    display:block;
+  }
+}
+
+@media only screen and (max-width: 580px) {
+  
+  .modal-dialog { /* Width */
+    max-width: 100%;
+    min-width: 300px;
+    width: auto !important;
+    display:block;
+    text-align:left;
+  }
+
+  .modal-content { /* Width */
+    display:block;
+  }
+  .modal-body { /* Width */
+    display:block;
+  }
+}
+
+
+</style>
 <script>
 
   // $(document).ready(function() {

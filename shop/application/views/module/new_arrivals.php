@@ -1,14 +1,16 @@
 
 <?php if( @$new_arrivals !== true ) : ?>
+
     <div class="container main-container head-offset">
         <!-- Main component call to action -->
-
         <div class="row featuredPostContainer globalPadding style2">
-            <h3 class="section-title style2 text-center header-main"><span>NEW ARRIVALS</span></h3>
+            <h3 class="section-title style2 text-center header-main">
+                <span>NEW ARRIVALS</span>
+            </h3>
 
             <div id="productslider" class="owl-carousel owl-theme">
                 <?php foreach( @$new_arrivals as $item ) : ?>
-                    <?php 	@$link = 'main/productDetail/'.$item->product_id; ?>
+                    <?php $link = 'main/productDetail/'.$item->product_id; ?>
                     <div class="item">
                         <div class="product">
                             <div class="image">
@@ -49,7 +51,7 @@
                         </span> 
                     </div>
                     <div class="action-control">
-                        <button class="btn btn-primary" onclick="addToCart(<?= $item->product_id ?>,<?= $id_customer ?>)"> 
+                        <button class="btn btn-primary" onclick="getOrderGrid(<?php echo $item->style_id; ?>,'<?php echo $item->style_code; ?>','<?php echo $item->style_name; ?>')"> 
                             <span class="add2cart">
                                 <i class="glyphicon glyphicon-shopping-cart"></i> Add to cart </span>
                             </button>
@@ -64,29 +66,3 @@
     <!--/.featuredPostContainer-->
 </div>    
 <?php endif; ?>
-
-<script>
-
-    function addToCart(id_product,id_customer){
-            // console.log(id_product);
-            // console.log(id_customer);
-            
-            $.ajax({
-                url:"cart/addToCart",
-                type:"POST",
-                cache:false, 
-                data:{"id_product":id_product,"id_customer":id_customer},
-                success: function(res){
-                    console.log(res);
-                    if(res=='success'){
-                        location.reload();
-                    }
-                    
-                },error:function(e){
-                    console.log("error");
-                }
-            }); 
-        }//function
-
-
-    </script>

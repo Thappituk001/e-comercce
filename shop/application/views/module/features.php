@@ -47,7 +47,7 @@
                  <?php endif; ?><br/>
                  <span><?php echo sell_price($item->product_price, $item->discount_amount,$item->discount_percent); ?><?php echo getCurrency(); ?></span> 
                </div>
-               <div class="action-control"><a class="btn btn-primary" onclick="addToCart(<?= $item->product_id ?>,<?= $id_customer ?>)"> <span class="add2cart"><i
+               <div class="action-control"><a class="btn btn-primary" onclick="getOrderGrid(<?php echo $item->style_id; ?>,'<?php echo $item->style_code; ?>','<?php echo $item->style_name; ?>')"> <span class="add2cart"><i
                 class="glyphicon glyphicon-shopping-cart"> </i> Add to cart </span> </a></div>
               </div>
             </div>
@@ -95,7 +95,7 @@
    {{/if}}
    <br><span>{{ sell_price }} บาท</span> 
  </div>
- <div class="action-control"><a class="btn btn-primary"> <span class="add2cart"><i class="glyphicon glyphicon-shopping-cart"> </i> Add to cart </span> </a></div>
+ <div class="action-control" onclick="getOrderGrid({{ style_id }})" ><a class="btn btn-primary"> <span class="add2cart"><i class="glyphicon glyphicon-shopping-cart"> </i> Add to cart </span> </a></div>
 </div>
 </div>
 {{/each}}
@@ -111,6 +111,7 @@
       url:"main/loadMoreFeatures",
       type:"POST", cache:false, data:{ "offset" : offset },
       success: function(rs){
+        // console.log($.parseJSON(rs));
        load_out();
        var rs = $.trim(rs);
        if( rs != 'none' )

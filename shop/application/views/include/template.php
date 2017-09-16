@@ -6,27 +6,278 @@ $this->load->view("include/footer");
 <div class="promo_field" id="promo">
 	Promotion Field
 </div>
+
+
+
 <script>
 	$(window).scroll(function() {
-	    if ($(this).scrollTop()) {
-	       $('#promo').show('4000', function() {
-		
+		if ($(this).scrollTop()) {
+			$('#promo').show('4000', function() {
+
 			});
-	    } else {
-	        $('#promo').hide('400', function() {
-		
+		} else {
+			$('#promo').hide('400', function() {
+
 			});
-	    }
+		}
 	});
+
+	$(document).ready(function(){
+		(function tableWidth(){
+			
+			$('#modal').on('show.bs.modal', function () {
+				$(this).find('.modal-body').css({
+			              width:'auto', //probably not needed
+			              height:'auto', //probably not needed 
+			              'max-height':'100%'
+			          });
+			});
+
+		}());
+		
+
+		$("#color_select").change(function(){
+			$.ajax({
+				url:"<?php echo base_url(); ?>shop/product/fetchSize",
+				type:"POST",
+				cache:true, 
+				data: {
+					"color_select" : $(this).val(),
+					"id_style": $("#style_id").val()
+				}, 
+				success: function(rs) { 
+					var opt = "";
+					var res = $.parseJSON(rs);
+					$.each(res, function(key, val){
+						opt +="<option value='"+ val +"'>"+val["size_name"]+"</option>"
+					});
+					$("#size_select").html( opt );
+					console.log(res);
+				},error: function(e) {
+					console.log("error");
+				}
+			});	
+		});
+
+});//document ready
+
+	function addToCart(customer_array,id_cart)
+	{
+		// var choosedValues ={};
+		// var key,val = [];
+		var key1 = 'something';
+		var value1 = 'something';
+		var attributes = {};
+		$("input[name='inputQty[]']").each(function() {
+			// console.log($(this).attr('id'));
+			// console.log($(this).val());
+			key1 = $(this).attr('id');
+			value1 = $(this).val() ;
+			attributes[key1] = value1;
+		});
+
+		// console.log(attributes);
+		
+		// load_in();
+
+		$.ajax({
+			url:"<?php echo base_url(); ?>shop/product/addToCart/",
+			type:"POST",
+			cache: "false",
+			data: {
+				dataChoosed:JSON.stringify(attributes),
+			},
+			success: function(rs){
+				load_out();
+				
+				console.log("success add to cart ..");
+				console.log(rs);
+
+				var rs = $.trim(rs);
+				// if( rs == 'success' )
+				// {
+				// 	swal({ title: 'Success', title : 'Add to cart successfully', timer: 1000, type: 'success' });
+				// 	// updateCart();
+				// }
+				// else
+				// {
+				// 	swal({ title: 'ไม่สำเร็จ', title : 'เพิ่มสินค้าลงตะกร้าไม่สำเร็จ กรุณาลองใหม่อีกครั้ง', type: 'error' });	
+				// }
+
+			}
+		});
+	}
+
+	function updateCart()
+	{
+		var id_cart = $('#id_cart').val();
+		$.ajax({
+			url:"<?php echo base_url(); ?>shop/cart/getCartQty",
+			type: "POST", cache: "false", data:{ "id_cart" : id_cart },
+			success: function(rs){
+				var rs = $.trim(rs);
+				var rs = parseInt(rs);
+				if( !isNaN(rs) )
+				{
+					$("#cartLabel").text(rs);
+					$('#cartLabel').css('visibility', 'visible');
+					$("#cartMobileLabel").text(rs);
+					$('#cartMobileLabel').css('visibility', 'visible');
+				}
+			}
+		});
+	}
+
+
+	function validQty(el, qty)
+	{
+		var input = parseInt(el.val());
+		el.val(input);
+		if( el.val() !== '' && isNaN(input) ){ swal('ตัวเลขไม่ถูกต้อง', 'กรุณาป้อนเฉพาะตัวเลขเท่านั้น', 'warning'); el.val(''); return false; }
+		var qty = parseInt(qty);
+		if( input > qty)
+		{
+			swal('สินค้าไม่พอ', 'มีสินค้าในสต็อก '+qty+' เท่านั้น', 'warning');
+			el.val('');
+		}
+	}
+
+
+	function getOrderGrid(id,product_code,product_name)
+	{
+		// load_in();
+		console.log("id product = "+id);
+		$.ajax({
+			url:"<?php echo base_url(); ?>shop/product/orderGrid",
+			type:"POST", 
+			cache: "false", 
+			data: { "id_style" : id },
+			success: function(rs){
+				// load_out();
+				
+				$("#productCode").html(product_code +"  |  "+ product_name);
+
+				var arr = Object.keys(JSON.parse(rs)).map(function(k) { 
+					return JSON.parse(rs)[k] 
+				});
+
+				// console.log(arr);
+				
+				var c = [];
+				$.each(arr, function(key, value) {
+					var x = $.inArray(value['color_name'],c);
+					if(x<0){
+						c.push(value['color_name']);
+					}
+				});
+
+				// console.log(c);
+
+				var s = [];
+				$.each(arr, function(key, value) {
+					var x = $.inArray(value['size_name'],s);
+					if(x<0){
+						s.push(arr[key]);
+					}
+				});
+
+				console.log(s);
+				$("#tableOrder_th").html("<th></th>");
+				$("#tableOrder_bd").html("");
+
+				
+				$.each(c, function( key,value ) 
+				{
+					$("#tableOrder_th").append("<th style='text-align: center;'>"+value+"</th>");
+				});
+				// console.log(s);
+				$dataAppend = "<tr>";
+				$.each(s, function( key,value ) 
+				{
+
+					$dataAppend += "<td style='padding-top:6%'>"+value['size_name']+"</td>";
+
+					$.each(c, function( k, v ) 
+					{
+						
+						// $("#tableOrder_bd").append("<td>"+value['size_name']+"</td>");
+						if(value['color_name'] == v)
+						{
+
+							$dataAppend += "<td><input type='text' name='inputQty[]'  class='col-sm-12' style='margin-bottom:0px'><span name='av[]'></span></td>";
+							// console.log(k);
+							// $('span[name=av[]')append(av);
+						}else{
+							$dataAppend += "<td></td>";
+						}
+
+					});
+					$dataAppend  += "</tr>";
+				});
+				
+				$("#tableOrder_bd").append($dataAppend);
+				
+				
+
+				$("#orderGrid").modal('show');
+
+
+			},error: function(XMLHttpRequest, textStatus, errorThrown) {
+				console.log(errorThrown);
+			}
+		});
+	}
+
+	function av(id,id_color,id_size){
+		$.ajax({
+			url:"<?php echo base_url(); ?>shop/product/getAvailable_qty",
+			type:"POST",
+			cache: "false",
+			data: {
+				"id_style":id,
+				"id_color":id_color,
+				"id_size":id_size
+			},
+			success: function(rs){
+					// console.log(rs);
+					return rs;
+			},
+			error: function(XMLHttpRequest, textStatus, errorThrown){
+				console.log(errorThrown);
+			}
+		});
+	}
+
 </script>
 <style>
+
+	.modal-dialog { /* Width */
+		max-width: 100%;
+		width: auto !important;
+		display: inline-block;
+	}
+	.modal-body { 
+		max-height: 300px; 
+		padding: 10px; 
+		overflow-y: auto; 
+		-webkit-overflow-scrolling: touch; 
+	}
+	.modal{
+		text-align: center;
+	}
+	
+	th,td  {
+		max-width: 100px;
+		word-wrap: break-word;
+	}
+	
 	.promo_field{
 		position: absolute;
-	    bottom:50px;
-	    font-size: 18px;
-	    width:100%;
-	    height:100px;
+		bottom:50px;
+		font-size: 18px;
+		width:100%;
+		height:100px;
 		opacity:0.4;
-	    background-color:#2E2E2E;
+		background-color:#2E2E2E;
 	}
 </style>

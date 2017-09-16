@@ -7,7 +7,7 @@ class Main extends CI_Controller
 	
 	public function __construct()
 	{
-		parent::__construct();		
+		@parent::__construct();		
 		
 		$this->load->model("main_model");
 		$this->load->model('product_model');
@@ -16,20 +16,22 @@ class Main extends CI_Controller
 
 		$this->home = base_url()."shop/main";
 
-		$this->id_customer  = getIdCustomer();//great or member
-		$this->id_cart 	    = getIdCart($this->id_customer['id']);
+		$this->customer  = getIdCustomer();//great or member
+		$this->id_cart 	    = getIdCart($this->customer['id']);
 		$this->cart_items 	= $this->cart_model->getCartProduct($this->id_cart);
 		$this->cart_qty		= $this->cart_model->cartQty($this->id_cart);
 		
 	}
 	
-	public function index()
+	public function index($id=0)
 	{
 		$data['title']			= $this->title;
 		$data['new_arrivals'] 	= $this->main_model->new_arrivals()!= false?$this->main_model->new_arrivals():array();
+
 		$data['features']		= $this->main_model->features()!= false?$this->main_model->features():array();
+
 		$data['cart_items']		= $this->cart_items==''?$this->cart_items=array():$this->cart_items;
-		$data['id_customer']    = $this->id_customer['id'];
+		$data['id_customer']    = $this->customer['id'];
 		$data['id_cart']		= $this->id_cart;
 		$data['cart_qty']		= $this->cart_qty;
 		$data['view'] 			= 'main';	
@@ -50,16 +52,21 @@ class Main extends CI_Controller
 		$data['product'] 		= $this->product_model->getProductDetail($id_pd);
 		$data['images']			= $this->product_model->productImages($id_pd);
 		
+
+		// echo "<pre>";
+		// print_r($this->product_model->getProductDetail($id_pd));
+		// exit();
+
 		$data['grid']			= $this->product_model->grid($data['product'][0]->style_id);
 		
 		
 		
 		$data['view']			= 'product_detail';
 		$data['cart_items']		= $this->cart_items==''?$this->cart_items=array():$this->cart_items;
-		$data['id_customer']    = $this->id_customer['id'];
+		$data['customer']    = $this->customer;
 		$data['id_cart']		= $this->id_cart;
 		$data['cart_qty']		= $this->cart_qty;
-		$data['menus'] =  $this->Menu_model->menus();
+		$data['menus']			=  $this->Menu_model->menus();
 
 
 		$this->load->view($this->layout, $data);	
@@ -86,14 +93,16 @@ class Main extends CI_Controller
 					$arr = array(
 						'link'				=>	'main/productDetail/'.$rs->product_id,
 						'image_path'		=> get_image_path(get_id_cover_image($rs->product_id), 3),
+						'style_id'			=> $rs->style_id,
 						'promotion'			=> $promo,
 						'new_product'		=> is_new_product($rs->product_id),
 						'discount'			=> $rs->discount_amount+$rs->discount_percent,
 						'discount_amount'	=> number_format($rs->discount_amount,2,'.',''),
 						'discount_percent'	=> number_format($rs->discount_percent,2,'.',''),
 						'discount_label'	=> discount_label($rs->discount_amount, $rs->discount_percent),
-						'product_code'	=> $rs->style_code,
-						'product_name'	=> $rs->style_name,
+						 'available_qty'    => apply_stock_filter($this->product_model->getAvailableQty($rs->product_id)), 
+						'product_code'		=> $rs->style_code,
+						'product_name'		=> $rs->style_name,
 						'sell_price'		=> sell_price($rs->product_price, $rs->discount_amount, $rs->discount_percent),
 						'price'				=> number_format($rs->product_price,2,'.','')
 						);	

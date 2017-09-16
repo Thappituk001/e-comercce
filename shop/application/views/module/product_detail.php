@@ -116,7 +116,7 @@
 								</span>
 							</div>
 
-	
+
 							<!--  ***************************************************************  -->
 							<!--  ********************** show on mobile *************************  -->
 
@@ -148,7 +148,7 @@
 								<!-- part  of size-->
 								
 								<div class="product-details-product-color hidden-lg hidden-md hidden-sm">
-					
+
 									<strong>Select Size </strong>
 									<div class="form-group">
 										<select class="form-control" name="size_select" id="size_select">
@@ -161,8 +161,8 @@
 
 
 
-			<!--  **************************** END ******************************  -->
-			<!--  ***************************************************************  -->
+						<!--  **************************** END ******************************  -->
+						<!--  ***************************************************************  -->
 						<input type="text" class="hidden" id="style_id" value="<?= $pd->style_id; ?>">
 
 
@@ -188,21 +188,31 @@
 							</div>
 						</div>
 					</div>
+
+					<?php echo "<pre>" ;print_r($grid); ?>
+
 					<!--/ right column end -->
 
 				</div>
 				<!--/.row-->
 
-<!-- 
-	<div style="clear:both"></div> -->
-
-
+<!--  <div style="clear:both"></div> -->
 </div>
 <!-- /.product-details-container -->
 </section>
+<style>
+body .modal-dialog { /* Width */
+    max-width: 100%;
+    width: auto !important;
+    display: inline-block;
+}
+.modal{
+	text-align: center;
+}
 
+</style>
 <form id="orderForm">
-	<div class="modal fade" id="orderGrid">
+	<div class="modal fade" id="orderGrid" >
 		<div class="modal-dialog" id="mainGrid">
 			<div class="modal-content">
 				<div class="modal-header" style="background-color:#585858">
@@ -211,9 +221,9 @@
 				</div>
 				<div class="modal-body" id="orderContent">
 					<form class="form-horizontal">
-						<div class="table-responsive">
-							<table class="table table-bordered table-striped table-highlight text-center" >
-								<thead style="text-align: center;">
+						<!-- <div class="table-responsive" style="width:auto;"> -->
+							<table class="table table-bordered table-striped table-highlight"  id="tableOrder">
+								<thead >
 									<th></th>
 									<?php 
 									$color = [];
@@ -232,16 +242,27 @@
 										?>
 									<?php endforeach ?>
 									<?php foreach ($color as $c): ?>
-										<th><?= $c ?></th>
+										<th style="text-align: center;"><?= $c ?></th>
 									<?php endforeach ?>
 
 								</thead>
-								<tbody >									
+								<tbody >		
+									<?php 
+
+									$available_qty = apply_stock_filter($this->product_model->getAvailableQty($pd->product_id)); 
+
+									?>										
 									<?php foreach ($size as $s): ?>
-										<tr><td><?php  print_r($s[0]); ?></td>
+										<?php print_r($s); ?>
+										<tr><td><?php  echo ($s[0]); ?></td>
 											<?php foreach ($color as $c): ?>
 												<?php if ($s['color'] == $c): ?>
-													<td><input type="text"></td>
+													<td>
+														<div class="form-group">
+														<input type="text" name="inputQty[]" id="<?php echo $s[0]; ?>_<?php echo $s['color']; ?>">
+														</div>
+
+													</td>
 												<?php else: ?>
 													<td></td>
 												<?php endif ?>
@@ -250,12 +271,13 @@
 									<?php endforeach ?>
 								</tbody>
 							</table>
-						</form>
-
-					</div>
+						<!-- </div> -->
+					</form>
+					
+					
 				</div>
 				<div class="modal-footer">
-					<input type="hidden" name="id_product" id="id_product" value="<?php echo $pd->product_id; ?>" />
+					<!-- <input type="hidden" name="id_product" id="id_product" value="<?php echo $pd->product_id; ?>" /> -->
 					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 					<button type="button" class="btn btn-primary" onClick="addToCart()">Add to cart</button>
 				</div>
@@ -268,52 +290,87 @@
 
 
 <script>
-$(document).ready(function(){
-	$("#color_select").change(function(){
-		$.ajax({
-			url:"<?php echo base_url(); ?>shop/product/fetchSize",
-			type:"POST",
-			cache:true, 
-			data: {
-				"color_select" : $(this).val(),
-				"id_style": $("#style_id").val()
-			}, 
-			success: function(rs) { 
-				var opt = "";
-				var res = $.parseJSON(rs)
-				$.each(res, function(key, val){
-					opt +="<option value='"+ val +"'>"+val["size_name"]+"</option>"
-				});
-				$("#size_select").html( opt );
-				console.log(res);
-			},error: function(e) {
-				console.log("error");
-			}
-		});	
-	});
+	$(document).ready(function(){
+		(function tableWidth(){
+			
+			$('#modal').on('show.bs.modal', function () {
+			       $(this).find('.modal-body').css({
+			              width:'auto', //probably not needed
+			              height:'auto', //probably not needed 
+			              'max-height':'100%'
+			       });
+			});
+
+		}());
+		
+
+		$("#color_select").change(function(){
+			$.ajax({
+				url:"<?php echo base_url(); ?>shop/product/fetchSize",
+				type:"POST",
+				cache:true, 
+				data: {
+					"color_select" : $(this).val(),
+					"id_style": $("#style_id").val()
+				}, 
+				success: function(rs) { 
+					var opt = "";
+					var res = $.parseJSON(rs);
+					$.each(res, function(key, val){
+						opt +="<option value='"+ val +"'>"+val["size_name"]+"</option>"
+					});
+					$("#size_select").html( opt );
+					console.log(res);
+				},error: function(e) {
+					console.log("error");
+				}
+			});	
+		});
+
 });//document ready
 
-	function addToCart()
+	function addToCart(customer_array,id_cart)
 	{
-		$("#orderGrid").modal('hide');
-		var id_cart 	= $("#id_cart").val();
-		var id_cus 	= $("#id_customer").val();
-		load_in();
+		// var choosedValues ={};
+		// var key,val = [];
+		var key1 = 'something';
+		var value1 = 'something';
+		var attributes = {};
+		$("input[name='inputQty[]']").each(function() {
+			// console.log($(this).attr('id'));
+			// console.log($(this).val());
+			key1 = $(this).attr('id');
+			value1 = $(this).val() ;
+			attributes[key1] = value1;
+		});
+
+		console.log(attributes);
+		
+		// load_in();
+
 		$.ajax({
-			url:"<?php echo base_url(); ?>shop/product/addToCart/"+id_cus+"/"+id_cart,
-			type:"POST", cache: "false", data: $("#orderForm").serialize(),
+			url:"<?php echo base_url(); ?>shop/product/addToCart/",
+			type:"POST",
+			cache: "false",
+			data: {
+				dataChoosed:JSON.stringify(attributes),
+			},
 			success: function(rs){
 				load_out();
+				
+				console.log("success add to cart ..");
+				console.log(rs);
+
 				var rs = $.trim(rs);
-				if( rs == 'success' )
-				{
-					swal({ title: 'Success', title : 'Add to cart successfully', timer: 1000, type: 'success' });
-					updateCart();
-				}
-				else
-				{
-					swal({ title: 'ไม่สำเร็จ', title : 'เพิ่มสินค้าลงตะกร้าไม่สำเร็จ กรุณาลองใหม่อีกครั้ง', type: 'error' });	
-				}
+				// if( rs == 'success' )
+				// {
+				// 	swal({ title: 'Success', title : 'Add to cart successfully', timer: 1000, type: 'success' });
+				// 	// updateCart();
+				// }
+				// else
+				// {
+				// 	swal({ title: 'ไม่สำเร็จ', title : 'เพิ่มสินค้าลงตะกร้าไม่สำเร็จ กรุณาลองใหม่อีกครั้ง', type: 'error' });	
+				// }
 
 			}
 		});
@@ -382,11 +439,7 @@ $(document).ready(function(){
 		});
 	}
 
-	
-	
+
+
 
 </script>
-<style>
-	
-
-</style>

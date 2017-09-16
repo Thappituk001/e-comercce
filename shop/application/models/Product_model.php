@@ -14,8 +14,8 @@ class Product_model extends CI_Model
 				tbl_product.code as product_code,
 				tbl_product.name as product_name,
 				tbl_product.price as product_price,
-				tbl_product.discount_percent,
-				tbl_product.discount_amount,
+				promotion.discount_percent,
+				promotion.discount_amount,
 				tbl_style.id as style_id,
 				tbl_style.code as style_code,
 				tbl_style.name as style_name,
@@ -32,6 +32,7 @@ class Product_model extends CI_Model
 			->join('tbl_size','tbl_size.id_size = tbl_product.id_size')
 			->join('color_group','color_group.id_color_group = tbl_color.id_color_group')
 			->join('product_online','product_online.id_product = tbl_product.id')
+			->join('promotion','promotion.id_product = product_online.id_product','left')
 			->where('product_online.id_parent_menu',$parent)
 			->limit(16,0)
 			->group_by('tbl_product.id')
@@ -45,8 +46,8 @@ class Product_model extends CI_Model
 				tbl_product.code as product_code,
 				tbl_product.name as product_name,
 				tbl_product.price as product_price,
-				tbl_product.discount_percent,
-				tbl_product.discount_amount,
+				promotion.discount_percent,
+			promotion.discount_amount,
 				tbl_style.id as style_id,
 				tbl_style.code as style_code,
 				tbl_style.name as style_name,
@@ -63,6 +64,7 @@ class Product_model extends CI_Model
 			->join('tbl_size','tbl_size.id_size = tbl_product.id_size')
 			->join('color_group','color_group.id_color_group = tbl_color.id_color_group')
 			->join('product_online','product_online.id_product = tbl_product.id')
+			->join('promotion','promotion.id_product = product_online.id_product','left')
 			->where('product_online.id_parent_menu',$parent)
 			->where('product_online.id_child_menu',$child)
 			->limit(16,0)
@@ -76,8 +78,8 @@ class Product_model extends CI_Model
 				tbl_product.code as product_code,
 				tbl_product.name as product_name,
 				tbl_product.price as product_price,
-				tbl_product.discount_percent,
-				tbl_product.discount_amount,
+				promotion.discount_percent,
+			promotion.discount_amount,
 				tbl_style.id as style_id,
 				tbl_style.code as style_code,
 				tbl_style.name as style_name,
@@ -94,6 +96,7 @@ class Product_model extends CI_Model
 			->join('tbl_size','tbl_size.id_size = tbl_product.id_size')
 			->join('color_group','color_group.id_color_group = tbl_color.id_color_group')
 			->join('product_online','product_online.id_product = tbl_product.id')
+			->join('promotion','promotion.id_product = product_online.id_product','left')
 			->where('product_online.id_parent_menu',$parent)
 			->where('product_online.id_child_menu',$child)
 			->where('product_online.id_subchild_menu',$sub_child)
@@ -108,8 +111,8 @@ class Product_model extends CI_Model
 				tbl_product.code as product_code,
 				tbl_product.name as product_name,
 				tbl_product.price as product_price,
-				tbl_product.discount_percent,
-				tbl_product.discount_amount,
+				promotion.discount_percent,
+			promotion.discount_amount,
 				tbl_style.id as style_id,
 				tbl_style.code as style_code,
 				tbl_style.name as style_name,
@@ -126,6 +129,7 @@ class Product_model extends CI_Model
 			->join('tbl_size','tbl_size.id_size = tbl_product.id_size')
 			->join('color_group','color_group.id_color_group = tbl_color.id_color_group')
 			->join('product_online','product_online.id_product = tbl_product.id')
+			->join('promotion','promotion.id_product = product_online.id_product','left')
 			->where('product_online.id_parent_menu',$parent)
 			->limit(16,0)
 			->group_by('tbl_product.id')
@@ -160,6 +164,32 @@ class Product_model extends CI_Model
 		$qty 	= ($qty + $move + $cancle) - $order;
 		
 		return $qty;	
+	}
+
+	public function getAvailableQty_OnGrid($id_style,$id_color,$id_size)
+	{
+
+		// $qty 		= 0; 
+		// $move 	    = $this->moveQty($id_pd);
+		// $cancle 	= $this->cancleQty($id_pd);
+		// $order	    = $this->orderQty($id_pd);
+
+
+		$rs = $this->db->query("SELECT SUM(qty) AS qty FROM tbl_product INNER JOIN tbl_stock ON CAST(tbl_product.id AS UNSIGNED) = tbl_stock.id_product INNER JOIN tbl_zone ON tbl_zone.id_zone = tbl_stock.id_zone WHERE tbl_product.id IN (SELECT tbl_product.id FROM tbl_product WHERE tbl_product.id_style = 108 AND tbl_product.id_color = 14 AND tbl_product.id_size = 6 )");
+		
+		// $qty 		= 0; 
+		// $move 	    = $this->moveQty($sub_query);
+		// $cancle 		= $this->cancleQty($sub_query);
+		// $order	    = $this->orderQty($sub_query);
+
+
+		if( $rs->num_rows() == 1 && !is_null($rs->row()))
+		{
+			// $qty = $rs->row()->qty;
+		}
+		// $qty 	= ($qty + $move + $cancle) - $order;
+		
+		return $rs->result()[0];	
 	}
 	
 	public function cancleQty($id_pa)
@@ -198,8 +228,8 @@ class Product_model extends CI_Model
 				tbl_product.code as product_code,
 				tbl_product.name as product_name,
 				tbl_product.price as product_price,
-				tbl_product.discount_percent,
-				tbl_product.discount_amount,
+				promotion.discount_percent,
+				promotion.discount_amount,
 				tbl_style.id as style_id,
 				tbl_style.code as style_code,
 				tbl_style.name as style_name,
@@ -215,6 +245,7 @@ class Product_model extends CI_Model
 			->join('tbl_color','tbl_color.id_color = tbl_product.id_color')
 			->join('tbl_size','tbl_size.id_size = tbl_product.id_size')
 			->join('color_group','color_group.id_color_group = tbl_color.id_color_group')
+			->join('promotion','promotion.id_product = tbl_product.id','left')
 			->where('tbl_product.id',$id)
 			->get('tbl_product');		
 			
@@ -262,14 +293,15 @@ class Product_model extends CI_Model
 				tbl_product.code as product_code,
 				tbl_product.name as product_name,
 				tbl_product.price as product_price,
-				tbl_product.discount_percent,
-				tbl_product.discount_amount,
+				promotion.discount_percent,
+			promotion.discount_amount,
 				tbl_style.id as style_id,
 				tbl_style.code as style_code,
 				tbl_style.name as style_name,
 				')
 			->join('tbl_style' , 'tbl_style.id = tbl_product.id_style')
 			->join('product_online','product_online.id_product = tbl_product.id')
+			->join('promotion','promotion.id_product = product_online.id_product','left')
 			->where('product_online.id_parent_menu',$parent)
 			->where('tbl_product.show_in_online',1)
 			->where('tbl_product.is_deleted',0)
@@ -283,14 +315,15 @@ class Product_model extends CI_Model
 				tbl_product.code as product_code,
 				tbl_product.name as product_name,
 				tbl_product.price as product_price,
-				tbl_product.discount_percent,
-				tbl_product.discount_amount,
+				promotion.discount_percent,
+			promotion.discount_amount,
 				tbl_style.id as style_id,
 				tbl_style.code as style_code,
 				tbl_style.name as style_name,
 				')
 			->join('tbl_style' , 'tbl_style.id = tbl_product.id_style')
 			->join('product_online','product_online.id_product = tbl_product.id')
+			->join('promotion','promotion.id_product = product_online.id_product','left')
 			->where('product_online.id_parent_menu',$parent)
 			->where('product_online.id_child_menu',$child)
 			->where('tbl_product.show_in_online',1)
@@ -305,14 +338,15 @@ class Product_model extends CI_Model
 				tbl_product.code as product_code,
 				tbl_product.name as product_name,
 				tbl_product.price as product_price,
-				tbl_product.discount_percent,
-				tbl_product.discount_amount,
+				promotion.discount_percent,
+			promotion.discount_amount,
 				tbl_style.id as style_id,
 				tbl_style.code as style_code,
 				tbl_style.name as style_name,
 				')
 			->join('tbl_style' , 'tbl_style.id = tbl_product.id_style')
 			->join('product_online','product_online.id_product = tbl_product.id')
+			->join('promotion','promotion.id_product = product_online.id_product','left')
 			->where('product_online.id_parent_menu',$parent)
 			->where('product_online.id_child_menu',$child)
 			->where('product_online.id_subchild_menu',$sub_child)

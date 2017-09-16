@@ -10,7 +10,7 @@ include '../function/order_helper.php';
 if( isset( $_GET['updateInvoice'] ) )
 {
 	$sc 			= 'fail';
-	$id_order 	= $_POST['id_order'];
+	$id_order 	    = $_POST['id_order'];
 	$invoice 		= $_POST['invoice'];	
 	
 	$qs = dbQuery("SELECT invoice FROM tbl_order_invoice WHERE id_order = ".$id_order);

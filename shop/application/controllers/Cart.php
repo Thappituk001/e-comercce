@@ -42,9 +42,7 @@ class Cart extends CI_Controller
 		$data['address']	   = $this->cart_model->getAddress($this->customer);
 		$data['bank']		   = $this->bank ;
 		
-		// echo "<pre>";
-		// print_r($data['address']);
-		// exit();
+		
 
 		$this->load->view($this->layout, $data);
 

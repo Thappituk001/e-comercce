@@ -1,27 +1,179 @@
 <?php
-class category {
-		public $id_product;
-		public $id_category, $category_name, $description, $parent_id, $level_depth, $postioin, $date_add, $date_upd, $active ;
-		protected $connect;
-		protected $sql;
-		public function __construct(){}
-		public function category_show_new($no_date,$id_product){
-			$date = date('Y-m-d');
-			list($date_upd) = dbFetchArray(dbQuery("SELECT date_add FROM tbl_product where id_product = '$id_product'"));
-			$date_new = date('Y-m-d 00:00:00',strtotime("+$no_date day" ,strtotime($date_upd)));
-			if($date_new > "$date 00:00:00"){
-				$this->NEW = "<span class='new-product'> NEW</span>";
-			}else{
-				$this->NEW = "";
+class category 
+{
+	public $id;
+	public $code;
+	public $name;
+	
+	public function __construct($id = '')
+	{
+		if( $id != '' )
+		{
+			$qs = dbQuery("SELECT * FROM tbl_product_category WHERE id = '".$id."'");
+			if( dbNumRows($qs) == 1 )
+			{
+				$rs = dbFetchObject($qs);
+				$this->id		= $rs->id;
+				$this->code	= $rs->code;
+				$this->name	= $rs->name;	
 			}
 		}
-		
-		public function categoryList()
+	}
+	
+	
+	
+	
+	
+	
+	public function add(array $ds )
+	{
+		$sc = FALSE;
+		if( count($ds) > 0 )
 		{
-			$sql = "SELECT * FROM tbl_category WHERE id_category !=0";	
-			return dbQuery($sql);
+			$fields	= "";
+			$values	= "";
+			$i			= 1;
+			foreach( $ds as $field => $value )
+			{
+				$fields	.= $i == 1 ? $field : ", ".$field;
+				$values	.= $i == 1 ? "'". $value ."'" : ", '". $value ."'";
+				$i++;	
+			}
+			$sc = dbQuery("INSERT INTO tbl_product_category (".$fields.") VALUES (".$values.")");
+		}
+		return $sc;	
+	}
+	
+	
+	
+	
+	
+	
+	
+	public function update($id, array $ds)
+	{
+		$sc = FALSE;
+		if( count( $ds ) > 0 )
+		{
+			$set 	= "";
+			$i		= 1;
+			foreach( $ds as $field => $value )
+			{
+				$set .= $i == 1 ? $field . " = '" . $value . "'" : ", ".$field . " = '" . $value . "'";
+				$i++;	
+			}
+			$sc = dbQuery("UPDATE tbl_product_category SET " . $set . " WHERE id = '".$id."'");
+		}
+		return $sc;
+	}
+	
+	
+	
+	
+	
+	
+	public function delete($id)
+	{
+		return dbQuery("DELETE FROM tbl_product_category WHERE id = '".$id."'");
+	}
+	
+	
+	
+	
+	
+	
+	public function removeMember($id)
+	{
+		return dbQuery("UPDATE tbl_product SET id_category = '0' WHERE id_category = '".$id."'");
+	}
+	
+	
+	
+	
+	
+	public function isExists($field, $value, $id='')
+	{
+		$sc = FALSE;
+		if( $id != '' )
+		{
+			$qs = dbQuery("SELECT id FROM tbl_product_category WHERE ".$field." = '".$value."' AND id != '".$id."'");
+		}
+		else
+		{
+			$qs = dbQuery("SELECT id FROM tbl_product_category WHERE ".$field." = '".$value."'");
 		}
 		
+		if( dbNumRows($qs) > 0 )
+		{
+			$sc = TRUE;	
+		}
+		return $sc;
 	}
-	// จบ class	
-?>							
+	
+		
+	
+	
+	public function getCategory()
+	{
+		return dbQuery("SELECT * FROM tbl_product_category");	
+	}
+	
+	
+	
+	
+	
+	public function getCategoryId($code)
+	{
+		$sc = FALSE;
+		$qs = dbQuery("SELECT id FROM tbl_product_category WHERE code = '".$code."'");
+		if( dbNumRows($qs) == 1 )
+		{
+			list( $sc ) = dbFetchArray($qs);
+		}
+		return $sc;
+	}
+	
+	
+	
+	
+	
+	
+	public function getCategoryCode($id)
+	{
+		$sc = '';
+		$qs = dbQuery("SELECT code FROM tbl_product_category WHERE id = '".$id."'");
+		if( dbNumRows($qs) == 1 )
+		{
+			list( $sc ) = dbFetchArray($qs);
+		}
+		return $sc;		
+	}
+	
+	
+	
+	
+	
+	public function getCategoryName($id)
+	{
+		$sc = '';
+		$qs = dbQuery("SELECT name FROM tbl_product_category WHERE id = '".$id."'");
+		if( dbNumRows($qs) == 1 )
+		{
+			list( $sc ) = dbFetchArray($qs);
+		}
+		return $sc;
+	}
+	
+	
+	
+	
+	
+	public function countMember($id)
+	{
+		$qs = dbQuery("SELECT id FROM tbl_product WHERE id_category = '".$id."' GROUP BY id_style");
+		return dbNumRows($qs);
+	}
+	
+	
+}//--- end class
+?>

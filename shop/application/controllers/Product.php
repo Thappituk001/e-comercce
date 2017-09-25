@@ -32,11 +32,11 @@ class Product extends CI_Controller
 		$product		     = $this->product_model->getProduct($parent,$child,$sub_child);	
 		$data['product']	    = $product;
 		$this->product_qty      = count($product);
-		$ColorGroup 			= array();
-		$size 					= array();
-		$id 					= array();
+		$ColorGroup 			= [];
+		$size 					= [];
+		$id 					= [];
 		$data['color']          = "";
-		$data['size']			= array();
+		$data['size']			= [];
 		
 		//pass product color to array 
 		if(!empty($product)){
@@ -64,36 +64,45 @@ class Product extends CI_Controller
 		//filter data
 		if($this->input->get()){
 			$present_qty = count($data['product']);
-			$color = $this->input->get('color')==''?array():$this->input->get('color',true);
-			$size  = $this->input->get('size')==''?array():$this->input->get('size',true);
+			$color = empty($this->input->get('color'))?[]:$this->input->get('color',true);
+			$size  = empty($this->input->get('size'))?[]:$this->input->get('size',true);
 			$minPrice = $this->input->get('minPrice')==''?0:$this->input->get('minPrice',true);
 			$maxPrice = $this->input->get('maxPrice')==''?10000:$this->input->get('maxPrice',true);
 
-			$productArray = array();
-		
+			$productArray = [];
+
 			
 			if($present_qty = $this->product_qty){
-				$n = 0;
-				foreach ($data['product'] as $p) {
-					
-					if(
-						(in_array($p->color_group_name,$color) && !empty($color)) || 
-						(in_array($p->id_size,$size) && !empty($size)) &&
-						($p->product_price >= $minPrice) &&
-						($p->product_price <= $maxPrice) 
-					 )
-					{
-						array_push($productArray, $p);
+				
+				if(!empty($color) || !empty($size)){
+					foreach ($data['product'] as $p) {
+
+						if(
+							(in_array($p->color_group_name,$color)) || 
+							(in_array($p->id_size,$size)) &&
+							($p->product_price >= $minPrice) &&
+							($p->product_price <= $maxPrice) 
+						)
+						{
+							array_push($productArray, $p);
+						}
+					}
+
+				}else if(empty($color) && empty($size)){
+
+					foreach ($data['product'] as $p) {
+						if(($p->product_price >= $minPrice) && ($p->product_price<= $maxPrice))
+						{
+							array_push($productArray, $p);
+						}
 					}
 				}
-				
-				$n++;
 			}//if be present data
 
 			$data['product'] = $productArray;
 		}//if get filter
 
-		$data['cart_items']		= $this->cart_items==''?$this->cart_items=array():$this->cart_items;
+		$data['cart_items']		= $this->cart_items==''?$this->cart_items=[]:$this->cart_items;
 		$data['id_customer']    = $this->id_customer['id'];
 		$data['id_cart']		= $this->id_cart;
 		$data['cart_qty']		= $this->cart_qty;
@@ -108,7 +117,7 @@ class Product extends CI_Controller
 	public function loadMoreItem()
 	{
 		
-		$data = array();
+		$data = [];
 		if( $this->input->post('offset') )
 		{
 			$result = $this->product_model->moreItem($this->input->post('offset'),$this->input->post('parent',true),$this->input->post('child',true),$this->input->post('sub_child',true));
@@ -131,18 +140,18 @@ class Product extends CI_Controller
 						'discount_amount'	=> number_format($rs->discount_amount,2,'.',''),
 						'discount_percent'	=> number_format($rs->discount_percent,2,'.',''),
 						'discount_label'	=> discount_label($rs->discount_amount, $rs->discount_percent),
-						 'available_qty'    => apply_stock_filter($this->product_model->getAvailableQty($rs->product_id)), 
+						'available_qty'    => apply_stock_filter($this->product_model->getAvailableQty($rs->product_id)), 
 						'product_code'		=> $rs->style_code,
 						'product_name'		=> $rs->style_name,
 						'sell_price'		=> sell_price($rs->product_price, $rs->discount_amount, $rs->discount_percent),
 						'price'				=> number_format($rs->product_price,2,'.','')
-						);	
+					);	
 					array_push($data, $arr);
 				}//foreach 
 				print_r(json_encode($data));
 			}//$result !== FALSE 
 			else{
-				print_r(array());
+				print_r([]);
 			}
 			
 		}//$this->input->post('offset')

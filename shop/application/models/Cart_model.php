@@ -34,13 +34,13 @@ class Cart_model extends CI_Model
 			tbl_color.*,
 			tbl_size.*')
 		
-			->join('tbl_product','tbl_product.id = cart_product_online.id_product')
-			->join('promotion','promotion.id_product = tbl_product.id','left')
-			->join('tbl_style','tbl_style.id = tbl_product.id_style')
-			->join('tbl_color','tbl_color.id_color = tbl_product.id_color')
-			->join('tbl_size','tbl_size.id_size = tbl_product.id_size')
-			->where('cart_product_online.id_cart_online',$id_cart)
-			->get('cart_product_online');
+		->join('tbl_product','tbl_product.id = cart_product_online.id_product')
+		->join('promotion','promotion.id_product = tbl_product.id','left')
+		->join('tbl_style','tbl_style.id = tbl_product.id_style')
+		->join('tbl_color','tbl_color.id_color = tbl_product.id_color')
+		->join('tbl_size','tbl_size.id_size = tbl_product.id_size')
+		->where('cart_product_online.id_cart_online',$id_cart)
+		->get('cart_product_online');
 
 
 		if( $rs->num_rows() > 0 )
@@ -103,9 +103,68 @@ class Cart_model extends CI_Model
 		return $rs->result();
 	}
 
-	public function getTrans()
+	public function getTrans($item,$id_cart)
 	{
-		$rs = $this->db->get('transport_with');
+		$transport= [];
+		$qty = 0;
+		$discount = getDiscount($id_cart);
+		$total_price = 0;
+
+		$rs = $this->db->select("transport_rule.*,transport_with.logistic_name
+			")
+		->join('transport_with','transport_rule.rule_for_logis_id = transport_with.id_logistic','right')
+		->where('transport_rule.actived',1)
+		->get('transport_rule');
+
+		if( $rs->num_rows() > 0 )
+		{
+			foreach ($item as $value) {
+				$qty += $value->qty;
+				$total_price += $value->price*$value->qty;
+			}
+			$total_price = $total_price - $discount;
+			
+			switch ($rs->result()[0]->id_rule) {
+			    case "0":
+			        return "case 0";
+			        break;
+			    case "1":
+			        return "case 1";
+			        break;
+			    //other
+			    default:
+				
+					foreach ($rs->result() as $res) {
+						$trans_data = [];
+						//filter by price
+						if($res->lower_price <= $total_price && $res->lower_item <= $qty)
+						{
+							$trans_data['id'] = $res->rule_for_logis_id;
+							$trans_data['name'] = $res->logistic_name;
+							$trans_data['trans_price'] = 0;
+						}
+						else
+						{
+							$trans_data['id'] = $res->rule_for_logis_id;
+							$trans_data['name'] = $res->logistic_name;
+							$trans_data['trans_price'] = $res->fix_price;
+						}
+						array_push($transport,$trans_data);
+					}//foreach $res
+			}//switch case
+			
+			return $transport;
+		}// if $rs->num_rows() > 0
+		else
+		{
+			return "not set some active";
+		}
+	}
+
+	public function getTCost($id)
+	{
+		$rs = $this->db->select("*")->where('actived',1)->get('transport_rule');
+
 		if( $rs->num_rows() > 0 )
 		{
 			return $rs->result();
@@ -162,14 +221,14 @@ class Cart_model extends CI_Model
 			$role = 'member';
 
 			$cart_id = $this->getCart_ID($id_customer);
-		
+
 			$data = array(
 				'id_cart_product_online' => '',
 				'id_cart_online' => $cart_id,
 				'id_pa'=>$id_product,
 				'qty'=>'1',
 				'date_add'=> date("Y-m-d H:i:s"),
-				);
+			);
 			$this->db->insert('cart_product_online', $data); 
 			return "success";
 
@@ -201,7 +260,7 @@ class Cart_model extends CI_Model
 		
 		return $this->db->where('id_cart_online', $id_cart)->where('id_product', $id_pd)->update('cart_product_online', array('qty'=>$qty));
 		
-			
+
 	}
 	
 	public function deleteCartProduct($id_cart, $id_pd)
@@ -237,7 +296,7 @@ class Cart_model extends CI_Model
 			$data = array(
 				'id_great' => '',
 				'ip_address' => $this->input->ip_address() ,
-				);
+			);
 
 			$this->db->insert('great', $data); 
 			$insert_id = $this->db->insert_id();
@@ -266,7 +325,7 @@ class Cart_model extends CI_Model
 					'id_great'=>$great_id,
 					'date_add'=> date("Y-m-d H:i:s"),
 					'cart_status'=>'0'
-					);
+				);
 
 				$this->db->insert('cart_online', $data); 
 				$insert_id = $this->db->insert_id();
@@ -298,7 +357,7 @@ class Cart_model extends CI_Model
 				'id_pa'=>$id_product,
 				'qty'=>'1',
 				'date_add'=> date("Y-m-d H:i:s"),
-				);
+			);
 
 			$this->db->insert('cart_product_online', $data); 
 			return "insert";
@@ -311,13 +370,13 @@ class Cart_model extends CI_Model
 	public function getCart_ID($id_customer){
 
 		
-			$rs = $this->db->select('id_cart')->where('id_great','0')->where('id_customer',$id_customer)->get('cart_online');
-			if( $rs->num_rows() == 1 )
-			{
-				return $rs->row()->id_cart;
-			}else{
-				return '';
-			}
+		$rs = $this->db->select('id_cart')->where('id_great','0')->where('id_customer',$id_customer)->get('cart_online');
+		if( $rs->num_rows() == 1 )
+		{
+			return $rs->row()->id_cart;
+		}else{
+			return '';
+		}
 		
 	}
 

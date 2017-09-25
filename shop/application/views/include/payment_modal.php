@@ -146,21 +146,43 @@
     <div class="modal-content">
       <div class="modal-header" style="background-color:#585858">
         <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">ช่องทางการขนส่ง</h4>
+        <h4 class="modal-title">กรุณาเลือกการจัดส่ง</h4>
       </div>
       <div class="modal-body">
-       <table class="table" style="min-width:300px" style="min-width:300px">
+       <table class="table" style="min-width:400px">
         <tbody >
+          <?php $index = 1; ?>
           <?php foreach ($transport as $k => $v): ?>
             <tr>
-              <td><?php echo $k+1; ?></td>
-              <td style="padding-left:10px">
-                <input type="radio" name="transType[]" value="<?php echo $v->id_logistic; ?>" >
+              <td><?php echo $index; ?></td>
+              <?php 
+              if ($k == "postTH") 
+                {
+                  $k = "1";
+                }
+                if($k == "kerry")
+                {
+                  $k = "2";
+                }
+               ?>
+              <td style="max-width:20px">
+                <input type="radio" name="transType[]" value="<?php echo $k;?>" style="margin-top:0px">
               </td>
-              <td>
-                <p><?php echo $v->logistic_name; ?></p>
+              <td style="text-align:left;">
+                <p><?php 
+                if ($k == "1") 
+                {
+                  $k = "ไปรษณีย์ไทย";
+                }
+                if($k == "2")
+                {
+                  $k = "Kerry Express";
+                }
+                echo $k." <span style='color:red;font-size:18px'>".$v."</span> "." บาท ";
+                ?></p>
               </td>
             </tr>
+            <?php $index++; ?>
           <?php endforeach ?>
         </tbody>
       </table>
@@ -168,7 +190,7 @@
     <div class="modal-footer">
       <tr>
         <td colspan="2">
-          <button type="button" class="btn btn-info" data-toggle="modal" id="nextTrans">ต่อไป</button> 
+          <button type="button" class="btn btn-info" id="nextTrans">ตกลง</button> 
           <!-- <button type="button" class="btn btn-info" data-toggle="modal" data-target="#addrPickerModal" data-dismiss="modal">ต่อไป</button> -->
           <button type="button" class="btn btn-primary" data-dismiss="modal">ปิด</button>
         </td>
@@ -179,30 +201,6 @@
 </div>
 
 
-<div class="modal fade" id="transportTypeModal" role="dialog">
- <div class="modal-dialog ">
-  <div class="modal-content">
-    <div class="modal-header" style="background-color:#585858">
-      <button type="button" class="close" data-dismiss="modal">&times;</button>
-      <h4 class="modal-title">เลือกรูปแบบการส่ง</h4>
-    </div>
-    <div class="modal-body">
-      <table class="table" style="min-width:300px">
-        <tbody id="styletrans">
-        </tbody>
-      </table>
-    </div>
-    <div class="modal-footer">
-      <tr>
-        <td colspan="2">
-         <button type="button" class="btn btn-info" data-toggle="modal" data-target="#addrPickerModal" data-dismiss="modal">ต่อไป</button>
-         <button type="button" class="btn btn-primary" data-dismiss="modal">ปิด</button>
-       </td>
-     </tr>
-   </div>
- </div>
-</div>
-</div>
 
 <div class="modal fade" id="addrPickerModal" role="dialog">
  <div class="modal-dialog ">
@@ -461,34 +459,27 @@
  $("#nextTrans").click(function() {
 
   var IsChecked = $('input[name="transType[]"]:checked').val();
-  $("#tranID").val(IsChecked);
-
   var base_url  = window.location.origin;
 
   $.ajax({
     type: "POST",
-    url:base_url+"/invent/shop/cart/getTrans",
+    url:base_url+"/invent/shop/cart/getCostTrans",
     data: ({
-      id:IsChecked
+      "id":IsChecked
     }), 
     success: function(data){
+      console.log($.parseJSON(data));
+      var v = 0;
+      $.each($.parseJSON(data), function( key, value ) {
+        if(value != 0)
+        {
+          $("#transCost").html(
+            "<span>"+(value) +"</span>"
+            );
+        }
+      });
       
-      console.log("get trans");
-      console.log(data);
-      $('.modal').modal('hide');
-      $("#styletrans").html("");
-      if(IsChecked == 1)
-      {
-        $.each($.parseJSON(data), function( key, value ) {
-          $("#styletrans").append(
-          "<tr><td><input type='radio' name='typeTrans[]' value='"+value['id_type']+"'><span>"+"   "+value['type_name']+"</span></td></tr>"
-          ).show('slow');
-          $('#transportTypeModal').modal('show');
-        });
-      
-      }else{
-        $('#addrPickerModal').modal('show');
-      }
+      $('#transportPickerModal').modal('hide');
     },
     error: function(e) {
       console.log("Error posting feed."); 

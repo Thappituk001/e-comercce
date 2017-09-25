@@ -28,7 +28,7 @@
 									</div>
 									<?php $j = 1; ?>
 									<?php foreach ($images as $img): ?>
-										<label for="image<?= $j ?>" class="thumb" style="background-image: url('<?php echo get_image_path(@$img->id, 4); ?>">
+										<label for="image<?= $j ?>" class="thumb" style="background-image: url('<?php echo get_image_path(@$img->id, 4); ?>');">
 										</label>
 										<?php $j++; ?>
 									<?php endforeach ?>
@@ -189,7 +189,7 @@
 						</div>
 					</div>
 
-					<?php echo "<pre>" ;print_r($grid); ?>
+					<!-- <?php echo "<pre>" ;print_r($grid); ?> -->
 
 					<!--/ right column end -->
 

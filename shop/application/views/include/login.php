@@ -4,9 +4,9 @@
 <!-- <script type="text/javascript" src="<?php echo base_url(); ?>shop/assets/plugins/icheck-1.x/icheck.min.js"></script>  -->
 
 <div class="modal signUpContent fade" id="ModalLogin" tabindex="-1" role="dialog" >
-    <div class="modal-dialog" style="width:300px;">
+    <div class="modal-dialog" style="min-width:300px;">
         <div class="modal-content">
-            <div class="modal-header">
+            <div class="modal-header" style="background-color:#585858">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true"> &times; </button>
                 <h3 class="modal-title-site text-center"> Login to SHOP </h3>
             </div>

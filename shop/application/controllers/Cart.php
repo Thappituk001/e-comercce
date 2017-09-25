@@ -38,7 +38,10 @@ class Cart extends CI_Controller
 		$data['menus'] 			= $this->Menu_model->menus();
 		
 		$data['item_in_cart']  = $this->cart_model->getItemInCart($this->id_cart);
-		$data['transport']	   = $this->cart_model->getTrans();
+		echo "<pre>";
+		$data['transport']	   = $this->cart_model->getTrans($data['item_in_cart'],$this->id_cart);
+		print_r($data['transport']);
+		exit();
 		$data['address']	   = $this->cart_model->getAddress($this->customer);
 		$data['bank']		   = $this->bank ;
 		
@@ -151,13 +154,12 @@ class Cart extends CI_Controller
 		
 	}
 
-	public function getTrans(){
-		$id_trans = $this->input->post('id',true);
-		$rs = $this->cart_model->getTypeTrans($id_trans);
-			if( $rs )
-			{
-				print_r(json_encode($rs));
-			}
+	public function getCostTrans(){
+		
+		$tp	   = $this->cart_model->getTCost($this->input->post('id',true));
+
+		print_r(json_encode($tp));
+	
 	}
 
 	public function transportSec()

@@ -45,9 +45,14 @@
         <h3>NO RESULT!</h3>
       </div>
     <?php endif ?>    
-    <!--  <?php echo "<pre>";print_r($product); ?> -->
+   <!-- <?php 
+   
+   echo "<pre>";
+   print_r($product);
+
+    ?> -->
     <?php foreach( @$product as $item ) : ?>
-      <?php   $link   = 'shop/main/productDetail/'.$item->product_id; ?>
+      <?php   $link   = base_url().'shop/main/productDetail/'.$item->product_id; ?>
       <div class="item col-lg-3 col-md-3 col-sm-4 col-xs-6 features" onclick="viewDetail(<?= $item->product_id ?>)">
         <div class="product">
           <div class="image">

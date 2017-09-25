@@ -19,12 +19,12 @@
                   <tr class="CartProduct cartTableHeader">
                     <td style="width:20%">สินค้า</td>
                     <td style="width:20%"></td>
-                    <td style="width:10%">จำนวน</td>
+                    <td style="width:15%">จำนวน</td>
                     <td style="width:10%">ลด/ชิ้น</td>
                     <td style="width:10%">ลด(%)/ชิ้น</td>
                     <td style="width:10%">ส่วนลดรวม</td>
                     <td style="width:10%">ราคารวม</td>
-                    <td style="width:10%" class="delete">&nbsp;</td>
+                    <td style="width:5%;" class="delete">&nbsp;</td>
                   </tr>
                   
                   <?php foreach( $item_in_cart as $item ) : ?>	
@@ -56,8 +56,8 @@
                         <strong><h3><?= sell_price($item->price, $item->discount_amount,$item->discount_percent); ?> <?= getCurrency(); ?></h3></strong>
                       </span>  
                     </td>
-                    <td>
-                     <div class="input-group" style="padding-left:15px;padding-right:15px">
+                    <td >
+                     <div class="input-group" style="">
                       <span class="input-group-btn">
                         <button class="btn btn-xs decrease-btn" type="button"  onClick="decreaseQty(<?= $item->id; ?>, 1)"><i class="fa fa-minus"></i></button>
                       </span>
@@ -123,7 +123,7 @@
             <strong><h3><?= sell_price($item->price, $item->discount_amount,$item->discount_percent); ?> <?= getCurrency(); ?></h3></strong>
           </span> 
         </div>
-        <div class="col-sm-2 col-xs-2" style="margin-top:40px;">
+        <div class="col-sm-2 col-xs-2" style="margin-top:25%;">
          <a title="Delete" onClick="deleteCartRow(<?= $item->id; ?>)"><i class="fa fa-times fa-lg"></i></a>
        </div>
        <div class="row">

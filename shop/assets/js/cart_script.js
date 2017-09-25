@@ -42,7 +42,7 @@
 
  function decreaseQty(id_pd, min_qty)
  {
-   console.log("decreaseQty");
+   console.log("decreaseQty"+id_pd);
    var qty = parseInt(removeCommas($('#Qty_'+id_pd).text()));
    var min_qty = parseInt(min_qty);
    if( qty > min_qty)
@@ -50,13 +50,13 @@
     qty -= 1;
     $('#Qty_'+id_pd).text(qty);
     $("#mQty_"+id_pd).text(qty);
-    updateCart(id_pd, qty);
+    updateCart_Qtyt(id_pd, qty);
   }		
 }
 
 function increaseQty(id_pd, max_qty)
 {
- console.log("increaseQty");
+ console.log("increaseQty"+id_pd);
  var qty = parseInt(removeCommas($('#Qty_'+id_pd).text()));
  var max_qty = parseInt(max_qty);
   if( qty < max_qty )
@@ -64,16 +64,16 @@ function increaseQty(id_pd, max_qty)
     qty += 1 ;
     $('#Qty_'+id_pd).text(qty);
     $("#mQty_"+id_pd).text(qty);
-    updateCart(id_pd, qty);
+    updateCart_Qty(id_pd, qty);
   }else{
     swal("สินค้ามีไม่พอจำหน่าย");
   }
 
 }
 
-function updateCart(id_pd, qty)
+function updateCart_Qty(id_pd, qty)
 {
-  console.log("updateCart");
+  console.log("updateCart"+id_pd);
 	var id_cart = $('#id_cart').val();
   var base_url = window.location.origin;
 	$.ajax({
@@ -84,6 +84,8 @@ function updateCart(id_pd, qty)
      if( rs != '' && rs != 'fail' )
      {
        window.location.reload();
+     }else{
+      console.log("update false!")
      }
   }
 });

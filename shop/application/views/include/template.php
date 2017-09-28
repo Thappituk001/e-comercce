@@ -6,63 +6,96 @@ $this->load->view("include/footer");
 <div class="promo_field" id="promo">
 	Promotion Field
 </div>
+<?php //this is session for modal grid ?>
+
+<div class="modal fade" id="orderGrid" >
+	<div class="modal-dialog" id="mainGrid">
+		<div class="modal-content">
+			<div class="modal-header" style="background-color:#585858">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h5 class="modal-title text-center" id="productCode" style="size:26px;margin-top:10px;font-weight: bold;"></h5>
+			</div>
+			<div class="modal-body" id="orderContent">
+				<form class="form-horizontal">
+					<!-- <div class="table-responsive" style="width:auto;"> -->
+						<table class="table table-bordered table-striped table-highlight"  id="tableOrder">
+							<thead >
+								<tr id="tableOrder_th">
+									<th></th>
+								</tr>
+							</thead>
+							<tbody id="tableOrder_bd"> 
+
+							</tbody>
+						</table>
+						<!-- </div> -->
+					</form>
+				</div>
+				<div class="modal-footer">
+					<!-- <input type="hidden" name="id_product" id="id_product" value="<?php echo $pd->product_id; ?>" /> -->
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					<button type="button" class="btn btn-primary" onClick="addToCart()">Add to cart</button>
+				</div>
+			</div><!-- /.modal-content -->
+		</div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
 
 
 
-<script>
-	$(window).scroll(function() {
-		if ($(this).scrollTop()) {
-			$('#promo').show('4000', function() {
+	<script>
+		$(window).scroll(function() {
+			if ($(this).scrollTop()) {
+				$('#promo').show('4000', function() {
 
-			});
-		} else {
-			$('#promo').hide('400', function() {
+				});
+			} else {
+				$('#promo').hide('400', function() {
 
-			});
-		}
-	});
+				});
+			}
+		});
 
-	$(document).ready(function(){
-		(function tableWidth(){
-			
-			$('#modal').on('show.bs.modal', function () {
-				$(this).find('.modal-body').css({
+		$(document).ready(function(){
+			(function tableWidth(){
+
+				$('#modal').on('show.bs.modal', function () {
+					$(this).find('.modal-body').css({
 			              width:'auto', //probably not needed
 			              height:'auto', //probably not needed 
 			              'max-height':'100%'
 			          });
+				});
+
+			}());
+
+
+			$("#color_select").change(function(){
+				$.ajax({
+					url:"<?php echo base_url(); ?>shop/product/fetchSize",
+					type:"POST",
+					cache:true, 
+					data: {
+						"color_select" : $(this).val(),
+						"id_style": $("#style_id").val()
+					}, 
+					success: function(rs) { 
+						var opt = "";
+						var res = $.parseJSON(rs);
+						$.each(res, function(key, val){
+							opt +="<option value='"+ val +"'>"+val["size_name"]+"</option>"
+						});
+						$("#size_select").html( opt );
+						console.log(res);
+					},error: function(e) {
+						console.log("error");
+					}
+				});	
 			});
-
-		}());
-		
-
-		$("#color_select").change(function(){
-			$.ajax({
-				url:"<?php echo base_url(); ?>shop/product/fetchSize",
-				type:"POST",
-				cache:true, 
-				data: {
-					"color_select" : $(this).val(),
-					"id_style": $("#style_id").val()
-				}, 
-				success: function(rs) { 
-					var opt = "";
-					var res = $.parseJSON(rs);
-					$.each(res, function(key, val){
-						opt +="<option value='"+ val +"'>"+val["size_name"]+"</option>"
-					});
-					$("#size_select").html( opt );
-					console.log(res);
-				},error: function(e) {
-					console.log("error");
-				}
-			});	
-		});
 
 });//document ready
 
-	function addToCart(customer_array,id_cart)
-	{
+		function addToCart(customer_array,id_cart)
+		{
 		// var choosedValues ={};
 		// var key,val = [];
 		var key1 = 'something';
@@ -143,25 +176,25 @@ $this->load->view("include/footer");
 	}
 
 
-	function getOrderGrid(id,product_code,product_name)
+	function getOrderGrid(id_style)
 	{
 		// load_in();
-		console.log("id product = "+id);
+		// console.log("id product = "+id_style);
 		$.ajax({
 			url:"<?php echo base_url(); ?>shop/product/orderGrid",
 			type:"POST", 
 			cache: "false", 
-			data: { "id_style" : id },
+			data: { "id_style" : id_style },
 			success: function(rs){
-				// load_out();
+				load_out();
+				// console.log(product_name);
 				
-				$("#productCode").html(product_code +"  |  "+ product_name);
-
 				var arr = Object.keys(JSON.parse(rs)).map(function(k) { 
 					return JSON.parse(rs)[k] 
 				});
+				
+				$("#productCode").html(arr[0]['code'] +"  |  "+ arr[0]['name']);
 
-				// console.log(arr);
 				
 				var c = [];
 				$.each(arr, function(key, value) {
@@ -181,7 +214,7 @@ $this->load->view("include/footer");
 					}
 				});
 
-				console.log(s);
+				// console.log(s);
 				$("#tableOrder_th").html("<th></th>");
 				$("#tableOrder_bd").html("");
 
@@ -204,7 +237,7 @@ $this->load->view("include/footer");
 						if(value['color_name'] == v)
 						{
 
-							$dataAppend += "<td><input type='text' name='inputQty[]'  class='col-sm-12' style='margin-bottom:0px'><span name='av[]'></span></td>";
+							$dataAppend += "<td><input type='text' name='inputQty[]'  style='margin-bottom:0px;'><span name='av[]'></span></td>";
 							// console.log(k);
 							// $('span[name=av[]')append(av);
 						}else{
@@ -241,43 +274,55 @@ $this->load->view("include/footer");
 			success: function(rs){
 					// console.log(rs);
 					return rs;
-			},
-			error: function(XMLHttpRequest, textStatus, errorThrown){
-				console.log(errorThrown);
-			}
-		});
+				},
+				error: function(XMLHttpRequest, textStatus, errorThrown){
+					console.log(errorThrown);
+				}
+			});
 	}
 
 </script>
 <style>
 
-	.modal-dialog { /* Width */
-		max-width: 100%;
-		width: auto !important;
-		display: inline-block;
-	}
-	.modal-body { 
-		max-height: 300px; 
-		padding: 10px; 
-		overflow-y: auto; 
-		-webkit-overflow-scrolling: touch; 
-	}
-	.modal{
-		text-align: center;
-	}
-	
-	th,td  {
-		max-width: 100px;
-		word-wrap: break-word;
-	}
-	
-	.promo_field{
-		position: absolute;
-		bottom:50px;
-		font-size: 18px;
-		width:100%;
-		height:100px;
-		opacity:0.4;
-		background-color:#2E2E2E;
-	}
+.modal-dialog { /* Width */
+	max-width: 100%;
+	width: auto !important;
+	display: inline-block;
+}
+.modal-body { 
+	max-height: 300px; 
+	padding: 10px; 
+	overflow-y: auto; 
+	-webkit-overflow-scrolling: touch; 
+}
+.modal{
+	text-align: center;
+}
+
+th,td  {
+	max-width: 100px;
+	word-wrap: break-word;
+}
+
+.promo_field{
+	position: absolute;
+	bottom:50px;
+	font-size: 18px;
+	width:100%;
+	height:100px;
+	opacity:0.4;
+	background-color:#2E2E2E;
+}
+input
+{
+	width: 100%;
+	min-width:50px;
+	max-width: 200px;
+	padding: 10px;
+	margin: 0px;
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	border: 1px solid #CCC;
+}
 </style>

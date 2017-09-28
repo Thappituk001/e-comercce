@@ -1,4 +1,4 @@
-<?php include_once("ga.php") ?>
+
 <?php if( isset($product_info) && $product_info !== FALSE ) : ?>
 <section class="section-product-info-bottom" >
     <div class="product-details-bottom-bar">

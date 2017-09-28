@@ -1,4 +1,69 @@
+<style>
+  .icheckbox_minimal-green,
+.iradio_minimal-green {
+    display: inline-block;
+    *display: inline;
+    vertical-align: middle;
+    margin: 0;
+    padding: 0;
+    width: 18px;
+    height: 18px;
+    /*background: url(../assets/plugins/icheck-1.x/skin/minimal/green.png) no-repeat;*/
+    border: none;
+    cursor: pointer;
+}
 
+.icheckbox_minimal-green {
+    background-position: 0 0;
+}
+
+.icheckbox_minimal-green.hover {
+    background-position: -20px 0;
+}
+
+.icheckbox_minimal-green.checked {
+    background-position: -40px 0;
+}
+
+.icheckbox_minimal-green.disabled {
+    background-position: -60px 0;
+    cursor: default;
+}
+
+.icheckbox_minimal-green.checked.disabled {
+    background-position: -80px 0;
+}
+
+.iradio_minimal-green {
+    background-position: -100px 0;
+}
+
+.iradio_minimal-green.hover {
+    background-position: -120px 0;
+}
+
+.iradio_minimal-green.checked {
+    background-position: -140px 0;
+}
+
+.iradio_minimal-green.disabled {
+    background-position: -160px 0;
+    cursor: default;
+}
+
+.iradio_minimal-green.checked.disabled {
+    background-position: -180px 0;
+}
+
+/* HiDPI support */
+@media (-o-min-device-pixel-ratio: 5/4), (-webkit-min-device-pixel-ratio: 1.25), (min-resolution: 120dpi) {
+    .icheckbox_minimal-green,
+    .iradio_minimal-green {
+        /*background-image: url(../assets/plugins/icheck-1.x/skin/minimal/green@2x.png);*/
+        -webkit-background-size: 200px 20px;
+        background-size: 200px 20px;
+    }
+</style>
 <a onclick="openNav()" id="btn_filter" class="btn_filter hidden-lg hidden-md hidden-sm"><i class="fa fa-filter" aria-hidden="true"></i></a>
 <script type="text/javascript" src="<?php echo base_url(); ?>shop/assets/plugins/icheck-1.x/icheck.min.js"></script> 
 
@@ -91,7 +156,7 @@
             <?php echo sell_price($item->product_price, $item->discount_amount,$item->discount_percent); ?> <?php echo getCurrency(); ?>
           </span> 
         </div>
-        <div class="action-control"><a class="btn btn-primary" onclick="addToCart(<?= $item->product_id ?>,<?= $id_customer ?>)"> <span class="add2cart"><i
+        <div class="action-control"><a class="btn btn-primary" onClick="getOrderGrid(<?php echo $item->style_id; ?>)"> <span class="add2cart"><i
           class="glyphicon glyphicon-shopping-cart"> </i> Add to cart </span> </a></div>
         </div>
       </div>
@@ -165,7 +230,7 @@
         <legend></legend>
         <label style="font-weight:bold;color:#DA631D">Price:</label>
         <CENTER>
-          <div id="slider_modal" style="width:200px"></div><br>
+          <div id="slider_modal" style="width:200px;"></div><br>
           MIX: <span id="slider-snap-value-lower-modal"></span><br>
           MAX: <span id="slider-snap-value-upper-modal"></span><br>
           <input type="text" name="minPrice" id="minPrice_Modal" class="" value="0">
@@ -206,7 +271,7 @@
         {{/if}}
         <br><span>{{ sell_price }} บาท</span> 
       </div>
-      <div class="action-control"><a class="btn btn-primary"> <span class="add2cart"><i class="glyphicon glyphicon-shopping-cart"> </i> Add to cart </span> </a></div>
+      <div class="action-control" onclick="getOrderGrid({{ style_id }})"><a class="btn btn-primary"> <span class="add2cart"><i class="glyphicon glyphicon-shopping-cart"> </i> Add to cart </span> </a></div>
     </div>
   </div>
   {{/each}}
@@ -283,28 +348,7 @@
     $("#btn_filter").show("slow");
   }
 
-  function addToCart(id_product,id_customer){
-
-    $.ajax({
-      url:"cart/filter_products",
-      type:"POST",
-      cache:false, 
-      data:{"id_product":id_product,"id_customer":id_customer},
-      success: function(res){
-        console.log(res);
-        if(res=='success'){
-          location.reload();
-        }
-      },error:function(e){
-        console.log("error");
-      }
-    }); 
-
-}//function
-
-function viewDetail(id_product){
-  window.location.href='/invent/shop/main/productDetail/'+id_product;
-}
+  
 
 function loadMoreItem(){
 
@@ -344,7 +388,8 @@ function loadMoreItem(){
 </script>
 
 <style>
-  div.scroll {
+
+  div.scroll {}
     width: 100px;
     height: 100px;
     overflow: scroll;

@@ -105,65 +105,73 @@ class Cart_model extends CI_Model
 
 	public function getTrans($item,$id_cart)
 	{
-		$transport= [];
-		$qty = 0;
-		$discount = getDiscount($id_cart);
-		$total_price = 0;
+		if(!empty($item)){
+			$transport= [];
+			$qty = 0;
+			$discount = getDiscount($id_cart);
+			$total_price = 0;
 
-		$rs = $this->db->select("transport_rule.*,transport_with.logistic_name
-			")
-		->join('transport_with','transport_rule.rule_for_logis_id = transport_with.id_logistic','right')
-		->where('transport_rule.actived',1)
-		->get('transport_rule');
+			$rs = $this->db->select("transport_rule.*,transport_with.logistic_name
+				")
+			->join('transport_with','transport_rule.rule_for_logis_id = transport_with.id_logistic','right')
+			->where('transport_rule.actived',1)
+			->get('transport_rule');
 
-		if( $rs->num_rows() > 0 )
-		{
-			foreach ($item as $value) {
-				$qty += $value->qty;
-				$total_price += $value->price*$value->qty;
-			}
-			$total_price = $total_price - $discount;
-			
-			switch ($rs->result()[0]->id_rule) {
-			    case "0":
-			        return "case 0";
-			        break;
-			    case "1":
-			        return "case 1";
-			        break;
-			    //other
-			    default:
+			if( $rs->num_rows() > 0 )
+			{
+				foreach ($item as $value) {
+					$qty += $value->qty;
+					$total_price += $value->price*$value->qty;
+				}
+				$total_price = $total_price - $discount;
 				
-					foreach ($rs->result() as $res) {
-						$trans_data = [];
-						//filter by price
-						if($res->lower_price <= $total_price && $res->lower_item <= $qty)
-						{
-							$trans_data['id'] = $res->rule_for_logis_id;
-							$trans_data['name'] = $res->logistic_name;
-							$trans_data['trans_price'] = 0;
-						}
-						else
-						{
-							$trans_data['id'] = $res->rule_for_logis_id;
-							$trans_data['name'] = $res->logistic_name;
-							$trans_data['trans_price'] = $res->fix_price;
-						}
-						array_push($transport,$trans_data);
-					}//foreach $res
-			}//switch case
-			
-			return $transport;
-		}// if $rs->num_rows() > 0
+				switch ($rs->result()[0]->id_rule) {
+				    case "0":
+				        return "case 0";
+				        break;
+				    case "1":
+				        return "case 1";
+				        break;
+				    //other
+				    default:
+						foreach ($rs->result() as $res) {
+							$trans_data = [];
+							//filter by price
+							if($res->lower_price <= $total_price && $res->lower_item <= $qty)
+							{	
+								$trans_data['id'] = $res->id_rule;
+								$trans_data['name'] = $res->logistic_name;
+								$trans_data['trans_price'] = 0;
+							}
+							else
+							{
+								$trans_data['id'] = $res->id_rule;
+								$trans_data['name'] = $res->logistic_name;
+								$trans_data['trans_price'] = $res->fix_price;
+							}
+							array_push($transport,$trans_data);
+						}//foreach $res
+				}//switch case
+				
+				return $transport;
+			}// if $rs->num_rows() > 0
+			else
+			{
+				return "not set some active";
+			}
+		}
 		else
 		{
-			return "not set some active";
+			return "no item";
 		}
 	}
 
 	public function getTCost($id)
 	{
-		$rs = $this->db->select("*")->where('actived',1)->get('transport_rule');
+		$rs = $this->db->select("*")
+		->where('id_rule',$id)
+		->where('actived',1)
+		->get('transport_rule');
 
 		if( $rs->num_rows() > 0 )
 		{

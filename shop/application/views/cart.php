@@ -12,6 +12,11 @@
     <div class="col-lg-9 col-md-9 col-sm-7  hidden-sm hidden-xs">
       <div class="row userInfo">
         <div class="col-xs-12 col-sm-12">
+          <?php if (empty($item_in_cart)): ?>
+            <div class="well text-center" style="margin-top:10%;margin-left:10%">
+              <h1 style="color:red">ไม่มีสินค้าในตระกร้า</h1>
+            </div>
+          <?php endif ?>
           <?php if( isset( $item_in_cart ) && $item_in_cart !== FALSE ) : ?>	  
             <div class="cartContent w100">
               <table class="cartTable table-responsive" id="cart-table" style="width:100%">
@@ -53,7 +58,7 @@
                         <span class="old-price"><?php echo number_format($item->price, 2, '.', '') ?>  <?= getCurrency(); ?></span>
                       <?php endif; ?>
                       <span><br>
-                        <strong><h3><?= sell_price($item->price, $item->discount_amount,$item->discount_percent); ?> <?= getCurrency(); ?></h3></strong>
+                        <strong><h3><?php $sell_price =  sell_price($item->price, $item->discount_amount,$item->discount_percent); ?><?= number_format( $sell_price); ?> <?= getCurrency(); ?></h3></strong>
                       </span>  
                     </td>
                     <td >
@@ -72,13 +77,13 @@
                     <span class="stock-label">คงเหลือ <?= $available_qty ?>  ในสต็อก</span>
                   </td>
                   <?php 
-                  $discount = (($item->price*($item->discount_percent/100))+$item->discount_amount)*$item->qty;
-                  $total_price = ($item->qty*$item->price)-$discount; 
+                  $discount = number_format((($item->price*($item->discount_percent/100))+$item->discount_amount)*$item->qty);
+                  $total_price = number_format(($item->qty*$item->price)-$discount); 
                   ?>
                   <td style="color:#1a1aff;font-size:18;font-weight:700"><?= number_format($item->discount_amount, 2); ?> <?= getCurrency(); ?></td>
                   <td style="color:#1a1aff;font-size:18;font-weight:700"><?= number_format($item->discount_percent, 2);  ?> % </td>
                   <td style="color:red;font-size:18;font-weight:700">
-                   <?= number_format($discount, 2); ?> <?= getCurrency(); ?>   
+                   <?= $discount; ?> <?= getCurrency(); ?>   
                  </td>
                  <td style="color:#1aff1a;font-size:18;font-weight:700">
                   <?= number_format($total_price, 2); ?> <?= getCurrency(); ?>
@@ -166,10 +171,9 @@
 
 </div><!-- mobile -->
 
-<?php $shipping_cost  = delivery_cost($this->cart_qty); ?>
-<?php $total_discount = getDiscount($id_cart); ?>
+<?php $total_discount = number_format(getDiscount($id_cart)); ?>
 <?php $total_price    = getTotal($id_cart); ?>
-<?php $total_amount   = ($total_price-$total_discount) + $shipping_cost  ?>
+<?php $total_amount   = ($total_price-$total_discount) ?>
 <div class="col-lg-3 col-md-3 col-sm-5 rightSidebar">
 
   <div class="contentBox">
@@ -184,7 +188,7 @@
                 <?php echo number_format($total_price, 2); ?>
               </td>
             </tr>
-             <tr class="cart-total-price ">
+            <tr class="cart-total-price ">
               <td>ส่วนลด</td>
               <td class="price" id="total-discount">
                 <?php echo number_format($total_discount,2); ?>
@@ -199,43 +203,44 @@
             <tr class="cart-total-price ">
               <td>ส่วนลดรวม</td>
               <td class="price" id="total-discount">
-                <?php echo number_format($total_discount, 2); ?>
+                <?php echo number_format($total_discount,2); ?>
               </td>
             </tr>
             <tr style="">
-                <td>ค่าจัดส่ง</td>
-                <td class="price" id="shipping-fee"><span id="transCost" style="color:red;font-size:14px">*** กรุณากดคำนวนค่าจัดส่ง</span></td>
+              <td>ค่าจัดส่ง</td>
+              <td class="price" id="shipping-fee"><span id="transCost" style="color:red;font-size:14px">*** กรุณากดคำนวนค่าจัดส่ง</span></td>
             </tr>
             <tr>
-                <td style="font-size:18px;font-size:700">ราคาสุทธิ</td>
-                <td class=" site-color" id="total-amount" style="font-size:22px; font-weight:bold;"><?php echo number_format($total_amount, 2); ?></td>
+              <td style="font-size:18px;font-size:700">ราคาสุทธิ</td>
+              <td class="site-color" id="total_amount" style="font-size:22px; font-weight:bold;"><?php echo number_format($total_amount, 2); ?></td>
+              <input type="text" class="hidden" id="trans_price" value="">
             </tr>
-              <tr>
-                <td colspan="2">
+            <tr>
+              <td colspan="2">
 
-                 <!--  <button type="button" class="btn btn-info btn-block" data-toggle="modal" data-target="#transportPickerModal">เลือกช่องทางการจัดส่ง</button> -->
-                <label for="">รหัสโปรโมชั่น : </label>
-                <div class="input-group">
+               <!--  <button type="button" class="btn btn-info btn-block" data-toggle="modal" data-target="#transportPickerModal">เลือกช่องทางการจัดส่ง</button> -->
+               <label for="">รหัสโปรโมชั่น : </label>
+               <div class="input-group">
 
-                  <input type="text" class="form-control" placeholder="Promotion Code" aria-label="Search for...">
-                  <span class="input-group-btn">
-                    <button class="btn btn-success" type="button">ตกลง</button>
-                  </span>
-                </div>
-                <legend></legend>
-                <button type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#transportPickerModal">คำนวนค่าจัดส่ง</button>
+                <input type="text" class="form-control" placeholder="Promotion Code" aria-label="Search for..." id="inputCode">
+                <span class="input-group-btn">
+                  <button class="btn btn-success" type="button" onclick="promotionCode()">ตกลง</button>
+                </span>
+              </div>
+              <legend></legend>
+              <button type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#transportPickerModal">คำนวนค่าจัดส่ง</button>
 
-                <button type="button" class="btn btn-info btn-block" data-toggle="modal" data-target="#bankPickerModal">แจ้งการโอนเงิน</button>
+              <button type="button" class="btn btn-info btn-block" data-toggle="modal" data-target="#bankPickerModal">แจ้งการโอนเงิน</button>
 
-                <button type="button" class="btn btn-warning btn-block" id="checkout-btn-bottom" onClick="goToHome()">กลับ</button>
-                
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+              <button type="button" class="btn btn-warning btn-block" id="checkout-btn-bottom" onClick="goToHome()">กลับ</button>
+
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
+</div>
 </div>
 <!-- End popular -->
 
@@ -243,11 +248,17 @@
 <!--/rightSidebar-->
 </div>
 <!--/row-->
-
 <div style="clear:both"></div>
 </div>
 <!-- /.main-container -->
 
 <?php require('include/payment_modal.php'); ?>
+<script>
+  function promotionCode(event) {
+    var x = $("#inputCode").val();
+  
+    console.log(x);
+  };
 
+</script>
 <script src="<?php echo base_url(); ?>shop/assets/js/cart_script.js"></script>

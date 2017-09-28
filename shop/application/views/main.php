@@ -77,41 +77,8 @@ th,td  {
     background-color:#2E2E2E;
 }
 </style>
+
 <?php $this->load->view('module/new_arrivals'); ?>
 <?php $this->load->view('module/features'); ?>
 
-<form id="orderForm">
-	<div class="modal fade" id="orderGrid" >
-		<div class="modal-dialog" id="mainGrid">
-			<div class="modal-content">
-				<div class="modal-header" style="background-color:#585858">
-					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-					<h5 class="modal-title text-center" id="productCode" style="size:26px;margin-top:10px;font-weight: bold;"></h5>
-				</div>
-				<div class="modal-body" id="orderContent">
-					<form class="form-horizontal">
-						<!-- <div class="table-responsive" style="width:auto;"> -->
-                          <table class="table table-bordered table-striped table-highlight"  id="tableOrder">
-                             <thead >
-                                <tr id="tableOrder_th">
-                                   <th></th>
-                               </tr>
-                           </thead>
-                           <tbody id="tableOrder_bd"> 
 
-                           </tbody>
-                       </table>
-                       <!-- </div> -->
-                   </form>
-
-
-               </div>
-               <div class="modal-footer">
-                   <!-- <input type="hidden" name="id_product" id="id_product" value="<?php echo $pd->product_id; ?>" /> -->
-                   <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                   <button type="button" class="btn btn-primary" onClick="addToCart()">Add to cart</button>
-               </div>
-           </div><!-- /.modal-content -->
-       </div><!-- /.modal-dialog -->
-   </div><!-- /.modal -->
-</form>

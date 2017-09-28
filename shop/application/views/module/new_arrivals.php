@@ -10,7 +10,7 @@
 
             <div id="productslider" class="owl-carousel owl-theme">
                 <?php foreach( @$new_arrivals as $item ) : ?>
-                    <?php $link = 'main/productDetail/'.$item->product_id; ?>
+                    <?php $link = 'product_detail/product/'.$item->product_id; ?>
                     <div class="item">
                         <div class="product">
                             <div class="image">

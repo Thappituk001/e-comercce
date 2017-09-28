@@ -371,8 +371,9 @@ class Product_model extends CI_Model
 	
 	public function grid($id_style)
 	{
-		$rs = $this->db->select('tbl_color.id_color,tbl_color.color_name,tbl_size.id_size,tbl_size.size_name')
+		$rs = $this->db->select('tbl_style.code,tbl_style.name,tbl_color.id_color,tbl_color.color_name,tbl_size.id_size,tbl_size.size_name')
 		->join('tbl_size','tbl_size.id_size = tbl_product.id_size')
+		->join('tbl_style','tbl_style.id = tbl_product.id_style')
 		->join('tbl_color','tbl_color.id_color = tbl_product.id_color')
 		->where('tbl_product.id_style',$id_style)
 		->get('tbl_product');

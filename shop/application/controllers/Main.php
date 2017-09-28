@@ -14,7 +14,7 @@ class Main extends CI_Controller
 		$this->load->model('cart_model');
 		$this->load->model('Menu_model');
 
-		$this->home = base_url()."shop/main";
+		@$this->home = base_url()."shop/main";
 
 		$this->customer  = getIdCustomer();//great or member
 		$this->id_cart 	    = getIdCart($this->customer['id']);

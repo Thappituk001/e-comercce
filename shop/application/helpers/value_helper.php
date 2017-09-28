@@ -78,6 +78,19 @@ function delivery_cost($qty = 0)
 	return $cost;	
 }
 
+function transpot_cost($id)
+{
+		$data['item_in_cart']  = $this->cart_model->getItemInCart($this->id_cart);
+		$data['transport']	   = $this->cart_model->getTrans($data['item_in_cart'],$this->id_cart);
+		$se = [];
+		foreach ($data['transport'] as $key => $value) {
+			if($value['id'] == $id){
+				array_push($se,$value);
+			}
+		}
+		print_r(json_encode($se));
+}
+
 function getDiscount($id_cart)
 {	
 	$total_discount = 0;

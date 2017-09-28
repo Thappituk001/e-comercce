@@ -29,6 +29,7 @@
         console.log("del success");
         $("#row_"+id_pd).animate({opacity : 0}, 1000, function(){ $('#row_'+id_pd).remove(); recalCart(); });
         $("#m-row_"+id_pd).animate({opacity : 0}, 1000, function(){ $('#m-row_'+id_pd).remove(); recalCart(); });
+        setTimeout( window.location.reload(), 2000)
        }
     }
   });
@@ -213,9 +214,11 @@ function readURL(input)
  if (input.files && input.files[0]) {
   var reader = new FileReader();
     reader.onload = function (e) {
-      $('#previewImg').html('<img id="previewImg" src="'+e.target.result+'" width="200px" alt="รูปสลิปของคุณ" />');
-    }
+      $('#previewImg').html('<img id="previewImg" src="'+e.target.result+'" width="150px" alt="รูปสลิปของคุณ" />');
+      console.log(input.files[0]);
+  }
   reader.readAsDataURL(input.files[0]);
+
   }
 }
 

@@ -38,10 +38,7 @@ class Cart extends CI_Controller
 		$data['menus'] 			= $this->Menu_model->menus();
 		
 		$data['item_in_cart']  = $this->cart_model->getItemInCart($this->id_cart);
-		echo "<pre>";
 		$data['transport']	   = $this->cart_model->getTrans($data['item_in_cart'],$this->id_cart);
-		print_r($data['transport']);
-		exit();
 		$data['address']	   = $this->cart_model->getAddress($this->customer);
 		$data['bank']		   = $this->bank ;
 		
@@ -134,9 +131,6 @@ class Cart extends CI_Controller
 	public function addToCart(){
 		$id_product = $this->input->post('id_product');
 		
-
-		
-
 		//member
 		if($this->customer['role']=='member'){
 			// $great_id = $this->cart_model->createGreatID();
@@ -156,21 +150,42 @@ class Cart extends CI_Controller
 
 	public function getCostTrans(){
 		
-		$tp	   = $this->cart_model->getTCost($this->input->post('id',true));
-
-		print_r(json_encode($tp));
-	
+		$data['item_in_cart']  = $this->cart_model->getItemInCart($this->id_cart);
+		$data['transport']	   = $this->cart_model->getTrans($data['item_in_cart'],$this->id_cart);
+		$se = [];
+		foreach ($data['transport'] as $key => $value) {
+			if($value['id'] == $this->input->post('id',true)){
+				array_push($se,$value);
+			}
+		}
+		print_r(json_encode($se));
 	}
 
 	public function transportSec()
 	{	
-		$data = ["logistic_by"=>$this->input->post('transType',true),
-		"style_delivery"=>$this->input->post('typeTrans',true),
-		"addr_customer"=>$this->input->post('address',true)];
+		// $data = ["logistic_by"=>$this->input->post('transType',true),
+		// "style_delivery"=>$this->input->post('typeTrans',true),
+		// "addr_customer"=>$this->input->post('address',true)];
 
-		print_r($data);
+		// print_r($data);
+		echo "ok ok";
+		
 	}
 	
+	public function getBank()
+	{	
+		$id_bank = $this->input->post('id_bank',true);
+		foreach ($this->bank as $key => $value) {
+			if($value->id_account == $id_bank)
+			{
+				print_r(json_encode($value));
+			}
+		}
+		
+		
+	}
+
+
 }/// end class
 
 ?>

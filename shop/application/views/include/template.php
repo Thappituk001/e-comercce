@@ -4,16 +4,17 @@ $this->load->view($view);
 $this->load->view("include/footer");
 ?>
 <div class="promo_field" id="promo">
-	Promotion Field
+
 </div>
 <?php //this is session for modal grid ?>
-
+<script type="text/javascript" src="<?php echo base_url(); ?>shop/assets/plugins/icheck-1.x/icheck.min.js"></script>
 <div class="modal fade" id="orderGrid" >
 	<div class="modal-dialog" id="mainGrid">
 		<div class="modal-content">
 			<div class="modal-header" style="background-color:#585858">
 				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-				<h5 class="modal-title text-center" id="productCode" style="size:26px;margin-top:10px;font-weight: bold;"></h5>
+				<h5 class="modal-title text-center" id="productCode" style="size:26px;margin-top:10px;font-weight: bold;">
+				</h5>
 			</div>
 			<div class="modal-body" id="orderContent">
 				<form class="form-horizontal">
@@ -34,7 +35,7 @@ $this->load->view("include/footer");
 				<div class="modal-footer">
 					<!-- <input type="hidden" name="id_product" id="id_product" value="<?php echo $pd->product_id; ?>" /> -->
 					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-					<button type="button" class="btn btn-primary" onClick="addToCart()">Add to cart</button>
+					<button type="button" class="btn btn-primary" id="addBtn" onClick="addToCart()">Add to cart</button>
 				</div>
 			</div><!-- /.modal-content -->
 		</div><!-- /.modal-dialog -->
@@ -42,101 +43,105 @@ $this->load->view("include/footer");
 
 
 
-	<script>
-		$(window).scroll(function() {
-			if ($(this).scrollTop()) {
-				$('#promo').show('4000', function() {
+<script>
+$(document).ready(function(){
 
-				});
-			} else {
-				$('#promo').hide('400', function() {
+	$(window).scroll(function() {
+		if ($(this).scrollTop()) {
+			$('#promo').show('4000', function() {
 
-				});
-			}
+			});
+		} else {
+			$('#promo').hide('400', function() {
+
+			});
+		}
+	});
+
+	(function tableWidth(){
+
+		$('#modal').on('show.bs.modal', function () {
+			$(this).find('.modal-body').css({
+	              width:'auto', //probably not needed
+	              height:'auto', //probably not needed 
+	              'max-height':'100%'
+	        });
 		});
 
-		$(document).ready(function(){
-			(function tableWidth(){
+	}());
 
-				$('#modal').on('show.bs.modal', function () {
-					$(this).find('.modal-body').css({
-			              width:'auto', //probably not needed
-			              height:'auto', //probably not needed 
-			              'max-height':'100%'
-			          });
+
+	$("#color_select").change(function(){
+		$.ajax({
+			url:"<?php echo base_url(); ?>shop/product/fetchSize",
+			type:"POST",
+			cache:true, 
+			data: {
+				"color_select" : $(this).val(),
+				"id_style": $("#style_id").val()
+			}, 
+			success: function(rs) { 
+				var opt = "";
+				var res = $.parseJSON(rs);
+				$.each(res, function(key, val){
+					opt +="<option value='"+ val +"'>"+val["size_name"]+"</option>"
 				});
-
-			}());
-
-
-			$("#color_select").change(function(){
-				$.ajax({
-					url:"<?php echo base_url(); ?>shop/product/fetchSize",
-					type:"POST",
-					cache:true, 
-					data: {
-						"color_select" : $(this).val(),
-						"id_style": $("#style_id").val()
-					}, 
-					success: function(rs) { 
-						var opt = "";
-						var res = $.parseJSON(rs);
-						$.each(res, function(key, val){
-							opt +="<option value='"+ val +"'>"+val["size_name"]+"</option>"
-						});
-						$("#size_select").html( opt );
-						console.log(res);
-					},error: function(e) {
-						console.log("error");
-					}
-				});	
-			});
+				$("#size_select").html( opt );
+				console.log(res);
+			},error: function(e) {
+				console.log("error");
+			}
+		});	
+	});
 
 });//document ready
 
-		function addToCart(customer_array,id_cart)
-		{
-		// var choosedValues ={};
-		// var key,val = [];
-		var key1 = 'something';
-		var value1 = 'something';
-		var attributes = {};
-		$("input[name='inputQty[]']").each(function() {
-			// console.log($(this).attr('id'));
-			// console.log($(this).val());
-			key1 = $(this).attr('id');
-			value1 = $(this).val() ;
-			attributes[key1] = value1;
-		});
-
-		// console.log(attributes);
+	function addToCart()
+	{
 		
-		// load_in();
+		var key = [];
+		var value = [];
+		var attributes = [];
 
+		var i = 0 ;
+		$.each($("#tableOrder_bd").find("tr"), function(){
+			key = $(this).find("span").attr('id');
+			value = $(this).find("input[name='inputQty[]']").val();   
+			if(value==''){ value = 0; }
+			var res = key.split("_");
+			
+		    attributes[i] = {
+		    					'id_style':$("#id_style").val(),
+		    					'id_color':res[0],
+		    					'id_size':res[1],
+		    					'qty':value
+							};
+		    i++;
+		});
+		
 		$.ajax({
-			url:"<?php echo base_url(); ?>shop/product/addToCart/",
+			url:"<?php echo base_url(); ?>shop/product/addToCart",
 			type:"POST",
 			cache: "false",
 			data: {
-				dataChoosed:JSON.stringify(attributes),
+				'dataChoosed':attributes,
 			},
 			success: function(rs){
+
+				if( rs == 'success' )
+				{
+					 $('#orderGrid').modal('toggle');
+					swal({ title: 'Success', title : 'Add to cart successfully', timer: 2000, type: 'success' });
+					
+				}
+				else
+				{
+					 $('#orderGrid').modal('toggle');
+					swal({ title: 'ไม่สำเร็จ', title : 'เพิ่มสินค้าลงตะกร้าไม่สำเร็จ กรุณาลองใหม่อีกครั้ง', type: 'error' });	
+				}
+			},error: function(XMLHttpRequest, textStatus, errorThrown) {
+				swal({ title: 'ไม่สำเร็จ', title : 'การเชื่อมต่อกับฐานข้อมูลมีปัณหา กรุณาลองใหม่ !!', type: 'error' });	
 				load_out();
-				
-				console.log("success add to cart ..");
-				console.log(rs);
-
-				var rs = $.trim(rs);
-				// if( rs == 'success' )
-				// {
-				// 	swal({ title: 'Success', title : 'Add to cart successfully', timer: 1000, type: 'success' });
-				// 	// updateCart();
-				// }
-				// else
-				// {
-				// 	swal({ title: 'ไม่สำเร็จ', title : 'เพิ่มสินค้าลงตะกร้าไม่สำเร็จ กรุณาลองใหม่อีกครั้ง', type: 'error' });	
-				// }
-
 			}
 		});
 	}
@@ -178,7 +183,7 @@ $this->load->view("include/footer");
 
 	function getOrderGrid(id_style)
 	{
-		// load_in();
+		load_in();
 		// console.log("id product = "+id_style);
 		$.ajax({
 			url:"<?php echo base_url(); ?>shop/product/orderGrid",
@@ -193,7 +198,7 @@ $this->load->view("include/footer");
 					return JSON.parse(rs)[k] 
 				});
 				
-				$("#productCode").html(arr[0]['code'] +"  |  "+ arr[0]['name']);
+				$("#productCode").html(arr[0]['code'] +"  _  "+ arr[0]['name']);
 
 				
 				var c = [];
@@ -225,20 +230,20 @@ $this->load->view("include/footer");
 				});
 				// console.log(s);
 				$dataAppend = "<tr>";
+
 				$.each(s, function( key,value ) 
 				{
 
 					$dataAppend += "<td style='padding-top:6%'>"+value['size_name']+"</td>";
-
+				
 					$.each(c, function( k, v ) 
 					{
-						
 						// $("#tableOrder_bd").append("<td>"+value['size_name']+"</td>");
 						if(value['color_name'] == v)
 						{
 
-							$dataAppend += "<td><input type='text' name='inputQty[]'  style='margin-bottom:0px;'><span name='av[]'></span></td>";
-							// console.log(k);
+							$dataAppend += "<td ><input type='text' name='inputQty[]'  style='margin-bottom:0px;'><span name='av[]' id='"+value['id_color']+'_'+value['id_size']+"' style='font-size:10px;color:#DA631D'></span></td>";
+							av(id_style,value['id_color'],value['id_size']);
 							// $('span[name=av[]')append(av);
 						}else{
 							$dataAppend += "<td></td>";
@@ -249,14 +254,14 @@ $this->load->view("include/footer");
 				});
 				
 				$("#tableOrder_bd").append($dataAppend);
-				
-				
+				$("#tableOrder_bd").append("<input class='hidden' name='id_style' id='id_style' value='"+id_style+"' >");
 
 				$("#orderGrid").modal('show');
 
-
+				load_out();
 			},error: function(XMLHttpRequest, textStatus, errorThrown) {
 				console.log(errorThrown);
+				load_out();
 			}
 		});
 	}
@@ -272,18 +277,24 @@ $this->load->view("include/footer");
 				"id_size":id_size
 			},
 			success: function(rs){
-					// console.log(rs);
-					return rs;
-				},
-				error: function(XMLHttpRequest, textStatus, errorThrown){
-					console.log(errorThrown);
+				// console.log(rs);
+				$('#'+id_color+'_'+id_size).html("เหลือ "+rs+" ชิ้น");
+				if(rs<=0){
+					$('#addBtn').addClass("disabled");
+				}else{
+					$('#addBtn').removeClass("disabled");
 				}
-			});
+				// console.log(rs);
+				return rs;
+				},
+			error: function(XMLHttpRequest, textStatus, errorThrown){
+				console.log(errorThrown);
+			}
+		});
 	}
 
 </script>
 <style>
-
 .modal-dialog { /* Width */
 	max-width: 100%;
 	width: auto !important;
@@ -305,6 +316,7 @@ th,td  {
 }
 
 .promo_field{
+	color:#fff;
 	position: absolute;
 	bottom:50px;
 	font-size: 18px;

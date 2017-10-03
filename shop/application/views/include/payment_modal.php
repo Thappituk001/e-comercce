@@ -16,17 +16,17 @@ input[type="radio"]:checked {
 
 <div class="modal fade" id="bankPickerModal" role="dialog">
  <div class="modal-dialog ">
-  <div class="modal-content" >
+  <div class="modal-content" style="height:100%">
     <div class="modal-header" style="background-color:#585858">
       <button type="button" class="close" data-dismiss="modal">&times;</button>
       <h4 class="modal-title">เลือกธนาคาร</h4>
     </div>
-    <div class="modal-body">
+    <div class="modal-body" style="height:100%">
       <?php foreach ($bank as $b): ?>
         <div class="row">
           <div class="col-sm-7 col-xs-12">
             <input type="radio" id="r1" name="optradio[]" value="<?php echo $b->id_account; ?>"/>
-            <img id="bank_img" src="<?php echo  base_url()."img" ?>/bank/<?php echo $b->bankcode; ?>.png" alt="" width="150">
+            <img id="bank_img" src="<?php echo  base_url()."img" ?>/bank/<?php echo $b->bankcode; ?>.png" alt="" width="100">
           </div>
           <legend class="visible-xs"></legend>
           <div class="col-sm-5  col-xs-12 ">
@@ -530,8 +530,8 @@ input[type="radio"]:checked {
     },
     error: function(e) {
       console.log("Error posting feed."); 
-  //   }
-  // });
+    }
+  });
 
 }
 

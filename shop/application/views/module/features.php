@@ -3,7 +3,7 @@
   <div class="container main-container">
     <div class="morePost row featuredPostContainer style2 globalPaddingTop ">
       <h3 class="section-title style2 text-center"><span>FEATURES PRODUCT</span></h3>
-
+      
       <div class="container" id="draggable">
         <div class="row xsResponse" id="feature-box">
           <?php foreach( $features as $item ) : ?>
@@ -45,7 +45,7 @@
                   <?php if(  $item->discount_percent > 0 || $item->discount_amount > 0  ) : ?>
                    <span class="old-price"><?php echo number_format($item->product_price,2,'.',''); ?>  <?php echo getCurrency(); ?></span>
                  <?php endif; ?><br/>
-                 <span><?php echo sell_price($item->product_price, $item->discount_amount,$item->discount_percent); ?><?php echo getCurrency(); ?></span> 
+                 <span><?php $product_price =  sell_price($item->product_price, $item->discount_amount,$item->discount_percent); echo number_format($product_price) ?><?php echo getCurrency(); ?></span> 
                </div>
                <div class="action-control"><a class="btn btn-primary" onclick="getOrderGrid(<?php echo $item->style_id; ?>,'<?php echo $item->style_code; ?>','<?php echo $item->style_name; ?>')"> <span class="add2cart"><i
                 class="glyphicon glyphicon-shopping-cart"> </i> Add to cart </span> </a></div>
@@ -104,7 +104,7 @@
   function loadMoreFeatures()
   {
    var offset = $('.features').length;
-   console.log(offset);
+   
    load_in();
    setTimeout(function(){
      $.ajax({

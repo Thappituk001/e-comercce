@@ -61,7 +61,8 @@ class Product extends CI_Controller
 		$data['color']  = array_unique($ColorGroup);
 		$data['size']   = $size;
 		
-		//filter data
+		//filter data 
+		//form submit
 		if($this->input->get()){
 			$present_qty = count($data['product']);
 			$color = empty($this->input->get('color'))?[]:$this->input->get('color',true);
@@ -71,17 +72,15 @@ class Product extends CI_Controller
 
 			$productArray = [];
 
-			
 			if($present_qty = $this->product_qty){
 				
 				if(!empty($color) || !empty($size)){
 					foreach ($data['product'] as $p) {
-
 						if(
-							(in_array($p->color_group_name,$color)) || 
-							(in_array($p->id_size,$size)) &&
-							($p->product_price >= $minPrice) &&
-							($p->product_price <= $maxPrice) 
+							(in_array($p->color_group_name,$color) || 
+							in_array($p->id_size,$size) )&&
+							((sell_price($p->product_price, $p->discount_amount,$p->discount_percent) >= $minPrice) &&
+							(sell_price($p->product_price, $p->discount_amount,$p->discount_percent) <= $maxPrice)) 
 						)
 						{
 							array_push($productArray, $p);
@@ -89,9 +88,8 @@ class Product extends CI_Controller
 					}
 
 				}else if(empty($color) && empty($size)){
-
 					foreach ($data['product'] as $p) {
-						if(($p->product_price >= $minPrice) && ($p->product_price<= $maxPrice))
+						if((sell_price($p->product_price, $p->discount_amount,$p->discount_percent) >= $minPrice) && (sell_price($p->product_price, $p->discount_amount,$p->discount_percent)<= $maxPrice))
 						{
 							array_push($productArray, $p);
 						}
@@ -130,6 +128,7 @@ class Product extends CI_Controller
 					{
 						$promo = 1;
 					}
+					$sp = sell_price($rs->product_price, $rs->discount_amount, $rs->discount_percent);
 					$arr = array(
 						'link'				=>	'main/productDetail/'.$rs->product_id,
 						'image_path'		=> get_image_path(get_id_cover_image($rs->product_id), 3),
@@ -140,12 +139,12 @@ class Product extends CI_Controller
 						'discount_amount'	=> number_format($rs->discount_amount,2,'.',''),
 						'discount_percent'	=> number_format($rs->discount_percent,2,'.',''),
 						'discount_label'	=> discount_label($rs->discount_amount, $rs->discount_percent),
-						'available_qty'    => apply_stock_filter($this->product_model->getAvailableQty($rs->product_id)), 
+						 'available_qty'    => apply_stock_filter($this->product_model->getAvailableQty($rs->product_id)), 
 						'product_code'		=> $rs->style_code,
 						'product_name'		=> $rs->style_name,
-						'sell_price'		=> sell_price($rs->product_price, $rs->discount_amount, $rs->discount_percent),
+						'sell_price'		=> number_format($sp),
 						'price'				=> number_format($rs->product_price,2,'.','')
-					);	
+						);	
 					array_push($data, $arr);
 				}//foreach 
 				print_r(json_encode($data));
@@ -181,17 +180,26 @@ class Product extends CI_Controller
 
 	public function addToCart()
 	{	
-		$data    = json_decode($this->input->post('dataChoosed'),true);
+		$data    = $this->input->post('dataChoosed',true);
+		$data_insert = [];
 
-		foreach ($data as $key => $value) {
-			echo $key." ".$value;
+		foreach ($data as $item) {
+			if($item['qty'] > 0)
+			{
+			$id_product = $this->product_model->getProdctFormGrid($item['id_style'],$item['id_size'],$item['id_color']);
+			array_push($data_insert,array("id_cart_product_online"=>'',"id_cart_online"=>$this->id_cart,"id_product"=>$id_product->id,"qty"=>$item['qty'],"date_add"=>''));
+			}
 		}
+		$insert_status = $this->cart_model->addToCart($data_insert);
+		// $this->db->insert('cart_product_online', $data_insert); 
+
+		print_r($insert_status);
 		
 	}
 
 	public function getAvailable_qty(){
 		$qty = $this->product_model->getAvailableQty_OnGrid($this->input->post('id_style',true),$this->input->post('id_color',true),$this->input->post('id_size',true));
-		print_r($qty->qty);
+		print_r($qty);
 
 	}
 

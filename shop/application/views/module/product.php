@@ -1,71 +1,5 @@
-<style>
-  .icheckbox_minimal-green,
-.iradio_minimal-green {
-    display: inline-block;
-    *display: inline;
-    vertical-align: middle;
-    margin: 0;
-    padding: 0;
-    width: 18px;
-    height: 18px;
-    /*background: url(../assets/plugins/icheck-1.x/skin/minimal/green.png) no-repeat;*/
-    border: none;
-    cursor: pointer;
-}
 
-.icheckbox_minimal-green {
-    background-position: 0 0;
-}
-
-.icheckbox_minimal-green.hover {
-    background-position: -20px 0;
-}
-
-.icheckbox_minimal-green.checked {
-    background-position: -40px 0;
-}
-
-.icheckbox_minimal-green.disabled {
-    background-position: -60px 0;
-    cursor: default;
-}
-
-.icheckbox_minimal-green.checked.disabled {
-    background-position: -80px 0;
-}
-
-.iradio_minimal-green {
-    background-position: -100px 0;
-}
-
-.iradio_minimal-green.hover {
-    background-position: -120px 0;
-}
-
-.iradio_minimal-green.checked {
-    background-position: -140px 0;
-}
-
-.iradio_minimal-green.disabled {
-    background-position: -160px 0;
-    cursor: default;
-}
-
-.iradio_minimal-green.checked.disabled {
-    background-position: -180px 0;
-}
-
-/* HiDPI support */
-@media (-o-min-device-pixel-ratio: 5/4), (-webkit-min-device-pixel-ratio: 1.25), (min-resolution: 120dpi) {
-    .icheckbox_minimal-green,
-    .iradio_minimal-green {
-        /*background-image: url(../assets/plugins/icheck-1.x/skin/minimal/green@2x.png);*/
-        -webkit-background-size: 200px 20px;
-        background-size: 200px 20px;
-    }
-</style>
 <a onclick="openNav()" id="btn_filter" class="btn_filter hidden-lg hidden-md hidden-sm"><i class="fa fa-filter" aria-hidden="true"></i></a>
-<script type="text/javascript" src="<?php echo base_url(); ?>shop/assets/plugins/icheck-1.x/icheck.min.js"></script> 
 
 <script src="<?php echo base_url(); ?>shop/assets/js/nouislider.js"></script>
 <link rel="stylesheet" href="<?php echo base_url(); ?>shop/assets/css/nouislider.min.css" />
@@ -78,7 +12,6 @@
       <form  id="form_filter">
        <label >COLOR</label>
        <div class="input-group">
-
         <?php foreach ($color as $c): ?>
           <input type="checkbox" name="color[]" value="<?= $c ?>"> <?php print_r($c) ?><br>
         <?php endforeach ?>
@@ -93,14 +26,14 @@
     <legend></legend>
 
     <label for="price-min">Price:</label>
-    <div id="slider"></div><br>
+    <div name="slider" id="slider"></div><br>
 
-    MIX: <span id="slider-snap-value-lower"></span><br>
-    MAX:<span id="slider-snap-value-upper"></span><br>
-    <input type="text" name="minPrice" id="minPrice" class="" value="0">
-    <input type="text" name="maxPrice" id="maxPrice" class="" value="10000">
+    <span style="font-size:18;font-weight:800">MIX : </span><span id="slider-snap-value-lower"></span><br>
+    <span style="font-size:18;font-weight:800">MAX :</span><span id="slider-snap-value-upper"></span><br>
+    <input type="text" name="minPrice" id="minPrice" class="hidden" value="0">
+    <input type="text" name="maxPrice" id="maxPrice" class="hidden" value="10000">
   </form>
-  <button class="btn btn-block btn-primary" id="btn_smt_filter">ตกลง</button>
+  <button class="btn btn-block btn-primary" id="btn_smt_filter" style="margin-top:10px">ตกลง</button>
 
 </div>
 <div class="col-md-10 col-sm-10 col-xs-12" id="draggable">
@@ -118,7 +51,7 @@
     ?> -->
     <?php foreach( @$product as $item ) : ?>
       <?php   $link   = base_url().'shop/main/productDetail/'.$item->product_id; ?>
-      <div class="item col-lg-3 col-md-3 col-sm-4 col-xs-6 features" onclick="viewDetail(<?= $item->product_id ?>)">
+      <div class="item col-lg-3 col-md-3 col-sm-4 col-xs-6 features" >
         <div class="product">
           <div class="image">
             <a href="<?php echo $link; ?>">
@@ -156,7 +89,7 @@
             <?php echo sell_price($item->product_price, $item->discount_amount,$item->discount_percent); ?> <?php echo getCurrency(); ?>
           </span> 
         </div>
-        <div class="action-control"><a class="btn btn-primary" onClick="getOrderGrid(<?php echo $item->style_id; ?>)"> <span class="add2cart"><i
+        <div class="action-control"><a class="btn btn-primary" id="<?= $item->style_id; ?>" onClick="getOrderGrid(<?php echo $item->style_id; ?>)"> <span class="add2cart"><i
           class="glyphicon glyphicon-shopping-cart"> </i> Add to cart </span> </a></div>
         </div>
       </div>
@@ -224,7 +157,6 @@
         ?>
         
       <?php endforeach ?>
-
       
       <div class="row" style="padding-right:10px;padding-left: 10px">
         <legend></legend>

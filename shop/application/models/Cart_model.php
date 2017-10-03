@@ -223,28 +223,54 @@ class Cart_model extends CI_Model
 		}
 	}
 	
-	public function addToCart($id_customer,$id_product)
+	public function addToCart($data)
 	{
-		if($this->session->userdata('id_customer')){
-			$role = 'member';
+		if(!empty($data)){
+			$x_insert = [];
+			$x_ins = 0;
+			$x_upd = 0;
+			foreach ( $data as $k => $value) {
 
-			$cart_id = $this->getCart_ID($id_customer);
+				$rs = $this->db->select('cart_product_online.id_product,cart_product_online.qty')
+				->where('cart_product_online.id_product',$value['id_product'])
+				->where('cart_product_online.id_cart_online',$value['id_cart_online'])
+				->get('cart_product_online');
 
-			$data = array(
-				'id_cart_product_online' => '',
-				'id_cart_online' => $cart_id,
-				'id_pa'=>$id_product,
-				'qty'=>'1',
-				'date_add'=> date("Y-m-d H:i:s"),
-			);
-			$this->db->insert('cart_product_online', $data); 
-			return "success";
+				if($rs->num_rows() <= 0)
+				{
+					array_push($x_insert,@array("id_cart_product_online"=>'',"id_cart_online"=>$value['id_cart_online'],"id_product"=>$value['id_product'],"qty"=>$value['qty']));
+				}
+				else//return id_product and qty of dupplicate item
+				{
+					if($this->db->where('cart_product_online.id_product',$value['id_product'])
+				    ->where('cart_product_online.id_cart_online',$value['id_cart_online'])
+					->update('cart_product_online',array("qty"=>$value['qty']+$rs->result()[0]->qty)))
+					{
+					  $x_upd = 1;
+					}
+				}
 
+			}//foreach
+			if(!empty($x_insert)){
+				if($this->db->where('cart_product_online.id_product',$value['id_product'])
+					    ->where('cart_product_online.id_cart_online',$value['id_cart_online'])
+						->insert_batch('cart_product_online',$x_insert))
+				{
+					$x_ins = 1;
+				}
+			}
 
-		}else{
-			$role = 'great';
-			return $role;
-		}
+			$a_and_bool = $x_ins + $x_upd;
+			if($a_and_bool >= 1){
+				return "success";
+			}
+			else{
+				return "false";
+			}
+			
+			
+		}//if
+		
 
 	}
 	
@@ -343,36 +369,6 @@ class Cart_model extends CI_Model
 		
 		
 	}//function
-
-	public function insertItem($cart_id,$id_product){
-
-
-		$rs = $this->db->select('id_cart_product_online')->where('id_cart_online',$cart_id)->where('id_pa',$id_product)->get('cart_product_online');
-
-		if($rs->num_rows() == 1){
-			
-			$this->db->where('id_cart_online', $cart_id);
-			$this->db->where('id_pa',$id_product);
-			$this->db->set('qty', 'qty+1', FALSE);
-			$this->db->update('cart_product_online'); 
-			return "update qty";
-
-		}else{
-
-			$data = array(
-				'id_cart_product_online' => '',
-				'id_cart_online' => $cart_id,
-				'id_pa'=>$id_product,
-				'qty'=>'1',
-				'date_add'=> date("Y-m-d H:i:s"),
-			);
-
-			$this->db->insert('cart_product_online', $data); 
-			return "insert";
-		}//else
-
-		
-	}
 
 
 	public function getCart_ID($id_customer){

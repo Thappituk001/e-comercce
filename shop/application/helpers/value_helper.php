@@ -55,9 +55,9 @@ function cartValue($id_cart = 0)
 			foreach($rs->result() as $rd)
 			{
 				$id_pd 		= getIdProduct($rd->id_product_attribute);
-				$qty 			= $rd->qty;
+				$qty 		= $rd->qty;
 				$price 		= itemPrice($rd->id_product_attribute);
-				$dis			= get_discount($rd->id_customer, $id_pd);
+				$dis		= get_discount($rd->id_customer, $id_pd);
 				$sell_price	= sell_price($price, $dis['discount'], $dis['type']);
 				$value += $sell_price;
 			}

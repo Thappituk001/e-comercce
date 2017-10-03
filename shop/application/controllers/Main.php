@@ -90,6 +90,7 @@ class Main extends CI_Controller
 					{
 						$promo = 1;
 					}
+					$sp = sell_price($rs->product_price, $rs->discount_amount, $rs->discount_percent);
 					$arr = array(
 						'link'				=>	'main/productDetail/'.$rs->product_id,
 						'image_path'		=> get_image_path(get_id_cover_image($rs->product_id), 3),
@@ -103,7 +104,7 @@ class Main extends CI_Controller
 						 'available_qty'    => apply_stock_filter($this->product_model->getAvailableQty($rs->product_id)), 
 						'product_code'		=> $rs->style_code,
 						'product_name'		=> $rs->style_name,
-						'sell_price'		=> sell_price($rs->product_price, $rs->discount_amount, $rs->discount_percent),
+						'sell_price'		=> number_format($sp),
 						'price'				=> number_format($rs->product_price,2,'.','')
 						);	
 					array_push($data, $arr);

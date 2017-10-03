@@ -169,13 +169,13 @@ class Product_model extends CI_Model
 	public function getAvailableQty_OnGrid($id_style,$id_color,$id_size)
 	{
 
-		// $qty 		= 0; 
-		// $move 	    = $this->moveQty($id_pd);
-		// $cancle 	= $this->cancleQty($id_pd);
-		// $order	    = $this->orderQty($id_pd);
+		$qty 		= 0; 
+		$move 	    = $this->moveQty($id_style);
+		$cancle 	= $this->cancleQty($id_style);
+		$order	    = $this->orderQty($id_style);
 
 
-		$rs = $this->db->query("SELECT SUM(qty) AS qty FROM tbl_product INNER JOIN tbl_stock ON CAST(tbl_product.id AS UNSIGNED) = tbl_stock.id_product INNER JOIN tbl_zone ON tbl_zone.id_zone = tbl_stock.id_zone WHERE tbl_product.id IN (SELECT tbl_product.id FROM tbl_product WHERE tbl_product.id_style = 108 AND tbl_product.id_color = 14 AND tbl_product.id_size = 6 )");
+		$rs = $this->db->query("SELECT SUM(qty) AS qty FROM tbl_product INNER JOIN tbl_stock ON CAST(tbl_product.id AS UNSIGNED) = tbl_stock.id_product INNER JOIN tbl_zone ON tbl_zone.id_zone = tbl_stock.id_zone WHERE tbl_product.id IN (SELECT tbl_product.id FROM tbl_product WHERE tbl_product.id_style = $id_style AND tbl_product.id_color = $id_color AND tbl_product.id_size = $id_size )");
 		
 		// $qty 		= 0; 
 		// $move 	    = $this->moveQty($sub_query);
@@ -185,11 +185,11 @@ class Product_model extends CI_Model
 
 		if( $rs->num_rows() == 1 && !is_null($rs->row()))
 		{
-			// $qty = $rs->row()->qty;
+			$qty = $rs->row()->qty;
 		}
-		// $qty 	= ($qty + $move + $cancle) - $order;
+		$qty 	= ($qty + $move + $cancle) - $order;
 		
-		return $rs->result()[0];	
+		return $qty ;	
 	}
 	
 	public function cancleQty($id_pa)
@@ -408,6 +408,17 @@ class Product_model extends CI_Model
 			return FALSE;
 		}	
 
+
+	}
+
+	public function getProdctFormGrid($id_style,$id_size,$id_color){
+		$rs = $this->db->select("tbl_product.id")
+		->where('tbl_product.id_style',$id_style)
+		->where('tbl_product.id_size',$id_size)
+		->where('tbl_product.id_color',$id_color)
+		->get('tbl_product');
+		
+		return  $rs->result()[0];
 
 	}
 

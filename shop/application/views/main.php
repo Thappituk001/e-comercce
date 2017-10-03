@@ -47,21 +47,6 @@
     text-align: center;
 }
 
-.modal-dialog { /* Width */
-    max-width: 100%;
-    width: auto !important;
-    display: inline-block;
-}
-.modal-body { 
-    max-height: 300px; 
-    padding: 10px; 
-    overflow-y: auto; 
-    -webkit-overflow-scrolling: touch; 
-}
-.modal{
-    text-align: center;
-}
-
 th,td  {
     max-width: 100px;
     word-wrap: break-word;

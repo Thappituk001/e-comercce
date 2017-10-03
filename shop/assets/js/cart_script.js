@@ -29,7 +29,7 @@
         console.log("del success");
         $("#row_"+id_pd).animate({opacity : 0}, 1000, function(){ $('#row_'+id_pd).remove(); recalCart(); });
         $("#m-row_"+id_pd).animate({opacity : 0}, 1000, function(){ $('#m-row_'+id_pd).remove(); recalCart(); });
-        setTimeout( window.location.reload(), 2000)
+        setTimeout( window.location.reload(), 2000);
        }
     }
   });
@@ -43,7 +43,7 @@
 
  function decreaseQty(id_pd, min_qty)
  {
-   console.log("decreaseQty"+id_pd);
+   // console.log("decreaseQty"+id_pd);
    var qty = parseInt(removeCommas($('#Qty_'+id_pd).text()));
    var min_qty = parseInt(min_qty);
    if( qty > min_qty)
@@ -51,13 +51,13 @@
     qty -= 1;
     $('#Qty_'+id_pd).text(qty);
     $("#mQty_"+id_pd).text(qty);
-    updateCart_Qtyt(id_pd, qty);
+    updateCart_Qty(id_pd, qty);
   }		
 }
 
 function increaseQty(id_pd, max_qty)
 {
- console.log("increaseQty"+id_pd);
+ // console.log("increaseQty"+id_pd);
  var qty = parseInt(removeCommas($('#Qty_'+id_pd).text()));
  var max_qty = parseInt(max_qty);
   if( qty < max_qty )
@@ -74,7 +74,7 @@ function increaseQty(id_pd, max_qty)
 
 function updateCart_Qty(id_pd, qty)
 {
-  console.log("updateCart"+id_pd);
+  // console.log("updateCart"+id_pd);
 	var id_cart = $('#id_cart').val();
   var base_url = window.location.origin;
 	$.ajax({

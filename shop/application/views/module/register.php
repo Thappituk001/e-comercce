@@ -1,4 +1,4 @@
-<?php include_once("ga.php") ?>
+
 <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.16.0/jquery.validate.js"></script>
 <script type="text/javascript" src="<?php echo base_url(); ?>shop/assets/plugins/icheck-1.x/icheck.min.js"></script> 
 

@@ -127,27 +127,6 @@ class Cart extends CI_Controller
 		}
 	}
 
-
-	public function addToCart(){
-		$id_product = $this->input->post('id_product');
-		
-		//member
-		if($this->customer['role']=='member'){
-			// $great_id = $this->cart_model->createGreatID();
-			// $cart_id  = $this->cart_model->createCartID($great_id);
-			// $this->cart_model->insertItem($cart_id,$id_product);
-			// echo "success";
-			echo "if";
-		}else{// great
-			// $id_customer = $this->session->userdata('id_customer');
-		 //    $x = $this->cart_model->addToCart($id_customer,$id_product);
-			// print_r($x);
-			echo "else";
-		}
-		
-		
-	}
-
 	public function getCostTrans(){
 		
 		$data['item_in_cart']  = $this->cart_model->getItemInCart($this->id_cart);

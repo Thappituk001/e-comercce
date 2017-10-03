@@ -44,10 +44,12 @@
                     </div>
                     <div class="price">
                         <?php if( $item->discount_percent > 0 || $item->discount_amount > 0) : ?>
-                            <span class="old-price"><?php echo number_format($item->product_price, 2, '.', '') ?>  <?php echo getCurrency(); ?></span>
+                            <span class="old-price">
+                                <?php echo number_format($item->product_price, 2, '.', '') ?>  <?php echo getCurrency(); ?>
+                            </span>
                         <?php endif; ?>
                         <span><br>
-                            <?php echo sell_price($item->product_price, $item->discount_amount,$item->discount_percent); ?> <?php echo getCurrency(); ?>
+                            <?php $product_price =  sell_price($item->product_price, $item->discount_amount,$item->discount_percent); echo number_format($product_price) ?><?php echo getCurrency(); ?>
                         </span> 
                     </div>
                     <div class="action-control">

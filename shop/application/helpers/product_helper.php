@@ -447,6 +447,8 @@ function apply_stock_filter($qty = 0)
 	return $qty;
 }
 
+
+
 function getGridByStyle($id_style=0)
 {
 	$c 		=& get_instance();

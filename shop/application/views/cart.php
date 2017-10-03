@@ -86,7 +86,7 @@
                    <?= $discount; ?> <?= getCurrency(); ?>   
                  </td>
                  <td style="color:#1aff1a;font-size:18;font-weight:700">
-                  <?= number_format($total_price, 2); ?> <?= getCurrency(); ?>
+                  <?= $total_price; ?> <?= getCurrency(); ?>
                 </td>
                 <td>
                   <a title="Delete" onClick="deleteCartRow(<?= $item->id; ?>)"><i class="fa fa-times fa-lg"></i></a>
@@ -110,7 +110,7 @@
       <?php 
       $discount = (($item->price*($item->discount_percent/100))+$item->discount_amount)*$item->qty;
       $total_price = ($item->qty*$item->price)-$discount; 
-      $available_qty = 5;
+      $available_qty = 0;
       ?>
       <div class="row" id="row_<?= $item->id; ?>">
         <div class="col-sm-4 col-xs-4 text-center" style="padding:0px">

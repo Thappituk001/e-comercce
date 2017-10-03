@@ -172,8 +172,9 @@
     </form>
     <button class="btn btn-block btn-primary">ตกลง</button>
   </div>
-
 </div> 
+</div>
+<div class="promo_field" id="promo">
 
 </div>
 <script id="item_template" type="text/x-handlebars-template">
@@ -236,11 +237,11 @@
   var slider_modal = document.getElementById('slider_modal');
 
   noUiSlider.create(slider_modal, {
-    start: [0, 10000],
+    start: [0, 3000],
     connect: true,
     range: {
       'min': 0,
-      'max': 10000
+      'max': 3000
     }
   });
 

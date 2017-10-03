@@ -6,7 +6,7 @@ class Login_model extends CI_Model
 		parent::__construct();
 	}
 	
-	public function getUser($user, $pass)
+	public function userValidation($user, $pass)
 	{
 		$rs = $this->db->where("username", $user)->where("password", $pass)->get("account_customer_online");
 		if($rs->num_rows() == 1 )
@@ -18,7 +18,7 @@ class Login_model extends CI_Model
 			return false;
 		}
 	}
-	public function getUser_Info($id_user){
+	public function getUserInfo($id_user){
 		$rs = $this->db->where("id_customer", $id_user)->get("customer_online");
 		if($rs->num_rows() == 1 )
 		{

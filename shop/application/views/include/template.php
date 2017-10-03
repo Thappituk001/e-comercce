@@ -3,9 +3,7 @@ $this->load->view("include/header");
 $this->load->view($view);
 $this->load->view("include/footer");
 ?>
-<div class="promo_field" id="promo">
 
-</div>
 <?php //this is session for modal grid ?>
 <script type="text/javascript" src="<?php echo base_url(); ?>shop/assets/plugins/icheck-1.x/icheck.min.js"></script>
 <div class="modal fade" id="orderGrid" >
@@ -52,7 +50,7 @@ $(document).ready(function(){
 
 			});
 		} else {
-			$('#promo').hide('400', function() {
+			$('#promo').hide('4000', function() {
 
 			});
 		}
@@ -98,7 +96,7 @@ $(document).ready(function(){
 
 	function addToCart()
 	{
-		
+		load_in();
 		var key = [];
 		var value = [];
 		var attributes = [];
@@ -162,6 +160,9 @@ $(document).ready(function(){
 					$("#cartMobileLabel").text(rs);
 					$('#cartMobileLabel').css('visibility', 'visible');
 				}
+			},error: function(XMLHttpRequest, textStatus, errorThrown) {
+				swal({ title: 'ไม่สำเร็จ', title : 'การเชื่อมต่อกับฐานข้อมูลมีปัณหา กรุณาลองใหม่ !!', type: 'error' });	
+				load_out();
 			}
 		});
 	}
@@ -316,6 +317,7 @@ th,td  {
 }
 
 .promo_field{
+	z-index:999;
 	color:#fff;
 	position: absolute;
 	bottom:50px;
@@ -325,16 +327,7 @@ th,td  {
 	opacity:0.4;
 	background-color:#2E2E2E;
 }
-input
-{
-	width: 100%;
-	min-width:50px;
-	max-width: 200px;
-	padding: 10px;
-	margin: 0px;
-	box-sizing: border-box;
-	-moz-box-sizing: border-box;
-	-webkit-box-sizing: border-box;
-	border: 1px solid #CCC;
+input:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0 30px white inset;
 }
 </style>

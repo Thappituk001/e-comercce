@@ -38,66 +38,62 @@ class Member extends CI_Controller
 
 	}
 
-	public function loged_in()
+	public function validation()
 	{	
-		$this->load->library('form_validation');
-		$this->form_validation->set_rules('username','Username','require');
-		$this->form_validation->set_rules('password','Password','require');
-
-		if( $this->form_validation->run() )
-		{
+	
+		if($this->input->post()){
 
 			$user 	= $this->input->post("username",true);
-		    // $pass 	= md5(md5(md5($this->input->post("password"))));
 			$pass 	= $this->input->post("password",true);
-			$id_c	= $this->input->post("id_customer",true);
-			$rmbm	= $this->input->post("rememberme",true);
-			$rs 	= $this->login_model->getUser($user, $pass);
+
+		    // $pass 	= md5(md5(md5($this->input->post("password"))));
+
+			$rs 	= $this->login_model->userValidation($user, $pass);
+
 			//is member
 			if( $rs )
 			{
-				$user_info = $this->login_model->getUser_Info($rs->id_customer_online);
+				$user_info = $this->login_model->getUserInfo($rs->id_customer_online);
 				
 				$userdata = array(
 					'id_customer'   => $user_info->id_customer,
 					'first_name'	=> $user_info->fname,
 					'last_name'		=> $user_info->lname,
-					'email'			=> $rs->email,
-					'tel'			=> $user_info->tel,
 				);
 
 				$this->session->set_userdata($userdata);
 				
-				// $id_cart_great  = $this->id_cart;
-				// $id_cart_member = $this->login_model->getIdCartMember($user_info->id_customer);
+				$id_cart_great  = $this->id_cart;
+				$id_cart_member = $this->login_model->getIdCartMember($user_info->id_customer);
 
-				// $this->login_model->loged($user_info->id_customer);
-				// $this->login_model->switch_cart_item($id_cart_great,$id_cart_member);
+				$this->login_model->loged($user_info->id_customer);
+				$this->login_model->switch_cart_item($id_cart_great,$id_cart_member);
 				
-				redirect('shop/main', 'refresh');
-				// echo "success";
+				print_r($userdata);
 				// print_r($this->session->userdata());
-			
+
 			}
 			else
 			{
-				$this->session->set_flashdata('error','Invalid Username Or Password');
+				echo "error";
 			}
-		}else{
-			redirect('shop/', 'refresh');
+		}
+		else
+		{
+			echo "error";
 		}
 	}
 
-	public function logOut()
-	{
-		$this->login_model->loged_out($_SESSION['id_customer']);
-		
-		$userdata = array('id_customer','first_name','last_name','email');
-		$this->session->unset_userdata($userdata);
-		session_destroy();
-		redirect('shop/main', 'refresh');
-		
-	}
+	// public function logOut()
+	// {
+	// 	$this->login_model->loged_out($_SESSION['id_customer']);
+
+	// 	$userdata = array('id_customer','first_name','last_name','email');
+	// 	$this->session->unset_userdata($userdata);
+	// 	session_destroy();
+	// 	redirect('shop/main', 'refresh');
+
+	// }
 
 }
 

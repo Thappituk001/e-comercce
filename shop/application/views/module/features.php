@@ -4,8 +4,10 @@
     <div class="morePost row featuredPostContainer style2 globalPaddingTop ">
       <h3 class="section-title style2 text-center"><span>FEATURES PRODUCT</span></h3>
       
-      <div class="container" id="draggable">
+      <div class="container" id="draggable"> 
+        <div class="row "><?php print_r($this->session->userdata()); ?></div> 
         <div class="row xsResponse" id="feature-box">
+
           <?php foreach( $features as $item ) : ?>
 
             <?php 	$link	= 'product_detail/product/'.$item->product_id; ?>

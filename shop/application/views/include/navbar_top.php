@@ -18,6 +18,7 @@
       <div class="col-lg-6 col-sm-6 col-xs-6 col-md-6 no-margin no-padding">
         <div class="pull-right">
           <ul class="userMenu">
+            
             <?php if(empty($this->session->userdata('id_customer'))) : ?>
           
              <li>
@@ -39,7 +40,7 @@
             <li class="dropdown hasUserMenu">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false"> 
                 <i class="glyphicon glyphicon-log-in hide visible-xs"></i>
-                <span class="hidden-xs">Hi,<?php print_r($_SESSION); ?> </span>
+                <span class="hidden-xs">Hi,<?php print_r($this->session->userdata("first_name")); ?> </span>
               </a>
             </li>
             <li>

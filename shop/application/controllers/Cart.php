@@ -132,24 +132,19 @@ class Cart extends CI_Controller
 		$data['item_in_cart']  = $this->cart_model->getItemInCart($this->id_cart);
 		$data['transport']	   = $this->cart_model->getTrans($data['item_in_cart'],$this->id_cart);
 		$se = [];
-		foreach ($data['transport'] as $key => $value) {
-			if($value['id'] == $this->input->post('id',true)){
-				array_push($se,$value);
+		if ($this->input->post('id',true)) {
+			//*********************** Create Order *************************
+			// $this->cart_model->create_order();
+			
+			foreach ($data['transport'] as $key => $value) {
+				if($value['id'] == $this->input->post('id',true)){
+					array_push($se,$value);
+				}
 			}
 		}
 		print_r(json_encode($se));
 	}
 
-	public function transportSec()
-	{	
-		// $data = ["logistic_by"=>$this->input->post('transType',true),
-		// "style_delivery"=>$this->input->post('typeTrans',true),
-		// "addr_customer"=>$this->input->post('address',true)];
-
-		// print_r($data);
-		echo "ok ok";
-		
-	}
 	
 	public function getBank()
 	{	

@@ -171,7 +171,6 @@ input[type="radio"]:checked {
      </div>
    </div>
  </div>
-
 </form>
 
 <div class="modal fade" id="transportPickerModal" role="dialog">
@@ -204,7 +203,6 @@ input[type="radio"]:checked {
     <tr>
       <td colspan="2">
         <button type="button" class="btn btn-info" id="nextTrans">ตกลง</button> 
-        <!-- <button type="button" class="btn btn-info" data-toggle="modal" data-target="#addrPickerModal" data-dismiss="modal">ต่อไป</button> -->
         <button type="button" class="btn btn-primary" data-dismiss="modal">ปิด</button>
       </td>
     </tr>

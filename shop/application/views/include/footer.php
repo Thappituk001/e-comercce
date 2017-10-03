@@ -23,7 +23,7 @@
     <div class="container">
       <p class="pull-left"> &copy; WARRIX SHOP 2017</p>
       
-      <div class="pull-right paymentMethodImg">
+    <!--   <div class="pull-right paymentMethodImg">
         <img height="30" class="pull-right" src="<?php echo base_url(); ?>shop/images/site/payment/master_card.png" alt="img"> 
         <img height="30" class="pull-right" src="<?php echo base_url(); ?>shop/images/site/payment/visa_card.png" alt="img">
         <img height="30" class="pull-right" src="<?php echo base_url(); ?>shop/images/site/payment/paypal.png"
@@ -31,7 +31,7 @@
         <img height="30" class="pull-right" src="<?php echo base_url(); ?>shop/images/site/payment/american_express_card.png" alt="img"> <img
         height="30" class="pull-right" src="<?php echo base_url(); ?>shop/images/site/payment/discover_network_card.png" alt="img">
         <img height="30" class="pull-right" src="<?php echo base_url(); ?>shop/images/site/payment/google_wallet.png" alt="img">
-      </div>
+      </div> -->
     </div>
   </div> <!--/.footer-bottom-->
  

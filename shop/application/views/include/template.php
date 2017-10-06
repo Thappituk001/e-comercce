@@ -5,8 +5,8 @@ $this->load->view("include/footer");
 ?>
 
 <?php //this is session for modal grid ?>
-<script type="text/javascript" src="<?php echo base_url(); ?>shop/assets/plugins/icheck-1.x/icheck.min.js"></script>
-<div class="modal fade" id="orderGrid" >
+<!-- <script type="text/javascript" src="<?php echo base_url(); ?>shop/assets/plugins/icheck-1.x/icheck.min.js"></script>
+ --><div class="modal fade" id="orderGrid" >
 	<div class="modal-dialog" id="mainGrid">
 		<div class="modal-content">
 			<div class="modal-header" style="background-color:#585858">
@@ -327,6 +327,11 @@ th,td  {
 	opacity:0.4;
 	background-color:#2E2E2E;
 }
+tr > td > input{
+		max-width:100%;
+		padding:1px;
+	}
+
 input:-webkit-autofill {
     -webkit-box-shadow: 0 0 0 30px white inset;
 }

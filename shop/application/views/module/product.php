@@ -1,8 +1,9 @@
 
-<a onclick="openNav()" id="btn_filter" class="btn_filter hidden-lg hidden-md hidden-sm"><i class="fa fa-filter" aria-hidden="true"></i></a>
-
 <script src="<?php echo base_url(); ?>shop/assets/js/nouislider.js"></script>
 <link rel="stylesheet" href="<?php echo base_url(); ?>shop/assets/css/nouislider.min.css" />
+<script type="text/javascript" src="<?php echo base_url(); ?>shop/assets/plugins/icheck-1.x/icheck.min.js"></script>
+
+<a onclick="openNav()" id="btn_filter" class="btn_filter hidden-lg hidden-md hidden-sm"><i class="fa fa-filter" aria-hidden="true"></i></a>
 
 <div class="container main-container" style="margin-left:5%">
   <div class="morePost row featuredPostContainer style2 globalPaddingTop" style="margin:20px">

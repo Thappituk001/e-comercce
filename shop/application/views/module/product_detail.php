@@ -1,14 +1,4 @@
-<style>
-body .modal-dialog { /* Width */
-	max-width: 100%;
-	width: auto !important;
-	display: inline-block;
-}
-.modal{
-	text-align: center;
-}
 
-</style>
 <link href="<?php echo base_url(); ?>shop/assets/css/product_detail.css" rel="stylesheet">
 <?php if( $product !== FALSE ) : ?>
 	
@@ -196,6 +186,5 @@ body .modal-dialog { /* Width */
 <!-- /.product-details-container -->
 </section>
 <?php endif; ?>
-
 
 
